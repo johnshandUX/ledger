@@ -1,0 +1,61 @@
+import { Account, makeAccount } from "../domain/Account";
+
+export const accounts: Account[] = [
+  makeAccount({
+    id: "acc-ns-op",
+    businessId: "b-northstar",
+    name: "Operating account",
+    description: "Main business operating account",
+    accountNumber: "12345678",
+    sortCode: "12-34-56",
+    type: "Current",
+    currentBalance: 245000.5,
+    availableBalance: 240000.5,
+  }),
+  makeAccount({
+    id: "acc-ns-pay",
+    businessId: "b-northstar",
+    name: "Payroll account",
+    description: "Monthly payroll movements",
+    accountNumber: "23456789",
+    sortCode: "12-34-57",
+    type: "Current",
+    currentBalance: 15000,
+    availableBalance: 15000,
+  }),
+  makeAccount({
+    id: "acc-ns-tax",
+    businessId: "b-northstar",
+    name: "Tax reserve",
+    description: "Reserved for tax liabilities",
+    accountNumber: "34567890",
+    sortCode: "12-34-58",
+    type: "Reserve",
+    currentBalance: 50000,
+    availableBalance: 50000,
+  }),
+  makeAccount({
+    id: "acc-mg-1",
+    businessId: "b-morgan",
+    name: "Property receipts",
+    description: "Tenant receipts account",
+    accountNumber: "67890123",
+    sortCode: "98-76-54",
+    type: "Current",
+    currentBalance: 80000,
+    availableBalance: 80000,
+  }),
+  makeAccount({
+    id: "acc-mg-2",
+    businessId: "b-morgan",
+    name: "Maintenance reserve",
+    description: "Reserve for property maintenance",
+    accountNumber: "78901234",
+    sortCode: "98-76-55",
+    type: "Reserve",
+    currentBalance: 20000,
+    availableBalance: 20000,
+  }),
+];
+
+export default accounts;

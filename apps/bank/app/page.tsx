@@ -1,6 +1,9 @@
 import { Button, Input } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
-import { accounts } from "./accountsData";
+import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
+
+const activeProfile = getActiveBusinessProfile();
+const accounts = activeProfile ? getAccountsForProfile(activeProfile.id) : [];
 
 const fmt = (v: number) =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(v);
