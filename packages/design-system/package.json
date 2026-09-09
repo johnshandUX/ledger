@@ -1,0 +1,80 @@
+{
+  "name": "@johnshandux/ledger-design-system",
+  "version": "1.0.6",
+  "files": [
+    "dist"
+  ],
+  "description": "A production-focused design system and prototype for a modern business banking platform",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "build": "vite build && npx vite --config vite.icons.config.ts build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnshandUX/ledger-design-system.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/johnshandUX/ledger-design-system/issues"
+  },
+  "homepage": "https://github.com/johnshandUX/ledger-design-system#readme",
+  "devDependencies": {
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-mcp": "^10.6.0",
+    "@storybook/addon-vitest": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
+    "@types/node": "^26.5.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@typescript/typescript6": "^6.0.2",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitest/browser-playwright": "latest",
+    "@vitest/coverage-v8": "latest",
+    "playwright": "latest",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "^10.6.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "vite-plugin-dts": "^5.1.0",
+    "vitest": "latest"
+  },
+  "main": "./dist/ledger-design-system.js",
+  "module": "./dist/ledger-design-system.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/ledger-design-system.js",
+      "require": "./dist/ledger-design-system.umd.cjs",
+      "default": "./dist/ledger-design-system.js"
+    },
+    "./icons": {
+      "types": "./dist/src/icons.d.ts",
+      "import": "./dist/icons.js",
+      "require": "./dist/icons.cjs",
+      "default": "./dist/icons.js"
+    },
+    "./styles.css": "./dist/ledger-design-system.css"
+  },
+
+  "exportsIgnore": [],
+  "style": "./dist/ledger-design-system.css",
+  "peerDependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "dependencies": {
+    "lucide-react": "^1.43.0"
+  }
+}

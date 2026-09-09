@@ -1,0 +1,23 @@
+.ledger-button {
+  border: 0;
+  border-radius: var(--ledger-radius-medium);
+  padding: var(--ledger-space-3) var(--ledger-space-5);
+  font: inherit;
+  font-weight: var(--ledger-font-weight-semibold);
+  cursor: pointer;
+}
+
+.ledger-button--primary {
+  background: var(--ledger-color-action);
+  color: var(--ledger-color-action-text);
+}
+
+.ledger-button--primary:hover {
+  background: var(--ledger-color-action-hover);
+}
+
+.ledger-button--secondary {
+  background: var(--ledger-color-surface);
+  color: var(--ledger-color-text);
+  border: var(--ledger-border-width-thin) solid var(--ledger-color-border);
+}

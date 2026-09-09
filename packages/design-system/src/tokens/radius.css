@@ -1,0 +1,7 @@
+:root {
+  --ledger-radius-none: 0px;
+  --ledger-radius-small: 4px;
+  --ledger-radius-medium: 8px;
+  --ledger-radius-large: 16px;
+  --ledger-radius-full: 9999px;
+}

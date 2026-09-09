@@ -1,0 +1,5 @@
+body {
+  font-family: var(--ledger-font-family-sans);
+  color: var(--ledger-color-text);
+  background: var(--ledger-color-background);
+}

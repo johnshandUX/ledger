@@ -1,0 +1,5 @@
+:root {
+  --ledger-border-width-none: 0px;
+  --ledger-border-width-thin: 1px;
+  --ledger-border-width-thick: 2px;
+}

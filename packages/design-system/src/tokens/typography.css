@@ -1,0 +1,34 @@
+:root {
+  /* Font family */
+
+  --ledger-font-family-sans: "Inter", Arial, sans-serif;
+
+
+  /* Font weights */
+
+  --ledger-font-weight-regular: 400;
+  --ledger-font-weight-medium: 500;
+  --ledger-font-weight-semibold: 600;
+
+
+  /* Font sizes */
+
+  --ledger-font-size-small: 12px;
+  --ledger-font-size-body-small: 14px;
+  --ledger-font-size-body: 16px;
+  --ledger-font-size-heading-small: 20px;
+  --ledger-font-size-heading-medium: 24px;
+  --ledger-font-size-heading-large: 32px;
+  --ledger-font-size-display: 40px;
+
+
+  /* Line heights */
+
+  --ledger-line-height-small: 16px;
+  --ledger-line-height-body-small: 20px;
+  --ledger-line-height-body: 24px;
+  --ledger-line-height-heading-small: 28px;
+  --ledger-line-height-heading-medium: 32px;
+  --ledger-line-height-heading-large: 40px;
+  --ledger-line-height-display: 48px;
+}

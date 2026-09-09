@@ -1,0 +1,71 @@
+:root {
+  /* Neutral */
+  --ledger-color-neutral-0: #ffffff;
+  --ledger-color-neutral-50: #fafafa;
+  --ledger-color-neutral-100: #f5f5f5;
+  --ledger-color-neutral-200: #e5e5e5;
+  --ledger-color-neutral-300: #d4d4d4;
+  --ledger-color-neutral-400: #a3a3a3;
+  --ledger-color-neutral-500: #737373;
+  --ledger-color-neutral-600: #525252;
+  --ledger-color-neutral-700: #404040;
+  --ledger-color-neutral-800: #262626;
+  --ledger-color-neutral-900: #171717;
+  --ledger-color-neutral-950: #0a0a0a;
+
+  /* Information / blue */
+  --ledger-color-blue-50: #eff6ff;
+  --ledger-color-blue-300: #93c5fd;
+  --ledger-color-blue-900: #1e3a8a;
+
+  /* Success / green */
+  --ledger-color-green-50: #f0fdf4;
+  --ledger-color-green-300: #86efac;
+  --ledger-color-green-800: #166534;
+
+  /* Warning / amber */
+  --ledger-color-amber-50: #fffbeb;
+  --ledger-color-amber-300: #fcd34d;
+  --ledger-color-amber-800: #92400e;
+
+  /* Error / red */
+  --ledger-color-red-50: #fef2f2;
+  --ledger-color-red-300: #fca5a5;
+  --ledger-color-red-800: #991b1b;
+
+  /* Semantic */
+  --ledger-color-background: var(--ledger-color-neutral-0);
+  --ledger-color-surface: var(--ledger-color-neutral-0);
+
+  --ledger-color-text: var(--ledger-color-neutral-900);
+  --ledger-color-text-secondary: var(--ledger-color-neutral-600);
+
+  --ledger-color-border: var(--ledger-color-neutral-300);
+  --ledger-color-border-strong: var(--ledger-color-neutral-700);
+
+  --ledger-color-action: var(--ledger-color-neutral-900);
+  --ledger-color-action-hover: var(--ledger-color-neutral-700);
+  --ledger-color-action-text: var(--ledger-color-neutral-0);
+
+  --ledger-color-status-neutral-background: var(--ledger-color-neutral-100);
+  --ledger-color-status-neutral-border: var(--ledger-color-neutral-300);
+  --ledger-color-status-neutral-text: var(--ledger-color-neutral-700);
+
+  --ledger-color-status-informational-background: var(--ledger-color-blue-50);
+  --ledger-color-status-informational-border: var(--ledger-color-blue-300);
+  --ledger-color-status-informational-text: var(--ledger-color-blue-900);
+
+  --ledger-color-status-success-background: var(--ledger-color-green-50);
+  --ledger-color-status-success-border: var(--ledger-color-green-300);
+  --ledger-color-status-success-text: var(--ledger-color-green-800);
+
+  --ledger-color-status-warning-background: var(--ledger-color-amber-50);
+  --ledger-color-status-warning-border: var(--ledger-color-amber-300);
+  --ledger-color-status-warning-text: var(--ledger-color-amber-800);
+
+  --ledger-color-status-error-background: var(--ledger-color-red-50);
+  --ledger-color-status-error-border: var(--ledger-color-red-300);
+  --ledger-color-status-error-text: var(--ledger-color-red-800);
+
+  --ledger-color-error: #b42318;
+}

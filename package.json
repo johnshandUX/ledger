@@ -1,0 +1,13 @@
+{
+  "name": "ledger",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm -w packages/design-system run build && npm -w apps/bank run build",
+    "build:bank": "npm -w apps/bank run build",
+    "build:design-system": "npm -w packages/design-system run build"
+  }
+}

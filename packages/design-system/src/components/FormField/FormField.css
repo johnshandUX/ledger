@@ -1,0 +1,32 @@
+.ledger-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ledger-space-2);
+}
+
+.ledger-form-field__label {
+  display: flex;
+  align-items: center;
+  gap: var(--ledger-space-1);
+  color: var(--ledger-color-text);
+  font-weight: var(--ledger-font-weight-semibold);
+}
+
+.ledger-form-field__required {
+  color: var(--ledger-color-text-secondary);
+  font-size: var(--ledger-font-size-body-small);
+  font-weight: var(--ledger-font-weight-regular);
+}
+
+.ledger-form-field__helper,
+.ledger-form-field__error {
+  font-size: var(--ledger-font-size-body-small);
+}
+
+.ledger-form-field__helper {
+  color: var(--ledger-color-text-secondary);
+}
+
+.ledger-form-field__error {
+  color: var(--ledger-color-error);
+}
