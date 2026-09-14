@@ -1,5 +1,6 @@
 import { Button, Input } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
+import Link from "next/link";
 import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
 
 const activeProfile = getActiveBusinessProfile();
@@ -73,7 +74,7 @@ export default function Home() {
               {accounts.map((a) => (
                 <tr key={a.id} tabIndex={0} className="row-interactive">
                   <td>
-                    <div className="acc-name">{a.name}</div>
+                    <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{a.description}</div>
                   </td>
                   <td>
@@ -93,7 +94,7 @@ export default function Home() {
               <article key={a.id} className="acc-card" tabIndex={0}>
                 <div className="acc-top">
                   <div>
-                    <div className="acc-name">{a.name}</div>
+                    <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{a.type} • {a.accountNumber}</div>
                   </div>
                   <div className="mono">{fmt(a.availableBalance)}</div>
