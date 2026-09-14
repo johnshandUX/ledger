@@ -1,0 +1,27 @@
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ledger-font-family-sans);
+  font-size: var(--ledger-font-size-body);
+  line-height: var(--ledger-line-height-body);
+}
+
+.ledger-table__head {}
+
+.ledger-table__cell {
+  padding: var(--ledger-space-3) var(--ledger-space-2);
+  border-bottom: var(--ledger-border-width-thin) solid var(--ledger-color-border);
+  color: var(--ledger-color-text);
+}
+
+.ledger-table__header {
+  color: var(--ledger-color-text-secondary);
+  font-weight: var(--ledger-font-weight-semibold);
+}
+
+.ledger-table__cell--right {
+  text-align: right;
+}
+
+/* Base rows are intentionally passive; interactive rows may be styled by the app via a
+   utility class (e.g. `row-interactive`) when clickability is desired. */

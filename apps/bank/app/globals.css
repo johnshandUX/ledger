@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
   --background: var(--ledger-color-background);
   --foreground: var(--ledger-color-text);
 }

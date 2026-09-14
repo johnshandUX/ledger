@@ -1,4 +1,4 @@
-import { Button, Input } from "@johnshandux/ledger-design-system";
+import { Button, Input, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
 import Link from "next/link";
 import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
@@ -60,34 +60,35 @@ export default function Home() {
         </section>
 
         <section className="accounts-list">
-          <table className="accounts-table">
-            <thead>
-              <tr>
-                <th>Account</th>
-                <th>Number / Sort</th>
-                <th>Type</th>
-                <th className="numeric">Current</th>
-                <th className="numeric">Available</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="accounts-table">
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Account</TableHeaderCell>
+                <TableHeaderCell>Number / Sort</TableHeaderCell>
+                <TableHeaderCell>Type</TableHeaderCell>
+                <TableHeaderCell align="right">Current</TableHeaderCell>
+                <TableHeaderCell align="right">Available</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
               {accounts.map((a) => (
-                <tr key={a.id} tabIndex={0} className="row-interactive">
-                  <td>
+                <TableRow key={a.id} tabIndex={0} className="row-interactive">
+                  <TableCell>
                     <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{a.description}</div>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <div className="mono">{a.accountNumber}</div>
                     <div className="mono">{a.sortCode}</div>
-                  </td>
-                  <td>{a.type}</td>
-                  <td className="numeric">{fmt(a.currentBalance)}</td>
-                  <td className="numeric">{fmt(a.availableBalance)}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{a.type}</TableCell>
+                  <TableCell align="right">{fmt(a.currentBalance)}</TableCell>
+                  <TableCell align="right">{fmt(a.availableBalance)}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
 
           <div className="accounts-mobile">
             {accounts.map((a) => (

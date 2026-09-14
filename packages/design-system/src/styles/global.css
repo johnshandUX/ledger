@@ -1,7 +1,3 @@
-:root {
-  color-scheme: light;
-}
-
 body {
   font-family: var(--ledger-font-family-sans);
   color: var(--ledger-color-text);
