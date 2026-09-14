@@ -73,7 +73,7 @@ export default function Home() {
 
             <TableBody>
               {accounts.map((a) => (
-                <TableRow key={a.id} tabIndex={0} className="row-interactive">
+                <TableRow key={a.id}>
                   <TableCell>
                     <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{a.description}</div>

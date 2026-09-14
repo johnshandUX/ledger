@@ -42,16 +42,6 @@
 .mono{font-family:var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono');color:var(--text)}
 .acc-name{font-weight:600}
 .acc-sub{color:var(--muted);font-size:13px}
-.row-interactive{cursor:pointer;transition:background .12s;border-radius:8px}
-.row-interactive:hover {
-  background: var(--ledger-color-status-neutral-background);
-}
-
-.row-interactive:focus-visible {
-  background: var(--ledger-color-status-neutral-background);
-  outline: var(--ledger-border-width-thick) solid var(--ledger-color-text);
-  outline-offset: 2px;
-}
 
 .accounts-mobile{display:none}
 
