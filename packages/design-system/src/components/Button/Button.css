@@ -21,3 +21,12 @@
   color: var(--ledger-color-text);
   border: var(--ledger-border-width-thin) solid var(--ledger-color-border);
 }
+
+.ledger-button--destructive {
+  color: var(--ledger-color-error-text);
+  background: var(--ledger-color-error);
+}
+
+.ledger-button--destructive:hover {
+  background: var(--ledger-color-error-hover);
+}

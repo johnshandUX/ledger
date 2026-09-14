@@ -23,6 +23,7 @@
     ".storybook",
     "vite.config.ts",
     "vite.dialog.config.ts",
+    "vite.interactions.config.ts",
     "vitest.config.ts"
   ]
 }

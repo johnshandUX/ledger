@@ -69,4 +69,6 @@
   --ledger-color-status-error-text: var(--ledger-color-red-800);
 
   --ledger-color-error: #b42318;
+  --ledger-color-error-hover: var(--ledger-color-red-800);
+  --ledger-color-error-text: var(--ledger-color-neutral-0);
 }

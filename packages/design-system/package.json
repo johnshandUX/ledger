@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && npx vite --config vite.icons.config.ts build && npx vite --config vite.dialog.config.ts build"
+    "build": "vite build && npx vite --config vite.icons.config.ts build && npx vite --config vite.dialog.config.ts build && npx vite --config vite.interactions.config.ts build"
   },
   "repository": {
     "type": "git",
@@ -77,6 +77,36 @@
       "import": "./dist/dialog.js",
       "require": "./dist/dialog.cjs",
       "default": "./dist/dialog.js"
+    },
+    "./tooltip": {
+      "types": "./dist/src/tooltip.d.ts",
+      "import": "./dist/tooltip.js",
+      "require": "./dist/tooltip.cjs",
+      "default": "./dist/tooltip.js"
+    },
+    "./popover": {
+      "types": "./dist/src/popover.d.ts",
+      "import": "./dist/popover.js",
+      "require": "./dist/popover.cjs",
+      "default": "./dist/popover.js"
+    },
+    "./dropdown-menu": {
+      "types": "./dist/src/dropdown-menu.d.ts",
+      "import": "./dist/dropdown-menu.js",
+      "require": "./dist/dropdown-menu.cjs",
+      "default": "./dist/dropdown-menu.js"
+    },
+    "./alert-dialog": {
+      "types": "./dist/src/alert-dialog.d.ts",
+      "import": "./dist/alert-dialog.js",
+      "require": "./dist/alert-dialog.cjs",
+      "default": "./dist/alert-dialog.js"
+    },
+    "./sheet": {
+      "types": "./dist/src/sheet.d.ts",
+      "import": "./dist/sheet.js",
+      "require": "./dist/sheet.cjs",
+      "default": "./dist/sheet.js"
     },
     "./styles.css": "./dist/ledger-design-system.css"
   },

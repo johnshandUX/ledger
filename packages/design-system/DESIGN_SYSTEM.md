@@ -262,6 +262,7 @@ For example, Ledger Button currently supports:
 
 - primary
 - secondary
+- destructive, reserved for actions with destructive or irreversible consequences
 
 Disabled Button is not currently a supported Ledger design-system pattern.
 

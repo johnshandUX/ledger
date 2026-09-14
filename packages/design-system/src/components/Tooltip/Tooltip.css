@@ -1,0 +1,17 @@
+.ledger-tooltip__content {
+  z-index: 1100;
+  max-width: 280px;
+  padding: var(--ledger-space-2) var(--ledger-space-3);
+  color: var(--ledger-color-action-text);
+  background: var(--ledger-color-action);
+  border-radius: var(--ledger-radius-small);
+  box-shadow: var(--ledger-shadow-medium);
+  font-family: var(--ledger-font-family-sans);
+  font-size: var(--ledger-font-size-small);
+  line-height: var(--ledger-line-height-small);
+}
+
+.ledger-tooltip__arrow { fill: var(--ledger-color-action); }
+.ledger-tooltip__content[data-state="delayed-open"] { animation: ledger-tooltip-in 120ms ease-out; }
+@keyframes ledger-tooltip-in { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ledger-tooltip__content[data-state] { animation: none; } }
