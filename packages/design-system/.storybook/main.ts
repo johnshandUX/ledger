@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import tailwindcss from '@tailwindcss/vite';
 
 const config: StorybookConfig = {
 stories: [
@@ -12,6 +13,10 @@ stories: [
     "@storybook/addon-docs",
     "@storybook/addon-mcp"
   ],
-  "framework": "@storybook/react-vite"
+  "framework": "@storybook/react-vite",
+  viteFinal: async (config) => ({
+    ...config,
+    plugins: [...(config.plugins ?? []), tailwindcss()],
+  })
 };
 export default config;

@@ -4,6 +4,7 @@ import "./tokens/radius.css";
 import "./tokens/typography.css";
 import "./tokens/borders.css";
 import "./tokens/elevation.css";
+import "./components/Dialog/Dialog.css";
 
 export * from "./components/Button/Button";
 export * from "./components/FormField/FormField";

@@ -1,0 +1,7 @@
+/*
+ * Tailwind is restricted to shadcn-derived implementation utilities.
+ * Ledger owns global normalization and visual tokens, so Preflight and
+ * Tailwind's default design theme are deliberately not imported.
+ */
+@layer utilities;
+@import "tailwindcss/utilities.css" layer(utilities) source("../components/Dialog");

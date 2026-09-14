@@ -36,6 +36,7 @@
   /* Semantic */
   --ledger-color-background: var(--ledger-color-neutral-0);
   --ledger-color-surface: var(--ledger-color-neutral-0);
+  --ledger-color-overlay: color-mix(in srgb, var(--ledger-color-neutral-950) 48%, transparent);
 
   --ledger-color-text: var(--ledger-color-neutral-900);
   --ledger-color-text-secondary: var(--ledger-color-neutral-600);
