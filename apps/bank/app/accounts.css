@@ -1,8 +1,8 @@
 :root{
-  --bg: #0f1113; /* very dark grey */
-  --panel: #0b0c0d;
-  --muted: #9aa0a6;
-  --text: #e9eef2;
+  --bg: var(--ledger-color-background);
+  --panel: var(--ledger-color-surface);
+  --muted: var(--ledger-color-text-secondary);
+  --text: var(--ledger-color-text);
   --card-radius: 10px;
 }
 
@@ -18,12 +18,12 @@
   align-items:center;
   gap:24px;
   padding:20px 28px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
+  border-bottom:1px solid var(--ledger-color-border);
 }
 .brand{font-weight:700;font-size:18px}
 .primary-nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
 .nav-item{padding:8px 12px;border-radius:8px;color:var(--muted)}
-.nav-item.selected{background:rgba(255,255,255,0.03);color:var(--text);font-weight:600}
+.nav-item.selected{background:var(--ledger-color-status-neutral-background);color:var(--text);font-weight:600}
 .profile{margin-left:auto;color:var(--muted)}
 
 .page{max-width:1100px;margin:28px auto;padding:0 20px}
@@ -39,14 +39,14 @@
 .summary-value{font-size:18px;font-weight:700;margin-top:6px}
 
 .accounts-table{width:100%;border-collapse:collapse;background:transparent}
-.accounts-table thead th{color:var(--muted);text-align:left;padding:12px 8px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.accounts-table tbody td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:middle}
+.accounts-table thead th{color:var(--muted);text-align:left;padding:12px 8px;border-bottom:1px solid var(--ledger-color-border)}
+.accounts-table tbody td{padding:12px 8px;border-bottom:1px solid var(--ledger-color-border);vertical-align:middle}
 .numeric{text-align:right}
 .mono{font-family:var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono');color:var(--text)}
 .acc-name{font-weight:600}
 .acc-sub{color:var(--muted);font-size:13px}
 .row-interactive{cursor:pointer;transition:background .12s;border-radius:8px}
-.row-interactive:focus, .row-interactive:hover{background:rgba(255,255,255,0.02);outline:none}
+.row-interactive:focus, .row-interactive:hover{background:var(--ledger-color-status-neutral-background);outline:none}
 
 .accounts-mobile{display:none}
 
