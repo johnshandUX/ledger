@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@johnshandux/ledger-design-system": ["../../packages/design-system/src/index.ts"]
     }
   },
   "include": [

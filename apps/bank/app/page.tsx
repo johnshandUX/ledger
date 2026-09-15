@@ -2,6 +2,7 @@ import { Button, Input, Table, TableHead, TableBody, TableRow, TableHeaderCell, 
 import "./accounts.css";
 import Link from "next/link";
 import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
+import { formatAccountType } from "../src/presentation/accountDetail";
 
 const activeProfile = getActiveBusinessProfile();
 const accounts = activeProfile ? getAccountsForProfile(activeProfile.id) : [];
@@ -82,7 +83,7 @@ export default function Home() {
                     <div className="mono">{a.accountNumber}</div>
                     <div className="mono">{a.sortCode}</div>
                   </TableCell>
-                  <TableCell>{a.type}</TableCell>
+                  <TableCell>{formatAccountType(a.type)}</TableCell>
                   <TableCell align="right">{fmt(a.currentBalance)}</TableCell>
                   <TableCell align="right">{fmt(a.availableBalance)}</TableCell>
                 </TableRow>
@@ -96,7 +97,7 @@ export default function Home() {
                 <div className="acc-top">
                   <div>
                     <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
-                    <div className="acc-sub">{a.type} • {a.accountNumber}</div>
+                    <div className="acc-sub">{formatAccountType(a.type)} • {a.accountNumber}</div>
                   </div>
                   <div className="mono">{fmt(a.availableBalance)}</div>
                 </div>

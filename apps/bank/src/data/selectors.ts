@@ -15,6 +15,12 @@ import { Account } from "../domain/Account";
 import { Transaction } from "../domain/Transaction";
 import { Payment } from "../domain/Payment";
 import { Beneficiary } from "../domain/Beneficiary";
+import { Permission } from "../domain/Permission";
+
+export type AccountAccessResult =
+  | { status: "not-authorised" }
+  | { status: "not-found" }
+  | { status: "allowed"; account: Account; canViewTransactions: boolean };
 
 export function getUser(userId: string): User | undefined {
   return users.find((u) => u.id === userId);
@@ -37,22 +43,48 @@ export function getBusinessForProfile(profileId: string): Business | undefined {
   return p ? getBusiness(p.businessId) : undefined;
 }
 
-export function getAccountsForBusiness(businessId: string): Account[] {
+function getAccountsForBusiness(businessId: string): Account[] {
   return accounts.filter((a) => a.businessId === businessId);
 }
 
 export function getAccountsForProfile(profileId: string): Account[] {
   const p = getBusinessProfile(profileId);
-  if (!p) return [];
+  if (!p || !p.permissions.includes("accounts:view")) return [];
   return getAccountsForBusiness(p.businessId);
 }
 
-export function getAccount(accountId: string): Account | undefined {
+function findAccount(accountId: string): Account | undefined {
   return accounts.find((a) => a.id === accountId);
 }
 
-export function getTransactionsForAccount(accountId: string): Transaction[] {
-  return transactions.filter((t) => t.accountId === accountId);
+function findTransactionsForAccount(accountId: string): Transaction[] {
+  return transactions
+    .filter((t) => t.accountId === accountId)
+    .sort((a, b) => b.postedAt.localeCompare(a.postedAt) || b.id.localeCompare(a.id));
+}
+
+export function getAccountAccessForProfile(profileId: string, accountId: string): AccountAccessResult {
+  const profile = getBusinessProfile(profileId);
+  if (!profile || !profile.permissions.includes("accounts:view")) {
+    return { status: "not-authorised" };
+  }
+
+  const account = findAccount(accountId);
+  if (!account || account.businessId !== profile.businessId) {
+    return { status: "not-found" };
+  }
+
+  return {
+    status: "allowed",
+    account,
+    canViewTransactions: profile.permissions.includes("accounts:transactions:view"),
+  };
+}
+
+export function getTransactionsForProfileAccount(profileId: string, accountId: string): Transaction[] | undefined {
+  const access = getAccountAccessForProfile(profileId, accountId);
+  if (access.status !== "allowed" || !access.canViewTransactions) return undefined;
+  return findTransactionsForAccount(accountId);
 }
 
 export function getPaymentsForBusiness(businessId: string): Payment[] {
@@ -76,10 +108,10 @@ export function getBeneficiariesForBusiness(businessId: string): Beneficiary[] {
   return beneficiaries.filter((b) => b.businessId === businessId);
 }
 
-export function hasPermission(profileId: string, permission: string): boolean {
+export function hasPermission(profileId: string, permission: Permission): boolean {
   const p = getBusinessProfile(profileId);
   if (!p) return false;
-  return p.permissions.includes(permission as any);
+  return p.permissions.includes(permission);
 }
 
 // Active session helpers
@@ -101,10 +133,9 @@ export default {
   getBusinessProfile,
   getBusinessProfilesForUser,
   getBusinessForProfile,
-  getAccountsForBusiness,
   getAccountsForProfile,
-  getAccount,
-  getTransactionsForAccount,
+  getAccountAccessForProfile,
+  getTransactionsForProfileAccount,
   getPaymentsForBusiness,
   getPaymentsForProfile,
   getPaymentsAwaitingApproval,
