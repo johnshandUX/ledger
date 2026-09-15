@@ -3,3 +3,22 @@ body {
   color: var(--ledger-color-text);
   background: var(--ledger-color-background);
 }
+
+.ledger-link {
+  color: var(--ledger-color-action);
+  font: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--ledger-border-width-thin);
+  text-underline-offset: var(--ledger-space-1);
+}
+
+.ledger-link:hover {
+  color: var(--ledger-color-action-hover);
+  text-decoration-thickness: var(--ledger-border-width-thick);
+}
+
+.ledger-link:focus-visible {
+  border-radius: var(--ledger-radius-small);
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-action);
+  outline-offset: var(--ledger-space-1);
+}

@@ -1,35 +1,19 @@
-import { Button, Input, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "@johnshandux/ledger-design-system";
+import { Button, formatCurrencyAmount, Input, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
 import Link from "next/link";
 import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
 import { formatAccountType } from "../src/presentation/accountDetail";
+import { getBalanceTotalsByCurrency } from "../src/presentation/accountOverview";
+import { ProductShell } from "./ProductShell";
 
 const activeProfile = getActiveBusinessProfile();
 const accounts = activeProfile ? getAccountsForProfile(activeProfile.id) : [];
 
-const fmt = (v: number) =>
-  new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(v);
-
 export default function Home() {
-  const totalCurrent = accounts.reduce((s, a) => s + a.currentBalance, 0);
-  const totalAvailable = accounts.reduce((s, a) => s + a.availableBalance, 0);
+  const balanceTotals = getBalanceTotalsByCurrency(accounts);
 
   return (
-    <div className="product-shell">
-      <header className="shell-header">
-        <div className="brand">Ledger Bank</div>
-
-        <nav className="primary-nav" aria-label="Primary">
-          <ul>
-            <li className="nav-item selected">Accounts</li>
-            <li className="nav-item">Payments</li>
-            <li className="nav-item">Reporting</li>
-          </ul>
-        </nav>
-
-        <div className="profile">J. Finance</div>
-      </header>
-
+    <ProductShell activeRoute="accounts">
       <main className="page">
         <div className="page-header">
           <div>
@@ -46,12 +30,16 @@ export default function Home() {
         <section className="summary">
           <div className="summary-card">
             <div className="summary-label">Total available</div>
-            <div className="summary-value">{fmt(totalAvailable)}</div>
+            <div className="summary-values">
+              {balanceTotals.map((total) => <div className="summary-value" key={total.currency}>{formatCurrencyAmount(total.available, total.currency)}</div>)}
+            </div>
           </div>
 
           <div className="summary-card">
             <div className="summary-label">Total current</div>
-            <div className="summary-value">{fmt(totalCurrent)}</div>
+            <div className="summary-values">
+              {balanceTotals.map((total) => <div className="summary-value" key={total.currency}>{formatCurrencyAmount(total.current, total.currency)}</div>)}
+            </div>
           </div>
 
           <div className="summary-card">
@@ -76,7 +64,7 @@ export default function Home() {
               {accounts.map((a) => (
                 <TableRow key={a.id}>
                   <TableCell>
-                    <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
+                    <div className="acc-name"><Link className="ledger-link" href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{a.description}</div>
                   </TableCell>
                   <TableCell>
@@ -84,8 +72,8 @@ export default function Home() {
                     <div className="mono">{a.sortCode}</div>
                   </TableCell>
                   <TableCell>{formatAccountType(a.type)}</TableCell>
-                  <TableCell align="right">{fmt(a.currentBalance)}</TableCell>
-                  <TableCell align="right">{fmt(a.availableBalance)}</TableCell>
+                  <TableCell className="financial-value" align="right">{formatCurrencyAmount(a.currentBalance, a.currency)}</TableCell>
+                  <TableCell className="financial-value" align="right">{formatCurrencyAmount(a.availableBalance, a.currency)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -93,17 +81,17 @@ export default function Home() {
 
           <div className="accounts-mobile">
             {accounts.map((a) => (
-              <article key={a.id} className="acc-card" tabIndex={0}>
+              <article key={a.id} className="acc-card">
                 <div className="acc-top">
                   <div>
-                    <div className="acc-name"><Link href={`/accounts/${a.id}`}>{a.name}</Link></div>
+                    <div className="acc-name"><Link className="ledger-link" href={`/accounts/${a.id}`}>{a.name}</Link></div>
                     <div className="acc-sub">{formatAccountType(a.type)} • {a.accountNumber}</div>
                   </div>
-                  <div className="mono">{fmt(a.availableBalance)}</div>
+                  <div className="financial-value">{formatCurrencyAmount(a.availableBalance, a.currency)}</div>
                 </div>
 
                 <div className="acc-meta">
-                  <div>Current: <span className="mono">{fmt(a.currentBalance)}</span></div>
+                  <div>Current: <span className="financial-value">{formatCurrencyAmount(a.currentBalance, a.currency)}</span></div>
                   <div>Sort: <span className="mono">{a.sortCode}</span></div>
                 </div>
               </article>
@@ -111,6 +99,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </div>
+    </ProductShell>
   );
 }

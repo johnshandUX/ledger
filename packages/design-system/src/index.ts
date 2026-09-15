@@ -19,6 +19,7 @@ export * from "./components/Select/Select";
 export * from "./components/Checkbox/Checkbox";
 export * from "./components/Radio/Radio";
 export * from "./components/Table";
+export * from "./lib/formatCurrencyAmount";
 // Icons are exported from a separate entry to avoid pulling client-only
 // runtime (lucide-react) into the main package entry which should remain
 // safe for Server Component consumers.

@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { formatCurrencyAmount } from "@johnshandux/ledger-design-system";
 import "../../accounts.css";
 import { getAccountAccessForProfile, getActiveBusinessProfile, getTransactionsForProfileAccount } from "../../../src/data/selectors";
-import { formatAccountType, formatCurrency, formatUpdatedAt } from "../../../src/presentation/accountDetail";
+import { formatAccountType, formatUpdatedAt } from "../../../src/presentation/accountDetail";
+import { ProductShell } from "../../ProductShell";
 import { TransactionHistory } from "./TransactionHistory";
 
 export default async function AccountPage({ params }: { params: Promise<{ accountId: string }> }) {
@@ -12,30 +14,16 @@ export default async function AccountPage({ params }: { params: Promise<{ accoun
 
   if (access.status === "not-found") notFound();
   if (access.status === "not-authorised") {
-    return <main className="state-page"><div className="state-panel"><p className="eyebrow">Account access</p><h1>You do not have access to accounts</h1><p>Ask a business administrator for permission to view account information.</p><Link href="/" className="text-link">Return to accounts</Link></div></main>;
+    return <main className="state-page"><div className="state-panel"><p className="eyebrow">Account access</p><h1>You do not have access to accounts</h1><p>Ask a business administrator for permission to view account information.</p><Link href="/" className="ledger-link state-link">Return to accounts</Link></div></main>;
   }
 
   const { account, canViewTransactions } = access;
   const transactions = canViewTransactions && activeProfile ? getTransactionsForProfileAccount(activeProfile.id, account.id) ?? [] : undefined;
 
   return (
-    <div className="product-shell">
-      <header className="shell-header">
-        <Link href="/" className="brand">Ledger Bank</Link>
-
-        <nav className="primary-nav" aria-label="Primary">
-          <ul>
-            <li><Link href="/" className="nav-item selected" aria-current="page">Accounts</Link></li>
-            <li><span className="nav-item">Payments</span></li>
-            <li><span className="nav-item">Reporting</span></li>
-          </ul>
-        </nav>
-
-        <div className="profile">J. Finance</div>
-      </header>
-
+    <ProductShell activeRoute="accounts">
       <main className="page account-page">
-        <nav className="breadcrumb" aria-label="Breadcrumb"><ol><li><Link href="/">Accounts</Link></li><li aria-current="page">{account.name}</li></ol></nav>
+        <nav className="breadcrumb" aria-label="Breadcrumb"><ol><li><Link className="ledger-link" href="/">Accounts</Link></li><li aria-current="page">{account.name}</li></ol></nav>
 
         <header className="account-header">
           <div>
@@ -47,8 +35,8 @@ export default async function AccountPage({ params }: { params: Promise<{ accoun
 
         <section className="balance-summary" aria-labelledby="balances-heading">
           <h2 id="balances-heading" className="visually-hidden">Balances</h2>
-          <div className="primary-balance"><span>Available balance</span><strong className="financial-value">{formatCurrency(account.availableBalance, account.currency)}</strong></div>
-          <div className="secondary-balance"><span>Current balance</span><strong className="financial-value">{formatCurrency(account.currentBalance, account.currency)}</strong></div>
+          <div className="primary-balance"><span>Available balance</span><strong className="financial-value">{formatCurrencyAmount(account.availableBalance, account.currency)}</strong></div>
+          <div className="secondary-balance"><span>Current balance</span><strong className="financial-value">{formatCurrencyAmount(account.currentBalance, account.currency)}</strong></div>
           <p>Updated {formatUpdatedAt(account.balancesUpdatedAt)}</p>
         </section>
 
@@ -62,6 +50,6 @@ export default async function AccountPage({ params }: { params: Promise<{ accoun
           {transactions === undefined ? <div className="permission-state"><h3>You do not have permission to view transactions</h3><p>Account balances and details remain available for your role.</p></div> : <TransactionHistory transactions={transactions} />}
         </section>
       </main>
-    </div>
+    </ProductShell>
   );
 }

@@ -83,10 +83,10 @@ Examples include:
 - Checkbox
 - Radio
 - Textarea
-- Link
-- Badge
+- Link (visual convention only; not an implemented React component)
+- Badge (planned; not an implemented public component)
 - Alert
-- Card
+- Card (planned; not an implemented public component)
 - Table
 - Tabs
 - Pagination
@@ -115,6 +115,50 @@ Patterns may contain more domain knowledge than individual components.
 Ledger Bank screens and journeys consume foundations, components and patterns.
 
 Product-specific UI should not be added to the core component library unless it represents a genuinely reusable pattern.
+
+### Typography consumption contract
+
+Ledger owns the authoritative font-family and type-scale tokens, including
+`--ledger-font-family-sans`. Consuming applications own framework-specific font loading and
+must make the font named by Ledger's family token available. Applications should consume the
+Ledger tokens rather than substitute a framework default or introduce a parallel type system.
+
+The current primary family is Inter. Changing that family is a design-system decision, not an
+application-level choice. Monospace treatment for product-specific identifiers may remain local
+until Ledger defines an authoritative monospace token.
+
+### Financial presentation
+
+Ledger's `formatCurrencyAmount(value, currency, locale?)` utility provides server-safe,
+framework-neutral currency formatting through `Intl.NumberFormat`. Its default locale is `en-GB`;
+products may pass an explicit locale when their locale context differs. Values must be finite
+JavaScript numbers and currencies must be explicit uppercase three-letter ISO 4217 codes.
+
+Ownership is intentionally split:
+
+- product/domain data owns the currency source and transaction direction
+- application locale context owns any locale override; Ledger supplies the documented default
+- `Intl.NumberFormat` owns currency-specific fraction digits and the visual rendering of zero and
+  negative values
+- the consuming product owns missing-value semantics and placeholders
+- Ledger presentation styles own tabular numerals and numeric alignment; products apply those
+  rules to the appropriate data
+- the product must not aggregate unlike currencies unless it has an explicit conversion and
+  valuation policy
+
+The formatter does not infer transaction direction, choose money-in or money-out placement,
+aggregate balances, perform foreign exchange, define missing values, or perform financial
+arithmetic. JavaScript `number` is acceptable for current fixture values, which must be finite.
+Precision-safe monetary representation must be revisited before implementing substantive payment
+arithmetic, FX, interest, fees, or accounting calculations.
+
+### Link styling convention
+
+Ledger provides `.ledger-link` as a framework-neutral visual convention for semantic anchors. It
+owns visual distinction, underline treatment, hover, focus-visible, and typography-compatible
+styling. The consuming application continues to own anchor semantics, routing, framework link
+behaviour, external-link detection, permissions, and navigation state. Ledger does not currently
+export a React `Link` component.
 
 ---
 

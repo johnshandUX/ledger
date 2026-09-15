@@ -40,10 +40,10 @@ Existing:
 
 To add:
 
-- Link
-- Badge
+- Link React component (deferred; `.ledger-link` visual convention exists)
+- Badge (planned; no public component exists)
 - Alert
-- Card
+- Card (planned; no public component exists)
 - Tabs
 - Table
 - Pagination

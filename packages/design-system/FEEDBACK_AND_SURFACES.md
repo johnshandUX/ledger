@@ -1,6 +1,6 @@
 # Ledger Feedback and Surfaces
 
-This document defines the shared rules for Ledger feedback, status and surface components.
+This document defines the shared rules for Ledger feedback, status and surface concepts.
 
 It applies to:
 
@@ -8,6 +8,10 @@ It applies to:
 - Alert
 - Card
 - Link
+
+Alert is implemented. Badge and Card remain specifications for planned components. Link is
+implemented only as the framework-neutral `.ledger-link` CSS convention; there is no public React
+component for Badge, Card, or Link.
 
 These components should remain visually restrained and consistent with Ledger's institutional, professional banking direction.
 
@@ -146,6 +150,9 @@ Link should:
 - use Ledger typography
 
 Do not use Link when the interaction performs an action that should be represented by Button.
+
+Ledger supplies the `.ledger-link` visual convention rather than a React component. Applications
+own routing, framework link behaviour, external-link detection, permissions, and navigation state.
 
 ---
 
