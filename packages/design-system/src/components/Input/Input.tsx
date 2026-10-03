@@ -3,12 +3,14 @@ import "./Input.css";
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
+  visuallyHiddenLabel?: boolean;
   hint?: string;
   error?: string;
 };
 
 export function Input({
   label,
+  visuallyHiddenLabel = false,
   hint,
   error,
   id,
@@ -29,7 +31,10 @@ export function Input({
 
   return (
     <div className="ledger-input-field">
-      <label className="ledger-input-label" htmlFor={inputId}>
+      <label
+        className={`ledger-input-label${visuallyHiddenLabel ? " ledger-input-label--visually-hidden" : ""}`}
+        htmlFor={inputId}
+      >
         {label}
       </label>
 

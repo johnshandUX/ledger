@@ -16,17 +16,31 @@
   background: var(--ledger-color-action-hover);
 }
 
+.ledger-button--primary:active {
+  background: var(--ledger-color-action-pressed);
+}
+
 .ledger-button--secondary {
   background: var(--ledger-color-surface);
   color: var(--ledger-color-text);
-  border: var(--ledger-border-width-thin) solid var(--ledger-color-border);
+  border: var(--ledger-border-width-thin) solid var(--ledger-color-control-border);
 }
 
+.ledger-button--secondary:hover { background: var(--ledger-color-surface-hover); }
+.ledger-button--secondary:active { background: var(--ledger-color-surface-selected); }
+
 .ledger-button--destructive {
-  color: var(--ledger-color-error-text);
-  background: var(--ledger-color-error);
+  color: var(--ledger-color-error-action-text);
+  background: var(--ledger-color-error-action);
 }
 
 .ledger-button--destructive:hover {
-  background: var(--ledger-color-error-hover);
+  background: var(--ledger-color-error-action-hover);
+}
+
+.ledger-button--destructive:active { background: var(--ledger-color-error-action-pressed); }
+
+.ledger-button:focus-visible {
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
+  outline-offset: var(--ledger-space-1);
 }

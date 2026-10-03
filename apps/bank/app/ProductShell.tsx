@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getActiveBusinessProfile, getActiveUser } from "../src/data/selectors";
 import { userFullName } from "../src/domain/User";
+import { ThemeControl } from "./ThemeControl";
 
 type ProductShellProps = {
   activeRoute: "accounts" | "payments" | "reporting";
@@ -46,6 +47,8 @@ export function ProductShell({ activeRoute, children }: ProductShellProps) {
             ))}
           </ul>
         </nav>
+
+        <ThemeControl />
 
         <div className="profile">
           <span>{activeUser ? userFullName(activeUser) : "Signed-in user"}</span>

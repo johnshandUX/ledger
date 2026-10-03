@@ -4,12 +4,15 @@ import "./tokens/radius.css";
 import "./tokens/typography.css";
 import "./tokens/borders.css";
 import "./tokens/elevation.css";
+import "./themes/light.css";
+import "./themes/dark.css";
 import "./components/Dialog/Dialog.css";
 import "./components/Tooltip/Tooltip.css";
 import "./components/Popover/Popover.css";
 import "./components/DropdownMenu/DropdownMenu.css";
 import "./components/AlertDialog/AlertDialog.css";
 import "./components/Sheet/Sheet.css";
+import "./components/AppearanceToggle/AppearanceToggle.css";
 
 export * from "./components/Button/Button";
 export * from "./components/FormField/FormField";

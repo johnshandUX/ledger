@@ -7,9 +7,11 @@
   "description": "A production-focused design system and prototype for a modern business banking platform",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:theme-parity": "node --test src/themes/dark.parity.test.mjs",
+    "test:theme-artifact": "node --test src/themes/theme-artifact.test.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && npx vite --config vite.icons.config.ts build && npx vite --config vite.dialog.config.ts build && npx vite --config vite.interactions.config.ts build"
+    "build": "vite build && npx vite --config vite.icons.config.ts build && npx vite --config vite.dialog.config.ts build && npx vite --config vite.interactions.config.ts build && npm run test:theme-artifact"
   },
   "repository": {
     "type": "git",
@@ -107,6 +109,12 @@
       "import": "./dist/sheet.js",
       "require": "./dist/sheet.cjs",
       "default": "./dist/sheet.js"
+    },
+    "./appearance-toggle": {
+      "types": "./dist/src/appearance-toggle.d.ts",
+      "import": "./dist/appearance-toggle.js",
+      "require": "./dist/appearance-toggle.cjs",
+      "default": "./dist/appearance-toggle.js"
     },
     "./styles.css": "./dist/ledger-design-system.css"
   },

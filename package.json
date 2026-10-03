@@ -6,8 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm -w packages/design-system run build && npm -w apps/bank run build",
+    "build": "npm -w packages/design-system run build && npm -w apps/bank run build && npm -w apps/site run build",
     "build:bank": "npm -w apps/bank run build",
-    "build:design-system": "npm -w packages/design-system run build"
+    "build:design-system": "npm -w packages/design-system run build",
+    "build:site": "npm -w apps/site run build"
   }
 }

@@ -19,7 +19,7 @@
   margin: 0;
   flex-shrink: 0;
   appearance: none;
-  border: var(--ledger-border-width-thick) solid var(--ledger-color-border);
+  border: var(--ledger-border-width-thick) solid var(--ledger-color-control-border);
   border-radius: 50%;
   background-color: var(--ledger-color-surface);
   background-image: none;
@@ -31,17 +31,20 @@
 .ledger-radio:checked {
   border-color: var(--ledger-color-action);
   background-color: var(--ledger-color-surface);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none'%3E%3Ccircle cx='5' cy='5' r='4' fill='%23171717'/%3E%3C/svg%3E");
+  background-image: radial-gradient(circle, var(--ledger-color-action) 0 4px, transparent 4.5px);
 }
 
 .ledger-radio:focus-visible {
-  outline: var(--ledger-border-width-thick) solid var(--ledger-color-text);
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
   outline-offset: 2px;
 }
 
 .ledger-radio--error {
   border-color: var(--ledger-color-error);
 }
+
+.ledger-radio:disabled { border-color: var(--ledger-color-border); background-color: var(--ledger-color-surface-disabled); cursor: not-allowed; }
+.ledger-radio-label:has(.ledger-radio:disabled) { color: var(--ledger-color-text-disabled); cursor: not-allowed; }
 
 .ledger-radio-hint {
   color: var(--ledger-color-text-secondary);

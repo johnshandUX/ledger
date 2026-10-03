@@ -53,19 +53,25 @@ Error text should use the Ledger error colour.
 
 ## 3. Border treatment
 
-Interactive form controls should use a 2px border by default.
+Interactive form controls should preserve their border geometry across default, hover, focus,
+error, and disabled states so state changes do not move layout.
 
-Use:
+Checkbox, Radio, Select, and Textarea use the full 2px boundary by default. Input uses a constant
+1px border whose semantic colour may be transparent at rest when the themed control surface
+provides sufficient identification. Hover should strengthen the boundary, while focus and
+validation must remain more prominent than hover.
 
-`--ledger-border-width-thick`
+Control boundaries should use:
 
-The default border colour should use:
-
-`--ledger-color-border`
+- `--ledger-color-control-border` for controls with a persistent boundary
+- `--ledger-color-control-border-resting` for Input at rest
+- `--ledger-color-control-border-hover` for Input hover
 
 Focus treatment should remain clearly visible and should not rely on colour alone.
 
-Controls should not use a 1px border as their default interactive boundary unless explicitly justified.
+Theme mappings may make Input's resting border transparent only where its surface and context
+preserve a clear control affordance. Light appearance retains a visible resting boundary because
+its input and surrounding surfaces are similar.
 
 ---
 
@@ -151,11 +157,15 @@ Do not hard-code a narrow component width purely for demonstration purposes.
 Input should:
 
 - use the standard field structure
-- use the shared 2px control border
+- retain constant 1px border geometry across default and hover states
+- use a restrained resting boundary, a stronger hover boundary, and the shared focus treatment
 - use medium radius
 - use Ledger typography
 - maintain a minimum height of approximately 44px
 - support label, hint and error states
+- keep labels visible by default
+- support a visually hidden label for contextually clear search controls while retaining the
+  semantic label as the accessible name
 
 ---
 

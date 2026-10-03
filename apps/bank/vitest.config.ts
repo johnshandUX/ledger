@@ -3,9 +3,16 @@ import { resolve } from "node:path";
 
 export default defineConfig({
   resolve: {
-    alias: {
-      "@johnshandux/ledger-design-system": resolve(__dirname, "../../packages/design-system/src/index.ts"),
-    },
+    alias: [
+      {
+        find: "@johnshandux/ledger-design-system/appearance-toggle",
+        replacement: resolve(__dirname, "../../packages/design-system/src/appearance-toggle.ts"),
+      },
+      {
+        find: "@johnshandux/ledger-design-system",
+        replacement: resolve(__dirname, "../../packages/design-system/src/index.ts"),
+      },
+    ],
   },
   test: {
     environment: "node",

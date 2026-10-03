@@ -9,6 +9,19 @@
   font-weight: var(--ledger-font-weight-semibold);
 }
 
+.ledger-input-label--visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
 .ledger-input-hint {
   color: var(--ledger-color-text-secondary);
   font-size: var(--ledger-font-size-body-small);
@@ -19,7 +32,7 @@
   width: 100%;
   min-height: 44px;
   padding: var(--ledger-space-2) var(--ledger-space-3);
-  border: var(--ledger-border-width-thick) solid var(--ledger-color-border);
+  border: var(--ledger-border-width-thin) solid var(--ledger-color-control-border-resting);
   border-radius: var(--ledger-radius-medium);
   background: var(--ledger-color-surface);
   color: var(--ledger-color-text);
@@ -29,8 +42,14 @@
   line-height: var(--ledger-line-height-body);
 }
 
-.ledger-input:focus {
-  outline: var(--ledger-border-width-thick) solid var(--ledger-color-text);
+.ledger-input::placeholder { color: var(--ledger-color-text-tertiary); }
+.ledger-input-field > input.ledger-input:hover:not(:disabled, .ledger-input--error) {
+  border-color: var(--ledger-color-control-border-hover);
+}
+.ledger-input:disabled { color: var(--ledger-color-text-disabled); background: var(--ledger-color-surface-disabled); cursor: not-allowed; }
+
+.ledger-input:focus-visible {
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
   outline-offset: 2px;
 }
 

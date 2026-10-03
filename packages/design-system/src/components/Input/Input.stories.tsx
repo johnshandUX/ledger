@@ -37,6 +37,28 @@ export const WithHint: Story = {
   },
 };
 
+export const Populated: Story = {
+  args: {
+    defaultValue: "Operating account",
+  },
+};
+
+export const VisuallyHiddenLabel: Story = {
+  args: {
+    label: "Search accounts",
+    visuallyHiddenLabel: true,
+    placeholder: "Search accounts",
+    type: "search",
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    placeholder: "Search unavailable",
+  },
+};
+
 export const Error: Story = {
   args: {
     error: "Enter an account name.",

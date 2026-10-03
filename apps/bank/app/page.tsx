@@ -22,7 +22,12 @@ export default function Home() {
           </div>
 
           <div className="page-actions">
-            <Input label="Search accounts" placeholder="Search account name or number" />
+            <Input
+              label="Search accounts"
+              visuallyHiddenLabel
+              placeholder="Search accounts"
+              type="search"
+            />
             <Button className="primary-action">Make a payment</Button>
           </div>
         </div>

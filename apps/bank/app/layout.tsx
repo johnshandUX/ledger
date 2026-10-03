@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@johnshandux/ledger-design-system/styles.css";
 import "./globals.css";
+import { PrototypeNotice } from "./PrototypeNotice";
 
 const inter = Inter({
   variable: "--ledger-font-family-sans",
@@ -9,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ledger Bank",
-  description: "Ledger commercial banking prototype",
+  title: "Ledger Bank · Demonstration prototype",
+  description: "A fictional commercial banking reference implementation built with the Ledger design system.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col"><PrototypeNotice />{children}</body>
     </html>
   );
 }

@@ -19,6 +19,6 @@ body {
 
 .ledger-link:focus-visible {
   border-radius: var(--ledger-radius-small);
-  outline: var(--ledger-border-width-thick) solid var(--ledger-color-action);
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
   outline-offset: var(--ledger-space-1);
 }

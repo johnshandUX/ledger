@@ -11,3 +11,25 @@ body {
   color: var(--ledger-color-text);
   font-family: var(--ledger-font-family-sans);
 }
+
+.prototype-notice {
+  min-height: 36px;
+  padding: var(--ledger-space-2) var(--ledger-space-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ledger-space-3);
+  border-bottom: var(--ledger-border-width-thin) solid var(--ledger-color-status-informational-border);
+  background: var(--ledger-color-status-informational-background);
+  color: var(--ledger-color-status-informational-text);
+  font-size: var(--ledger-font-size-small);
+  line-height: var(--ledger-line-height-small);
+}
+
+@media (max-width: 640px) {
+  .prototype-notice {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+}

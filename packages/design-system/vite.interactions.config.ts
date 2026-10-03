@@ -13,6 +13,7 @@ export default defineConfig({
         "dropdown-menu": resolve("src/dropdown-menu.ts"),
         "alert-dialog": resolve("src/alert-dialog.ts"),
         sheet: resolve("src/sheet.ts"),
+        "appearance-toggle": resolve("src/appearance-toggle.ts"),
       },
       formats: ["es", "cjs"],
       cssFileName: "interactions",

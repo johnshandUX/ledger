@@ -191,6 +191,7 @@ Examples:
 
 - `--ledger-color-background`
 - `--ledger-color-surface`
+- `--ledger-color-surface-subtle`
 - `--ledger-color-text`
 - `--ledger-color-text-secondary`
 - `--ledger-color-border`
@@ -205,19 +206,25 @@ Components should not depend directly on primitive colours unless there is a cle
 
 ## 5. Theming
 
-Ledger currently supports a single light theme.
+Ledger supports light and dark appearances through semantic colour-token remapping. Consuming
+applications own a `"system" | "light" | "dark"` preference and apply an explicit preference with
+`data-theme="light"` or `data-theme="dark"` on the document element. With no `data-theme`
+attribute, the design-system stylesheet follows `prefers-color-scheme`.
 
-The architecture must allow future support for:
+Theme preferences are intentionally separate from future accent or brand selection. Components
+must consume semantic roles and must not contain appearance-specific selectors.
+
+The architecture allows future support for:
 
 - dark mode
 - alternative Ledger themes
 - white-label or branded implementations
 
-Themes should primarily work by remapping semantic tokens.
+Themes work primarily by remapping semantic tokens.
 
 Components should not require separate implementations for each theme.
 
-Do not create dark-mode variants until they are required.
+Applications own preference state and persistence policy; the design system owns theme mappings.
 
 ---
 

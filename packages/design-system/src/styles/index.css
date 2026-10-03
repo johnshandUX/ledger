@@ -4,5 +4,7 @@
 @import "../tokens/typography.css";
 @import "../tokens/borders.css";
 @import "../tokens/elevation.css";
+@import "../themes/light.css";
+@import "../themes/dark.css";
 @import "./tailwind.css";
 @import "./global.css";

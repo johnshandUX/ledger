@@ -1,0 +1,117 @@
+/*
+ * Dark semantics intentionally appear in both the system-preference and explicit-override rules.
+ * Keep the declarations identical; dark.parity.test.mjs protects their parity without a token generator.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --ledger-color-background: var(--ledger-color-neutral-950);
+    --ledger-color-surface: var(--ledger-color-neutral-900);
+    --ledger-color-surface-subtle: var(--ledger-color-neutral-900);
+    --ledger-color-surface-elevated: var(--ledger-color-neutral-800);
+    --ledger-color-surface-hover: var(--ledger-color-neutral-800);
+    --ledger-color-surface-selected: var(--ledger-color-neutral-700);
+    --ledger-color-surface-disabled: var(--ledger-color-neutral-800);
+    --ledger-color-overlay: color-mix(in srgb, var(--ledger-color-neutral-950) 72%, transparent);
+    --ledger-color-inverse-surface: var(--ledger-color-neutral-50);
+    --ledger-color-inverse-text: var(--ledger-color-neutral-950);
+    --ledger-color-text: var(--ledger-color-neutral-50);
+    --ledger-color-text-secondary: var(--ledger-color-neutral-300);
+    --ledger-color-text-tertiary: var(--ledger-color-neutral-400);
+    --ledger-color-text-disabled: var(--ledger-color-neutral-400);
+    --ledger-color-border-subtle: var(--ledger-color-neutral-800);
+    --ledger-color-border: var(--ledger-color-neutral-500);
+    --ledger-color-border-strong: var(--ledger-color-neutral-400);
+    --ledger-color-control-border: var(--ledger-color-neutral-400);
+    --ledger-color-control-border-resting: transparent;
+    --ledger-color-control-border-hover: var(--ledger-color-neutral-500);
+    --ledger-color-action: var(--ledger-color-neutral-50);
+    --ledger-color-action-hover: var(--ledger-color-neutral-200);
+    --ledger-color-action-pressed: var(--ledger-color-neutral-300);
+    --ledger-color-action-subtle: var(--ledger-color-neutral-800);
+    --ledger-color-action-text: var(--ledger-color-neutral-950);
+    --ledger-color-focus: var(--ledger-color-blue-300);
+    --ledger-color-status-neutral-background: var(--ledger-color-neutral-800);
+    --ledger-color-status-neutral-border: var(--ledger-color-neutral-500);
+    --ledger-color-status-neutral-text: var(--ledger-color-neutral-300);
+    --ledger-color-status-informational-background: var(--ledger-color-blue-900);
+    --ledger-color-status-informational-border: var(--ledger-color-blue-300);
+    --ledger-color-status-informational-text: var(--ledger-color-blue-50);
+    --ledger-color-status-success-background: var(--ledger-color-green-800);
+    --ledger-color-status-success-border: var(--ledger-color-green-300);
+    --ledger-color-status-success-text: var(--ledger-color-green-50);
+    --ledger-color-status-warning-background: var(--ledger-color-amber-800);
+    --ledger-color-status-warning-border: var(--ledger-color-amber-300);
+    --ledger-color-status-warning-text: var(--ledger-color-amber-50);
+    --ledger-color-status-error-background: var(--ledger-color-red-800);
+    --ledger-color-status-error-border: var(--ledger-color-red-300);
+    --ledger-color-status-error-text: var(--ledger-color-red-50);
+    --ledger-color-error: var(--ledger-color-red-300);
+    --ledger-color-error-hover: var(--ledger-color-red-700);
+    --ledger-color-error-pressed: var(--ledger-color-red-800);
+    --ledger-color-error-text: var(--ledger-color-neutral-0);
+    --ledger-color-error-action: var(--ledger-color-red-600);
+    --ledger-color-error-action-hover: var(--ledger-color-red-700);
+    --ledger-color-error-action-pressed: var(--ledger-color-red-800);
+    --ledger-color-error-action-text: var(--ledger-color-neutral-0);
+    --ledger-shadow-small: var(--ledger-shadow-dark-small);
+    --ledger-shadow-medium: var(--ledger-shadow-dark-medium);
+    --ledger-shadow-large: var(--ledger-shadow-dark-large);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ledger-color-background: var(--ledger-color-neutral-950);
+  --ledger-color-surface: var(--ledger-color-neutral-900);
+  --ledger-color-surface-subtle: var(--ledger-color-neutral-900);
+  --ledger-color-surface-elevated: var(--ledger-color-neutral-800);
+  --ledger-color-surface-hover: var(--ledger-color-neutral-800);
+  --ledger-color-surface-selected: var(--ledger-color-neutral-700);
+  --ledger-color-surface-disabled: var(--ledger-color-neutral-800);
+  --ledger-color-overlay: color-mix(in srgb, var(--ledger-color-neutral-950) 72%, transparent);
+  --ledger-color-inverse-surface: var(--ledger-color-neutral-50);
+  --ledger-color-inverse-text: var(--ledger-color-neutral-950);
+  --ledger-color-text: var(--ledger-color-neutral-50);
+  --ledger-color-text-secondary: var(--ledger-color-neutral-300);
+  --ledger-color-text-tertiary: var(--ledger-color-neutral-400);
+  --ledger-color-text-disabled: var(--ledger-color-neutral-400);
+  --ledger-color-border-subtle: var(--ledger-color-neutral-800);
+  --ledger-color-border: var(--ledger-color-neutral-500);
+  --ledger-color-border-strong: var(--ledger-color-neutral-400);
+  --ledger-color-control-border: var(--ledger-color-neutral-400);
+  --ledger-color-control-border-resting: transparent;
+  --ledger-color-control-border-hover: var(--ledger-color-neutral-500);
+  --ledger-color-action: var(--ledger-color-neutral-50);
+  --ledger-color-action-hover: var(--ledger-color-neutral-200);
+  --ledger-color-action-pressed: var(--ledger-color-neutral-300);
+  --ledger-color-action-subtle: var(--ledger-color-neutral-800);
+  --ledger-color-action-text: var(--ledger-color-neutral-950);
+  --ledger-color-focus: var(--ledger-color-blue-300);
+  --ledger-color-status-neutral-background: var(--ledger-color-neutral-800);
+  --ledger-color-status-neutral-border: var(--ledger-color-neutral-500);
+  --ledger-color-status-neutral-text: var(--ledger-color-neutral-300);
+  --ledger-color-status-informational-background: var(--ledger-color-blue-900);
+  --ledger-color-status-informational-border: var(--ledger-color-blue-300);
+  --ledger-color-status-informational-text: var(--ledger-color-blue-50);
+  --ledger-color-status-success-background: var(--ledger-color-green-800);
+  --ledger-color-status-success-border: var(--ledger-color-green-300);
+  --ledger-color-status-success-text: var(--ledger-color-green-50);
+  --ledger-color-status-warning-background: var(--ledger-color-amber-800);
+  --ledger-color-status-warning-border: var(--ledger-color-amber-300);
+  --ledger-color-status-warning-text: var(--ledger-color-amber-50);
+  --ledger-color-status-error-background: var(--ledger-color-red-800);
+  --ledger-color-status-error-border: var(--ledger-color-red-300);
+  --ledger-color-status-error-text: var(--ledger-color-red-50);
+  --ledger-color-error: var(--ledger-color-red-300);
+  --ledger-color-error-hover: var(--ledger-color-red-700);
+  --ledger-color-error-pressed: var(--ledger-color-red-800);
+  --ledger-color-error-text: var(--ledger-color-neutral-0);
+  --ledger-color-error-action: var(--ledger-color-red-600);
+  --ledger-color-error-action-hover: var(--ledger-color-red-700);
+  --ledger-color-error-action-pressed: var(--ledger-color-red-800);
+  --ledger-color-error-action-text: var(--ledger-color-neutral-0);
+  --ledger-shadow-small: var(--ledger-shadow-dark-small);
+  --ledger-shadow-medium: var(--ledger-shadow-dark-medium);
+  --ledger-shadow-large: var(--ledger-shadow-dark-large);
+}

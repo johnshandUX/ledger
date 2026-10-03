@@ -3,7 +3,7 @@
   width: min(320px, calc(100vw - var(--ledger-space-6)));
   padding: var(--ledger-space-4);
   color: var(--ledger-color-text);
-  background: var(--ledger-color-surface);
+  background: var(--ledger-color-surface-elevated);
   border: var(--ledger-border-width-thin) solid var(--ledger-color-border);
   border-radius: var(--ledger-radius-medium);
   box-shadow: var(--ledger-shadow-medium);
