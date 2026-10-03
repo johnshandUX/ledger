@@ -20,14 +20,13 @@ Import `@johnshandux/ledger-design-system/styles.css` once in an application to 
 tokens, global typography, and the framework-neutral `.ledger-link` anchor convention. The package
 does not export React `Link`, `Card`, or `Badge` components.
 
-Icons are available from the `icons` subpath and are separated from the main entry:
+Icons are available through the governed `Icon` API from the `icons` subpath and are separated from the main entry:
 
-import {
-	InformationIcon,
-	SuccessIcon,
-	WarningIcon,
-	ErrorIcon
-} from "@johnshandux/ledger-design-system/icons";
+import { Icon } from "@johnshandux/ledger-design-system/icons";
 
-Icons are provided from a dedicated bundle so the icon dependency and runtime
-implementation do not affect the server-compatible main design-system entry.
+<Icon name="search" />;
+<Icon name="warning" aria-label="Payment requires review" />;
+
+Lucide is the underlying source, while Ledger owns semantic naming, the supported catalogue,
+sizing, accessibility, product meaning, and future custom replacements. Applications should not
+import Lucide directly. The dedicated bundle keeps that implementation out of the server-safe root entry.

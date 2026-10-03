@@ -13,6 +13,7 @@ import "./components/DropdownMenu/DropdownMenu.css";
 import "./components/AlertDialog/AlertDialog.css";
 import "./components/Sheet/Sheet.css";
 import "./components/AppearanceToggle/AppearanceToggle.css";
+import "./components/Icon/Icon.css";
 
 export * from "./components/Button/Button";
 export * from "./components/FormField/FormField";

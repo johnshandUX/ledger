@@ -6,9 +6,11 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm -w packages/design-system run build && npm -w apps/bank run build && npm -w apps/site run build",
-    "build:bank": "npm -w apps/bank run build",
+    "build": "npm run build:design-system && npm -w apps/bank run build:app && npm -w apps/site run build:app",
+    "build:bank": "npm run build:design-system && npm -w apps/bank run build:app",
     "build:design-system": "npm -w packages/design-system run build",
-    "build:site": "npm -w apps/site run build"
+    "build:site": "npm run build:design-system && npm -w apps/site run build:app",
+    "dev:bank": "npm run build:design-system && npm -w apps/bank run dev",
+    "dev:site": "npm run build:design-system && npm -w apps/site run dev"
   }
 }

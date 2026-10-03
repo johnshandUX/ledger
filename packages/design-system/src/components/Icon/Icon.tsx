@@ -1,19 +1,7 @@
-import type { ComponentType, SVGProps } from "react";
-import {
-  CircleCheck,
-  CircleX,
-  Info,
-  TriangleAlert,
-} from "lucide-react";
+import { iconRegistry } from "./icons";
+import type { IconName } from "./icons";
+import type { IconProps, IconSize, LedgerIconProps } from "./Icon.types";
 import "./Icon.css";
-
-export type IconSize = "small" | "medium" | "large";
-
-export type LedgerIconProps = Omit<SVGProps<SVGSVGElement>, "color" | "size"> & {
-  size?: IconSize;
-  className?: string;
-  "aria-label"?: string;
-};
 
 const iconSizeMap: Record<IconSize, number> = {
   small: 16,
@@ -21,40 +9,25 @@ const iconSizeMap: Record<IconSize, number> = {
   large: 24,
 };
 
-const baseIconProps = {
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
+export function Icon({ name, size = "medium", className = "", "aria-label": ariaLabel, ...props }: IconProps) {
+  const Component = iconRegistry[name].component;
+  const isDecorative = !ariaLabel;
+  const resolvedSize = iconSizeMap[size];
 
-function createLedgerIcon(Component: ComponentType<SVGProps<SVGSVGElement>>) {
-  return function LedgerIcon({
-    size = "medium",
-    className = "",
-    ...props
-  }: LedgerIconProps) {
-    const { "aria-label": ariaLabel, ...rest } = props;
-    const isDecorative = !ariaLabel;
-    const resolvedSize = iconSizeMap[size];
-
-    return (
-      <Component
-        {...baseIconProps}
-        {...rest}
-        className={`ledger-icon ${className}`.trim()}
-        width={resolvedSize}
-        height={resolvedSize}
-        role={isDecorative ? undefined : "img"}
-        aria-hidden={isDecorative || undefined}
-        aria-label={ariaLabel}
-      />
-    );
-  };
+  return <Component {...props} className={`ledger-icon ${className}`.trim()} width={resolvedSize} height={resolvedSize} fill="none" stroke="currentColor" strokeWidth={2} role={isDecorative ? undefined : "img"} aria-hidden={isDecorative || undefined} aria-label={ariaLabel} focusable="false" />;
 }
 
-export const InformationIcon = createLedgerIcon(Info);
-export const SuccessIcon = createLedgerIcon(CircleCheck);
-export const WarningIcon = createLedgerIcon(TriangleAlert);
-export const ErrorIcon = createLedgerIcon(CircleX);
+function createCompatibilityIcon(name: IconName) {
+  return function LedgerCompatibilityIcon(props: LedgerIconProps) { return <Icon name={name} {...props} />; };
+}
+
+/** @deprecated Use `<Icon name="information" />`. */
+export const InformationIcon = createCompatibilityIcon("information");
+/** @deprecated Use `<Icon name="success" />`. */
+export const SuccessIcon = createCompatibilityIcon("success");
+/** @deprecated Use `<Icon name="warning" />`. */
+export const WarningIcon = createCompatibilityIcon("warning");
+/** @deprecated Use `<Icon name="error" />`. */
+export const ErrorIcon = createCompatibilityIcon("error");
+
+export type { IconName, IconProps, IconSize, LedgerIconProps };

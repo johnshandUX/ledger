@@ -1,6 +1,6 @@
 {
   "name": "@johnshandux/ledger-design-system",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "files": [
     "dist"
   ],
@@ -11,7 +11,7 @@
     "test:theme-artifact": "node --test src/themes/theme-artifact.test.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && npx vite --config vite.icons.config.ts build && npx vite --config vite.dialog.config.ts build && npx vite --config vite.interactions.config.ts build && npm run test:theme-artifact"
+    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test:theme-artifact"
   },
   "repository": {
     "type": "git",
@@ -60,58 +60,58 @@
   },
   "main": "./dist/ledger-design-system.js",
   "module": "./dist/ledger-design-system.js",
-  "types": "./dist/src/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/ledger-design-system.js",
       "require": "./dist/ledger-design-system.umd.cjs",
       "default": "./dist/ledger-design-system.js"
     },
     "./icons": {
-      "types": "./dist/src/icons.d.ts",
+      "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
       "require": "./dist/icons.cjs",
       "default": "./dist/icons.js"
     },
     "./dialog": {
-      "types": "./dist/src/dialog.d.ts",
+      "types": "./dist/dialog.d.ts",
       "import": "./dist/dialog.js",
       "require": "./dist/dialog.cjs",
       "default": "./dist/dialog.js"
     },
     "./tooltip": {
-      "types": "./dist/src/tooltip.d.ts",
+      "types": "./dist/tooltip.d.ts",
       "import": "./dist/tooltip.js",
       "require": "./dist/tooltip.cjs",
       "default": "./dist/tooltip.js"
     },
     "./popover": {
-      "types": "./dist/src/popover.d.ts",
+      "types": "./dist/popover.d.ts",
       "import": "./dist/popover.js",
       "require": "./dist/popover.cjs",
       "default": "./dist/popover.js"
     },
     "./dropdown-menu": {
-      "types": "./dist/src/dropdown-menu.d.ts",
+      "types": "./dist/dropdown-menu.d.ts",
       "import": "./dist/dropdown-menu.js",
       "require": "./dist/dropdown-menu.cjs",
       "default": "./dist/dropdown-menu.js"
     },
     "./alert-dialog": {
-      "types": "./dist/src/alert-dialog.d.ts",
+      "types": "./dist/alert-dialog.d.ts",
       "import": "./dist/alert-dialog.js",
       "require": "./dist/alert-dialog.cjs",
       "default": "./dist/alert-dialog.js"
     },
     "./sheet": {
-      "types": "./dist/src/sheet.d.ts",
+      "types": "./dist/sheet.d.ts",
       "import": "./dist/sheet.js",
       "require": "./dist/sheet.cjs",
       "default": "./dist/sheet.js"
     },
     "./appearance-toggle": {
-      "types": "./dist/src/appearance-toggle.d.ts",
+      "types": "./dist/appearance-toggle.d.ts",
       "import": "./dist/appearance-toggle.js",
       "require": "./dist/appearance-toggle.cjs",
       "default": "./dist/appearance-toggle.js"

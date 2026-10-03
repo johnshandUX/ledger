@@ -31,7 +31,7 @@ export const componentCatalog: ReadonlyArray<{ name: string; status: Documentati
   { name: "AlertDialog", status: "Dedicated entry", entry: "./alert-dialog", purpose: "Confirms a high-consequence decision.", contract: "Requires a visible title plus explicit cancel and action elements." },
   { name: "Sheet", status: "Dedicated entry", entry: "./sheet", purpose: "Presents supporting content from a viewport edge.", contract: "Requires a title and supports left or right placement, an optional description and close control." },
   { name: "AppearanceToggle", status: "Dedicated entry", entry: "./appearance-toggle", purpose: "Switches the effective application appearance.", contract: "Controlled light/dark presentation with a stable pressed-state accessibility contract; applications own system preference and runtime state." },
-  { name: "Status icons", status: "Dedicated entry", entry: "./icons", purpose: "Communicates information, success, warning or error.", contract: "Small, medium and large sizes; decorative by default, with aria-label support for meaningful use." },
+  { name: "Icon", status: "Dedicated entry", entry: "./icons", purpose: "Renders an approved semantic icon from the governed Ledger catalogue.", contract: "Small, medium and large sizes; currentColor; decorative by default, with aria-label support for meaningful standalone use." },
   { name: "Link", status: "Convention", entry: "styles.css", purpose: "Navigates to another destination.", contract: "Use a semantic anchor with the .ledger-link class. Routing remains application-owned." },
   { name: "Badge", status: "Planned", entry: "—", purpose: "Will communicate compact status or classification.", contract: "Specified in principle but no public React component exists." },
   { name: "Card", status: "Planned", entry: "—", purpose: "Will group related content where a surface improves comprehension.", contract: "Specified in principle but no public React component exists." },
@@ -40,7 +40,7 @@ export const componentCatalog: ReadonlyArray<{ name: string; status: Documentati
 export const packageEntries = [
   ["@johnshandux/ledger-design-system", "Server-safe controls, Table and formatCurrencyAmount"],
   ["@johnshandux/ledger-design-system/styles.css", "Tokens, global conventions and component styles"],
-  ["@johnshandux/ledger-design-system/icons", "Ledger status icons"],
+  ["@johnshandux/ledger-design-system/icons", "Governed semantic Icon API and catalogue"],
   ["@johnshandux/ledger-design-system/dialog", "Dialog family"],
   ["@johnshandux/ledger-design-system/tooltip", "Tooltip"],
   ["@johnshandux/ledger-design-system/popover", "Popover family"],

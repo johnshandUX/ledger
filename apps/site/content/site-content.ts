@@ -2,6 +2,7 @@ export const designSystemNav = [
   { href: "/design-system", label: "Overview" },
   { href: "/design-system/foundations", label: "Foundations" },
   { href: "/design-system/components", label: "Components" },
+  { href: "/design-system/icons", label: "Icons" },
   { href: "/design-system/patterns", label: "Patterns" },
   { href: "/design-system/ai-guidance", label: "AI guidance" },
   { href: "/design-system/installation", label: "Installation" },

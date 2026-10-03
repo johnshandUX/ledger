@@ -8,13 +8,13 @@ From the repository root:
 
 ```bash
 npm install
-npm -w apps/site run dev
+npm run dev:site
 ```
 
 Open `http://localhost:3000`. To create a production build or run a standalone type check:
 
 ```bash
-npm -w apps/site run build
+npm run build:site
 npm -w apps/site run typecheck
 ```
 

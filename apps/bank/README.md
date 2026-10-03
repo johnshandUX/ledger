@@ -8,7 +8,7 @@ From the repository root:
 
 ```bash
 npm install
-npm -w apps/bank run dev
+npm run dev:bank
 ```
 
 Open the local URL printed by Next.js, normally `http://localhost:3000`.
@@ -19,7 +19,7 @@ Open the local URL printed by Next.js, normally `http://localhost:3000`.
 npx tsc -p apps/bank/tsconfig.json --noEmit
 npm -w apps/bank run lint
 npm -w apps/bank run test
-npm -w apps/bank run build
+npm run build:bank
 ```
 
 The application currently has no environment variables, authentication, API keys, persistence or paid-service dependencies.

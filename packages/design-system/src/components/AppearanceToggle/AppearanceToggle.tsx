@@ -1,7 +1,7 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
 import type { ButtonHTMLAttributes } from "react";
+import { Icon } from "../Icon/Icon";
 import "./AppearanceToggle.css";
 
 export type LedgerAppearance = "light" | "dark";
@@ -33,7 +33,7 @@ export function AppearanceToggle({
       onClick={() => onAppearanceChange(nextAppearance)}
       {...props}
     >
-      {isDark ? <Moon aria-hidden="true" /> : <Sun aria-hidden="true" />}
+      <Icon name={isDark ? "moon" : "sun"} size="small" />
     </button>
   );
 }
