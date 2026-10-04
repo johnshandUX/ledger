@@ -29,7 +29,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ledger-space-5); }
 .eyebrow, .example-label { margin-bottom: var(--ledger-space-3); color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-small); font-weight: var(--ledger-font-weight-semibold); line-height: var(--ledger-line-height-small); letter-spacing: .09em; text-transform: uppercase; }
 .hero { padding-top: clamp(88px, 13vw, 168px); padding-bottom: clamp(96px, 13vw, 176px); }
-.hero__content > h1, .journal-callout h2, .journal-page .page-heading h1 { font-family: var(--ledger-font-family-brand-display); font-weight: var(--ledger-font-weight-regular); letter-spacing: -.035em; }
+.hero__content > h1, .journal-callout h2, .journal-page .page-heading h1 { font-family: var(--ledger-font-family-brand-display); font-weight: var(--ledger-font-weight-regular); letter-spacing: .005em; }
 .hero--product { display: grid; grid-template-columns: minmax(340px, .8fr) minmax(560px, 1.2fr); align-items: center; gap: clamp(48px, 6vw, 88px); padding-top: clamp(72px, 8vw, 112px); padding-bottom: clamp(80px, 9vw, 128px); }
 .hero--product h1 { font-size: clamp(3rem, 5.3vw, 5.25rem); }
 .hero__preview { min-width: 0; display: grid; grid-template-columns: minmax(200px, .55fr) minmax(0, 1.45fr); overflow: hidden; border: 1px solid var(--ledger-color-border); border-radius: var(--ledger-radius-large); background: var(--ledger-color-surface-elevated); box-shadow: var(--ledger-shadow-medium); }
@@ -145,7 +145,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .font-role-card > :last-child { margin-bottom: 0; }
 .font-role-card code { overflow-wrap: anywhere; color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-small); }
 .brand-display-specimen, .brand-editorial-specimen { font-family: var(--ledger-font-family-brand-display); font-weight: var(--ledger-font-weight-regular); }
-.brand-display-specimen { font-size: var(--ledger-font-size-heading-large); line-height: var(--ledger-line-height-heading-large); letter-spacing: -.025em; }
+.brand-display-specimen { font-size: var(--ledger-font-size-heading-large); line-height: var(--ledger-line-height-heading-large); letter-spacing: .005em; }
 .brand-editorial-specimen { font-size: var(--ledger-font-size-heading-medium); line-height: var(--ledger-line-height-heading-medium); }
 .brand-mono-specimen { display: grid; gap: var(--ledger-space-3); font-family: var(--ledger-font-family-brand-mono); font-size: var(--ledger-font-size-body-small); letter-spacing: .03em; }
 .type-specimens { padding: var(--ledger-space-6); border: 1px solid var(--ledger-color-border); border-radius: var(--ledger-radius-medium); }.type-display { font-size: var(--ledger-font-size-display); line-height: var(--ledger-line-height-display); }.type-heading { font-size: var(--ledger-font-size-heading-large); line-height: var(--ledger-line-height-heading-large); }.small-copy { font-size: var(--ledger-font-size-body-small); }
