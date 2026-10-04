@@ -34,6 +34,7 @@ describe("Icon", () => {
     const catalogueNames: ReadonlyArray<string> = iconCatalog.map(({ name }) => name);
 
     expect(iconCatalog.find(({ name }) => name === "warning")?.lucideName).toBe("TriangleAlert");
+    expect(iconCatalog.find(({ name }) => name === "success")?.lucideName).toBe("CircleCheck");
     expect(catalogueNames).not.toContain("account");
     expect(catalogueNames).toContain("sun");
     expect(catalogueNames).toContain("moon");

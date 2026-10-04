@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar, Check,
-  ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleUserRound,
+  ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar,
+  ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleCheck, CircleUserRound,
   CircleX, CreditCard, Download, Eye, FileText, Filter, House, Info, Menu, Moon, Pencil,
   Plus, Search, Send, Settings, Sun, Trash2, TriangleAlert, Upload, UserRound, X,
 } from "lucide-react";
@@ -35,7 +35,7 @@ export const iconRegistry = {
   "arrow-down": defineIcon(ArrowDown, "ArrowDown", "Navigation"),
   information: defineIcon(Info, "Info", "Status"),
   warning: defineIcon(TriangleAlert, "TriangleAlert", "Status"),
-  success: defineIcon(Check, "Check", "Status"),
+  success: defineIcon(CircleCheck, "CircleCheck", "Status"),
   error: defineIcon(CircleX, "CircleX", "Status"),
   card: defineIcon(CreditCard, "CreditCard", "Finance"),
   payment: defineIcon(Send, "Send", "Finance"),

@@ -42,6 +42,10 @@
   --ledger-color-status-error-background: var(--ledger-color-red-50);
   --ledger-color-status-error-border: var(--ledger-color-red-300);
   --ledger-color-status-error-text: var(--ledger-color-red-800);
+  --ledger-color-icon-status-info: var(--ledger-color-blue-900);
+  --ledger-color-icon-status-success: var(--ledger-color-green-800);
+  --ledger-color-icon-status-warning: var(--ledger-color-amber-800);
+  --ledger-color-icon-status-error: var(--ledger-color-red-800);
   --ledger-color-error: var(--ledger-color-red-700);
   --ledger-color-error-hover: var(--ledger-color-red-800);
   --ledger-color-error-pressed: var(--ledger-color-red-800);

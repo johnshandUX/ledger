@@ -298,6 +298,11 @@ The first approved Ledger icons will support:
 
 These will initially be used by feedback components such as Alert.
 
+Status icon colour is limited to four meanings: info, success, warning and error. The semantic
+tokens follow `--ledger-color-icon-status-{meaning}` and map to theme-appropriate primitives.
+Feedback components own the semantic context; the base Icon component continues to inherit
+`currentColor`. A glyph resembling a status symbol does not by itself justify semantic colour.
+
 The icon foundation should remain small and expand only when product requirements identify additional icon needs.
 
 ---

@@ -22,6 +22,10 @@ test("published stylesheet contains the complete appearance theme contract", asy
     ["explicit dark selector", /:root\[data-theme=["']?dark["']?\]/],
     ["system dark media query", /@media\s*\(prefers-color-scheme:\s*dark\)/],
     ["system preference selector", /:root:not\(\[data-theme\]\)/],
+    ["info status icon semantic", /--ledger-color-icon-status-info:/],
+    ["success status icon semantic", /--ledger-color-icon-status-success:/],
+    ["warning status icon semantic", /--ledger-color-icon-status-warning:/],
+    ["error status icon semantic", /--ledger-color-icon-status-error:/],
   ];
 
   for (const [label, pattern] of requirements) {
