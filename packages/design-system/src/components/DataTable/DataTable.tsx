@@ -117,7 +117,9 @@ export function DataTable<TData, TFilterId extends string = string>({
   const [isHorizontallyScrollable, setIsHorizontallyScrollable] = useState(false);
   const [columnWidths, setColumnWidths] = useState<readonly number[]>([]);
   useMemo(() => {
-    if (import.meta.env.DEV) validateConfiguration(rows, columns, getRowId, pageSizeOptions);
+    if (import.meta.env.DEV || import.meta.env.MODE === "test") {
+      validateConfiguration(rows, columns, getRowId, pageSizeOptions);
+    }
   }, [rows, columns, getRowId, pageSizeOptions]);
   const [uncontrolledState, setUncontrolledState] = useState<DataTableState<TFilterId>>(() =>
     resolveInitialState(defaultState, pageSizeOptions),
