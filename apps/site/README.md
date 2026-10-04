@@ -1,6 +1,6 @@
 # LedgerOS website
 
-The public LedgerOS website is a separate Next.js workspace app. It consumes the local Ledger design-system package and does not embed Ledger Bank.
+The public LedgerOS website is a separate Next.js workspace app. It consumes the local Ledger Design System package and does not embed Ledger Bank.
 
 ## Local development
 

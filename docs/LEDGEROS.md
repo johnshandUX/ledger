@@ -1,21 +1,21 @@
 # LedgerOS direction
 
-LedgerOS is an agentic design system for creating credible commercial banking interfaces and prototypes. It is a learning and portfolio project, not production banking software.
+LedgerOS is the main website, documentation and playground for a code-first commercial banking project. It presents the Ledger Design System and Ledger Bank, and is a learning and portfolio project rather than production banking software.
 
 ## Proposition and audiences
 
-LedgerOS connects coded design-system foundations, reusable components, banking interface patterns and guidance for AI-enabled workflows. It is intended for product designers, developers and teams exploring how constrained agents can support commercial banking prototyping.
+LedgerOS connects the Ledger Design System, Ledger Bank and practical guidance for AI-enabled workflows. It is intended for product designers, developers and teams exploring how constrained agents can support commercial banking prototyping.
 
 ## Project areas
 
 - **Public website (`apps/site`)**: the overall project destination and explanation of the work.
-- **Design System**: human-readable documentation for implemented foundations and components, emerging financial patterns, planned AI guidance and installation status.
+- **Ledger Design System**: human-readable documentation for implemented foundations and components, emerging financial patterns, planned AI guidance and installation status.
 - **Playground**: curated prompts paired with predefined examples today; grounded live generation is planned.
 - **Ledger Bank (`apps/bank`)**: a separate, full-screen reference product that demonstrates the system in context.
 - **Journal**: a maintainable home for future project decisions and learnings; no articles are published yet.
-- **Library (`packages/design-system`)**: the reusable coded source of truth consumed by Ledger applications.
+- **Ledger Design System package (`packages/design-system`)**: the reusable coded source of truth consumed by Ledger applications.
 
-LedgerOS is the overall project. The design-system package supplies reusable implementation. Ledger Bank consumes it to demonstrate product experiences without becoming part of the public website.
+LedgerOS is the project destination. The Ledger Design System supplies the reusable implementation, and Ledger Bank consumes it to demonstrate product experiences without becoming part of the website.
 
 ## Routes
 

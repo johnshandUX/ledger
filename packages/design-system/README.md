@@ -1,5 +1,6 @@
-# ledger-design-system
-A production-focused design system and prototype for a modern business banking platform
+# Ledger Design System
+
+The shared tokens, components, patterns and guidance used by LedgerOS and Ledger Bank.
 
 ## Package API
 

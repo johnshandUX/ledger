@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Ledger Bank · Demonstration prototype",
-  description: "A fictional commercial banking reference implementation built with the Ledger design system.",
+  description: "A fictional commercial banking reference implementation built with the Ledger Design System.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

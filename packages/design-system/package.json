@@ -4,7 +4,7 @@
   "files": [
     "dist"
   ],
-  "description": "A production-focused design system and prototype for a modern business banking platform",
+  "description": "The shared tokens, components, patterns and guidance for LedgerOS and Ledger Bank",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:theme-parity": "node --test src/themes/dark.parity.test.mjs",
@@ -17,7 +17,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnshandUX/ledger-design-system.git"
+    "url": "git+https://github.com/johnshandUX/ledger.git",
+    "directory": "packages/design-system"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -32,9 +33,9 @@
     "#lib/*": "./src/lib/*.ts"
   },
   "bugs": {
-    "url": "https://github.com/johnshandUX/ledger-design-system/issues"
+    "url": "https://github.com/johnshandUX/ledger/issues"
   },
-  "homepage": "https://github.com/johnshandUX/ledger-design-system#readme",
+  "homepage": "https://github.com/johnshandUX/ledger/tree/main/packages/design-system#readme",
   "devDependencies": {
     "@chromatic-com/storybook": "latest",
     "@storybook/addon-a11y": "^10.6.0",

@@ -1,6 +1,6 @@
 # Ledger Bank
 
-Ledger Bank is the separate reference implementation for LedgerOS. It is a fictional commercial banking prototype using fixture data and the local Ledger design-system package. It is not a production banking service.
+Ledger Bank is the separate reference implementation for LedgerOS. It is a fictional commercial banking prototype using fixture data and the local Ledger Design System package. It is not a production banking service.
 
 ## Local development
 

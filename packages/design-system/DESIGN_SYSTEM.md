@@ -337,7 +337,7 @@ For example, Ledger Button currently supports:
 - secondary
 - destructive, reserved for actions with destructive or irreversible consequences
 
-Disabled Button is not currently a supported Ledger design-system pattern.
+Disabled Button is not currently a supported Ledger Design System pattern.
 
 New states and variants should be added because of demonstrated product requirements rather than pre-emptively.
 
