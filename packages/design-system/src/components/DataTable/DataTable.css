@@ -1,0 +1,239 @@
+.ledger-data-table {
+  color: var(--ledger-color-text);
+  font-family: var(--ledger-font-family-product);
+}
+
+.ledger-data-table__viewport {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ledger-data-table__viewport:focus-visible {
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
+  outline-offset: var(--ledger-space-1);
+}
+
+.ledger-data-table__viewport .ledger-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+.ledger-data-table__caption {
+  padding: 0 0 var(--ledger-space-3);
+  color: var(--ledger-color-text);
+  font-weight: var(--ledger-font-weight-semibold);
+  text-align: left;
+}
+
+.ledger-data-table__caption--visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ledger-data-table[data-density="comfortable"] .ledger-table__cell {
+  padding: var(--ledger-space-3) var(--ledger-space-2);
+}
+
+.ledger-data-table[data-density="compact"] .ledger-table__cell {
+  padding: var(--ledger-space-2);
+  font-size: var(--ledger-font-size-body-small);
+  line-height: var(--ledger-line-height-body-small);
+}
+
+.ledger-data-table[data-row-treatment="zebra"] .ledger-table__body .ledger-table__row:nth-child(even) {
+  background: var(--ledger-color-table-row-zebra);
+}
+
+.ledger-data-table .ledger-table__cell {
+  border-color: var(--ledger-color-table-border);
+}
+
+.ledger-data-table .ledger-table__header {
+  color: var(--ledger-color-text-secondary);
+  background: var(--ledger-color-table-header-surface);
+  font-size: var(--ledger-font-size-body-small);
+  font-weight: var(--ledger-font-weight-regular);
+  line-height: var(--ledger-line-height-body-small);
+}
+
+.ledger-data-table[data-density] .ledger-data-table__header--sortable {
+  padding: 0;
+}
+
+.ledger-data-table__cell--numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-data-table__cell--nowrap {
+  white-space: nowrap;
+}
+
+.ledger-data-table__sort-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--ledger-space-8);
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ledger-data-table__sort-content {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: var(--ledger-space-1);
+  padding: var(--ledger-space-3) var(--ledger-space-2);
+}
+
+.ledger-data-table__header--right .ledger-data-table__sort-content {
+  justify-content: flex-end;
+}
+
+.ledger-data-table__sort-button:hover {
+  color: var(--ledger-color-text);
+  background: var(--ledger-color-table-header-hover);
+}
+
+.ledger-data-table__sort-button:focus-visible {
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
+  outline-offset: var(--ledger-space-1);
+}
+
+.ledger-data-table__sort-indicator {
+  color: currentColor;
+}
+
+.ledger-data-table__state {
+  display: grid;
+  justify-items: start;
+  gap: var(--ledger-space-2);
+  padding: var(--ledger-space-5) var(--ledger-space-3);
+}
+
+.ledger-data-table__state-description {
+  color: var(--ledger-color-text-secondary);
+}
+
+.ledger-data-table__result-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ledger-data-table__result-count {
+  padding: var(--ledger-space-1) var(--ledger-space-2);
+  margin-right: var(--ledger-space-2);
+  color: var(--ledger-color-text-secondary);
+}
+
+.ledger-data-table__page-size-menu {
+  min-width: calc(var(--ledger-space-9) * 2);
+}
+
+.ledger-data-table__state-action {
+  margin-top: var(--ledger-space-2);
+}
+
+.ledger-data-table__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--ledger-space-4);
+  padding-top: var(--ledger-space-3);
+}
+
+.ledger-data-table__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ledger-space-1);
+  font-size: var(--ledger-font-size-body-small);
+}
+
+.ledger-data-table__range-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ledger-space-1);
+  min-height: var(--ledger-space-7);
+  padding: var(--ledger-space-1) var(--ledger-space-2);
+  margin-right: var(--ledger-space-2);
+  border: 0;
+  border-radius: var(--ledger-radius-small);
+  color: var(--ledger-color-text-secondary);
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: var(--ledger-space-1);
+}
+
+.ledger-data-table__range-trigger:hover,
+.ledger-data-table__page-control:hover:not(:disabled) {
+  color: var(--ledger-color-text);
+  background: var(--ledger-color-surface-hover);
+}
+
+.ledger-data-table__range-trigger:focus-visible,
+.ledger-data-table__page-control:focus-visible {
+  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
+  outline-offset: var(--ledger-space-1);
+}
+
+.ledger-data-table__page-control {
+  display: inline-grid;
+  place-items: center;
+  width: var(--ledger-space-7);
+  min-width: var(--ledger-space-7);
+  height: var(--ledger-space-7);
+  padding: 0;
+  border: 0;
+  border-radius: var(--ledger-radius-small);
+  color: var(--ledger-color-text-secondary);
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ledger-data-table__page-control[aria-current="page"] {
+  color: var(--ledger-color-text);
+  background: var(--ledger-color-action-subtle);
+  font-weight: var(--ledger-font-weight-semibold);
+}
+
+.ledger-data-table__page-control:disabled {
+  color: var(--ledger-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.ledger-data-table__page-ellipsis {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--ledger-space-5);
+}
+
+.ledger-data-table__page-size-option[data-current] {
+  background: var(--ledger-color-action-subtle);
+  font-weight: var(--ledger-font-weight-semibold);
+}

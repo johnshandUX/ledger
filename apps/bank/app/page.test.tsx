@@ -1,6 +1,8 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import Home from "./page";
+import { getAccountsForProfile, getActiveBusinessProfile } from "../src/data/selectors";
+import { createAccountsPresentationRowModel } from "./AccountsDataTable";
 
 describe("accounts overview", () => {
   it("keeps the search input labelled without displaying its label", () => {
@@ -17,5 +19,54 @@ describe("accounts overview", () => {
 
     expect(accountArticles).not.toBeNull();
     expect(accountArticles?.every((article) => !article.includes("tabindex="))).toBe(true);
+  });
+
+  it("uses the interactive DataTable for the desktop accounts presentation", () => {
+    const html = renderToStaticMarkup(<Home />);
+
+    expect(html).toContain("Accounts and balances");
+    expect(html).toContain("Sort by Account");
+    expect(html).toContain("Sort by Available balance");
+    expect(html).toContain("Sort accounts by");
+    expect(html).toContain('class="accounts-table"');
+  });
+
+  it("derives the responsive account order from the shared controlled row model", () => {
+    const profile = getActiveBusinessProfile();
+    const accounts = profile ? getAccountsForProfile(profile.id) : [];
+    const rowModel = createAccountsPresentationRowModel(accounts, {
+      query: "",
+      filters: {},
+      pageIndex: 0,
+      pageSize: 20,
+      sort: { columnId: "availableBalance", direction: "ascending" },
+    });
+
+    expect(rowModel.visibleRows.map(account => account.id)).toEqual([
+      "acc-ns-pay",
+      "acc-ns-tax",
+      "acc-ns-op",
+    ]);
+  });
+
+  it("keeps the full sorted account dataset available beyond the desktop page size", () => {
+    const profile = getActiveBusinessProfile();
+    const fixtures = profile ? getAccountsForProfile(profile.id) : [];
+    const accounts = Array.from({ length: 21 }, (_, index) => ({
+      ...fixtures[index % fixtures.length],
+      id: `account-${index}`,
+      availableBalance: 21 - index,
+    }));
+    const rowModel = createAccountsPresentationRowModel(accounts, {
+      query: "",
+      filters: {},
+      pageIndex: 0,
+      pageSize: 20,
+      sort: { columnId: "availableBalance", direction: "ascending" },
+    });
+
+    expect(rowModel.visibleRows).toHaveLength(20);
+    expect(rowModel.sortedRows).toHaveLength(21);
+    expect(rowModel.sortedRows[0]?.availableBalance).toBe(1);
   });
 });

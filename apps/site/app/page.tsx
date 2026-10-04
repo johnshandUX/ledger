@@ -20,7 +20,7 @@ function DesignSystemPreview() {
         <p className="eyebrow">Product composition</p><h3>Account overview</h3><p>A currency-aware summary assembled from current Ledger foundations and components.</p>
         <div className="balance-component"><span>Operating account · GBP</span><strong>£1,480,230.10</strong><small>Example data</small></div>
       </div>
-      <div className="system-preview__code"><span>Preview&nbsp;&nbsp; Code&nbsp;&nbsp; Guidance</span><pre><code>{`<Table ariaLabel="Account balances">\n  <TableHead>…</TableHead>\n  <TableBody>\n    <TableRow>…</TableRow>\n  </TableBody>\n</Table>`}</code></pre></div>
+      <div className="system-preview__code"><span>Preview&nbsp;&nbsp; Code&nbsp;&nbsp; Guidance</span><pre><code>{`<DataTable\n  caption="Account balances"\n  rows={accounts}\n  columns={columns}\n  getRowId={account => account.id}\n/>`}</code></pre></div>
     </div>
   );
 }

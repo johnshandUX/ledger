@@ -1,4 +1,15 @@
-import { formatCurrencyAmount, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@johnshandux/ledger-design-system";
+"use client";
+
+import { formatCurrencyAmount } from "@johnshandux/ledger-design-system";
+import { DataTable, type DataTableColumn } from "@johnshandux/ledger-design-system/data-table";
+
+type PreviewAccount = { name: string; currency: string; balance: number };
+
+const columns: readonly DataTableColumn<PreviewAccount>[] = [
+  { id: "account", label: "Account", header: "Account", cell: ({ row }) => row.name, sort: { value: row => row.name } },
+  { id: "currency", label: "Currency", header: "Currency", cell: ({ row }) => row.currency, sort: { value: row => row.currency } },
+  { id: "available", label: "Available balance", header: "Available", align: "right", headerAlign: "right", numeric: true, nowrap: true, cell: ({ row }) => formatCurrencyAmount(row.balance, row.currency), sort: { value: row => row.balance } },
+];
 
 const playgroundAccounts = [
   ["Operating account", "GBP", 248905.42], ["Payroll", "GBP", 84720.18], ["Client receipts", "GBP", 125600.00],
@@ -12,13 +23,14 @@ const bankAccounts = [
 export function AccountPreview({ compact = false, source = "playground" }: { compact?: boolean; source?: "playground" | "bank" }) {
   const isBankFixture = source === "bank";
   const accounts = isBankFixture ? bankAccounts : playgroundAccounts;
+  const visibleAccounts = accounts.slice(0, compact ? 4 : 6).map(([name, currency, balance]) => ({ name, currency, balance }));
   return (
     <div className={`bank-preview ${compact ? "bank-preview--compact" : ""}`}>
       <div className="bank-preview__bar"><span>Ledger Bank</span><span className="status-dot">{isBankFixture ? "Current prototype fixture" : "Curated example data"}</span></div>
       <div className="bank-preview__body">
         <div className="bank-preview__heading"><div><span className="eyebrow">Northstar Trading Ltd</span><h3>Accounts</h3></div><span className="preview-action">Make a payment</span></div>
         <div className="balance-grid"><div><span>Total available · GBP</span><strong>{isBankFixture ? "£305,000.50" : "£459,225.60"}</strong></div><div><span>Accounts</span><strong>{isBankFixture ? "3" : "6"}</strong></div><div><span>Currencies</span><strong>{isBankFixture ? "1" : "3"}</strong></div></div>
-        <div className="preview-table"><Table ariaLabel={isBankFixture ? "Current Ledger Bank account fixtures" : "Curated commercial bank account example"}><TableHead><TableRow><TableHeaderCell>Account</TableHeaderCell><TableHeaderCell>Currency</TableHeaderCell><TableHeaderCell align="right">Available</TableHeaderCell></TableRow></TableHead><TableBody>{accounts.slice(0, compact ? 4 : 6).map(([name, currency, balance]) => <TableRow key={name}><TableCell>{name}</TableCell><TableCell>{currency}</TableCell><TableCell align="right">{formatCurrencyAmount(balance, currency)}</TableCell></TableRow>)}</TableBody></Table></div>
+        <div className="preview-table"><DataTable caption={isBankFixture ? "Current Ledger Bank account fixtures" : "Curated commercial bank account example"} rows={visibleAccounts} columns={columns} getRowId={account => account.name} pageSizeOptions={[visibleAccounts.length]} /></div>
       </div>
     </div>
   );

@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@johnshandux/ledger-design-system": ["../../packages/design-system/src/index.ts"]
+      "@johnshandux/ledger-design-system": ["../../packages/design-system/src/index.ts"],
+      "@johnshandux/ledger-design-system/data-table": ["../../packages/design-system/src/data-table.ts"]
     }
   },
   "include": [

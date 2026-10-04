@@ -1,10 +1,9 @@
-import { Button, formatCurrencyAmount, Input, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "@johnshandux/ledger-design-system";
+import { Button, formatCurrencyAmount, Input } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
-import Link from "next/link";
 import { getActiveBusinessProfile, getAccountsForProfile } from "../src/data/selectors";
-import { formatAccountType } from "../src/presentation/accountDetail";
 import { getBalanceTotalsByCurrency } from "../src/presentation/accountOverview";
 import { ProductShell } from "./ProductShell";
+import { AccountsDataTable } from "./AccountsDataTable";
 
 const activeProfile = getActiveBusinessProfile();
 const accounts = activeProfile ? getAccountsForProfile(activeProfile.id) : [];
@@ -54,54 +53,7 @@ export default function Home() {
         </section>
 
         <section className="accounts-list">
-          <Table className="accounts-table">
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>Account</TableHeaderCell>
-                <TableHeaderCell>Number / Sort</TableHeaderCell>
-                <TableHeaderCell>Type</TableHeaderCell>
-                <TableHeaderCell align="right">Current</TableHeaderCell>
-                <TableHeaderCell align="right">Available</TableHeaderCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {accounts.map((a) => (
-                <TableRow key={a.id}>
-                  <TableCell>
-                    <div className="acc-name"><Link className="ledger-link" href={`/accounts/${a.id}`}>{a.name}</Link></div>
-                    <div className="acc-sub">{a.description}</div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="mono">{a.accountNumber}</div>
-                    <div className="mono">{a.sortCode}</div>
-                  </TableCell>
-                  <TableCell>{formatAccountType(a.type)}</TableCell>
-                  <TableCell className="financial-value" align="right">{formatCurrencyAmount(a.currentBalance, a.currency)}</TableCell>
-                  <TableCell className="financial-value" align="right">{formatCurrencyAmount(a.availableBalance, a.currency)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          <div className="accounts-mobile">
-            {accounts.map((a) => (
-              <article key={a.id} className="acc-card">
-                <div className="acc-top">
-                  <div>
-                    <div className="acc-name"><Link className="ledger-link" href={`/accounts/${a.id}`}>{a.name}</Link></div>
-                    <div className="acc-sub">{formatAccountType(a.type)} • {a.accountNumber}</div>
-                  </div>
-                  <div className="financial-value">{formatCurrencyAmount(a.availableBalance, a.currency)}</div>
-                </div>
-
-                <div className="acc-meta">
-                  <div>Current: <span className="financial-value">{formatCurrencyAmount(a.currentBalance, a.currency)}</span></div>
-                  <div>Sort: <span className="mono">{a.sortCode}</span></div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <AccountsDataTable accounts={accounts} />
         </section>
       </main>
     </ProductShell>

@@ -26,6 +26,7 @@ export default defineConfig({
         "alert-dialog": resolve("src/alert-dialog.ts"),
         sheet: resolve("src/sheet.ts"),
         "appearance-toggle": resolve("src/appearance-toggle.ts"),
+        "data-table": resolve("src/data-table.ts"),
       },
       formats: ["es", "cjs"],
       fileName: (format, entryName) => format === "es" ? `${entryName}.js` : entryName === "ledger-design-system" ? "ledger-design-system.umd.cjs" : `${entryName}.cjs`,

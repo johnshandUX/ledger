@@ -22,6 +22,10 @@
     --ledger-color-border-subtle: var(--ledger-color-neutral-800);
     --ledger-color-border: var(--ledger-color-neutral-500);
     --ledger-color-border-strong: var(--ledger-color-neutral-400);
+    --ledger-color-table-border: var(--ledger-color-neutral-800);
+    --ledger-color-table-header-surface: var(--ledger-color-neutral-900);
+    --ledger-color-table-header-hover: var(--ledger-color-neutral-800);
+    --ledger-color-table-row-zebra: var(--ledger-color-neutral-900);
     --ledger-color-control-border: var(--ledger-color-neutral-400);
     --ledger-color-control-border-resting: transparent;
     --ledger-color-control-border-hover: var(--ledger-color-neutral-500);
@@ -83,6 +87,10 @@
   --ledger-color-border-subtle: var(--ledger-color-neutral-800);
   --ledger-color-border: var(--ledger-color-neutral-500);
   --ledger-color-border-strong: var(--ledger-color-neutral-400);
+  --ledger-color-table-border: var(--ledger-color-neutral-800);
+  --ledger-color-table-header-surface: var(--ledger-color-neutral-900);
+  --ledger-color-table-header-hover: var(--ledger-color-neutral-800);
+  --ledger-color-table-row-zebra: var(--ledger-color-neutral-900);
   --ledger-color-control-border: var(--ledger-color-neutral-400);
   --ledger-color-control-border-resting: transparent;
   --ledger-color-control-border-hover: var(--ledger-color-neutral-500);

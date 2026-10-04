@@ -1,19 +1,22 @@
 {
   "name": "@johnshandux/ledger-design-system",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "files": [
     "dist"
   ],
   "description": "The shared tokens, components, patterns and guidance for LedgerOS and Ledger Bank",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:data-table",
+    "test:data-table": "vitest run --config vitest.unit.config.ts",
     "test:theme-parity": "node --test src/themes/dark.parity.test.mjs",
     "test:theme-artifact": "node --test src/themes/theme-artifact.test.mjs",
     "test:status-icon-colors": "node --test src/themes/status-icon-colors.test.mjs",
+    "test:table-colors": "node --test src/themes/table-colors.test.mjs",
     "test:typography": "node --test src/tokens/typography.test.mjs",
+    "test:data-table-boundary": "node --test src/data-table-boundary.test.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test:theme-artifact && npm run test:status-icon-colors && npm run test:typography"
+    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test && npm run test:theme-artifact && npm run test:status-icon-colors && npm run test:table-colors && npm run test:typography && npm run test:data-table-boundary"
   },
   "repository": {
     "type": "git",
@@ -118,6 +121,12 @@
       "import": "./dist/appearance-toggle.js",
       "require": "./dist/appearance-toggle.cjs",
       "default": "./dist/appearance-toggle.js"
+    },
+    "./data-table": {
+      "types": "./dist/data-table.d.ts",
+      "import": "./dist/data-table.js",
+      "require": "./dist/data-table.cjs",
+      "default": "./dist/data-table.js"
     },
     "./styles.css": "./dist/ledger-design-system.css"
   },

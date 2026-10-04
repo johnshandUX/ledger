@@ -33,12 +33,13 @@
 .summary-values{display:grid;gap:var(--ledger-space-1)}
 .summary-value{font-size:var(--ledger-font-size-heading-small);font-weight:var(--ledger-font-weight-semibold);margin-top:var(--ledger-space-1)}
 
-.accounts-table{/* presentation owned by design-system Table */}
+.accounts-table{/* presentation owned by design-system DataTable */}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,'Roboto Mono',monospace;color:var(--ledger-color-text)}
 .acc-name{font-weight:var(--ledger-font-weight-semibold)}
 .acc-sub{color:var(--ledger-color-text-secondary);font-size:13px}
 
 .accounts-mobile{display:none}
+.mobile-table-controls{display:none}
 
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .brand:focus-visible,.nav-item:focus-visible{outline:var(--ledger-border-width-thick) solid var(--ledger-color-action);outline-offset:var(--ledger-space-1)}
@@ -78,6 +79,9 @@
   .page-header{flex-direction:column;align-items:flex-start}
   .accounts-table{display:none}
   .accounts-mobile{display:grid;gap:var(--ledger-space-3);margin-top:var(--ledger-space-3)}
+  .mobile-table-controls{display:flex;align-items:end;gap:var(--ledger-space-3)}
+  .mobile-table-controls .ledger-select-field{flex:1}
+  .mobile-table-direction{margin-bottom:var(--ledger-space-1)}
   .acc-card{background:var(--ledger-color-surface);padding:var(--ledger-space-3);border-radius:12px}
   .acc-top{display:flex;justify-content:space-between;align-items:center}
   .acc-meta{margin-top:var(--ledger-space-2);color:var(--ledger-color-text-secondary);font-size:13px;display:flex;gap:var(--ledger-space-3);justify-content:space-between}
@@ -90,6 +94,7 @@
   .account-details dl{grid-template-columns:repeat(2,minmax(0,1fr))}
   .transactions-desktop{display:none}
   .transactions-mobile{display:grid;gap:var(--ledger-space-3);list-style:none;margin:0;padding:0}
+  .transactions-mobile-controls{display:block}
   .transaction-card{padding:var(--ledger-space-4);border:var(--ledger-border-width-thin) solid var(--ledger-color-border);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface)}
   .transaction-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ledger-space-4)}
   .transaction-card-header>strong{white-space:nowrap}

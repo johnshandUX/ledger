@@ -31,3 +31,17 @@ import { Icon } from "@johnshandux/ledger-design-system/icons";
 Lucide is the underlying source, while Ledger owns semantic naming, the supported catalogue,
 sizing, accessibility, product meaning, and future custom replacements. Applications should not
 import Lucide directly. The dedicated bundle keeps that implementation out of the server-safe root entry.
+
+Interactive data tables use their dedicated client entry:
+
+```tsx
+"use client";
+
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@johnshandux/ledger-design-system/data-table";
+```
+
+`Table` remains the semantic structural primitive. `DataTable` composes it with typed columns,
+sorting, pagination, density, overflow, result counts, and data-state foundations.

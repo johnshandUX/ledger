@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@johnshandux/ledger-design-system": "^1.1.0",
+    "@johnshandux/ledger-design-system": "^1.2.0",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"

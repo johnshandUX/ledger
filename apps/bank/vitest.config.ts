@@ -5,6 +5,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: "@johnshandux/ledger-design-system/data-table",
+        replacement: resolve(__dirname, "../../packages/design-system/src/data-table.ts"),
+      },
+      {
         find: "@johnshandux/ledger-design-system/appearance-toggle",
         replacement: resolve(__dirname, "../../packages/design-system/src/appearance-toggle.ts"),
       },
