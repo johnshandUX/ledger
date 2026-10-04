@@ -1,7 +1,13 @@
 :root {
-  /* Font family */
+  /* Font families */
 
-  --ledger-font-family-sans: "Inter", Arial, sans-serif;
+  --ledger-font-family-product: "Inter", Arial, sans-serif;
+  --ledger-font-family-brand-display: "Instrument Serif", Georgia, serif;
+  --ledger-font-family-brand-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* Backwards-compatible product alias */
+
+  --ledger-font-family-sans: var(--ledger-font-family-product);
 
 
   /* Font weights */

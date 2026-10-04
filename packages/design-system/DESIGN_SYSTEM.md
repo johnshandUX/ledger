@@ -118,14 +118,31 @@ Product-specific UI should not be added to the core component library unless it 
 
 ### Typography consumption contract
 
-Ledger owns the authoritative font-family and type-scale tokens, including
-`--ledger-font-family-sans`. Consuming applications own framework-specific font loading and
-must make the font named by Ledger's family token available. Applications should consume the
-Ledger tokens rather than substitute a framework default or introduce a parallel type system.
+Ledger owns the authoritative font-family and type-scale tokens. Inter is the product family,
+exposed as `--ledger-font-family-product`; the established `--ledger-font-family-sans` token
+remains as a compatible alias. Use Inter for all product UI and interface content, including body
+copy, navigation, controls, forms, tables, labels and standard headings. Product interfaces,
+including Ledger Bank, must continue to use Inter unless a future product-specific decision says
+otherwise.
 
-The current primary family is Inter. Changing that family is a design-system decision, not an
-application-level choice. Monospace treatment for product-specific identifiers may remain local
-until Ledger defines an authoritative monospace token.
+LedgerOS uses Instrument Serif for selected marketing and editorial headings through
+`--ledger-font-family-brand-display`. Inter remains the core typeface for all product interfaces
+and supporting content. IBM Plex Mono is used selectively through
+`--ledger-font-family-brand-mono` for supporting details such as dates, entry numbers, version
+labels, technical references and code examples. The display serif and monospace families are
+reserved for LedgerOS brand expression and should not be introduced into product components by
+default.
+
+Instrument Serif must not be used for paragraphs, navigation, buttons, forms, tables or other
+interface content. IBM Plex Mono must not become the default for product or editorial content.
+Both brand families are intentionally represented by semantic tokens so they can be changed
+without changing their usage contract.
+
+Consuming applications own framework-specific font loading and must make the families named by
+the tokens available. Applications should consume Ledger tokens rather than substitute framework
+defaults or introduce a parallel type system. Instrument Serif and IBM Plex Mono are both
+available under the SIL Open Font License 1.1; load only the weights and styles required by an
+approved use.
 
 ### Financial presentation
 

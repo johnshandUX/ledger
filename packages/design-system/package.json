@@ -9,9 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:theme-parity": "node --test src/themes/dark.parity.test.mjs",
     "test:theme-artifact": "node --test src/themes/theme-artifact.test.mjs",
+    "test:typography": "node --test src/tokens/typography.test.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test:theme-artifact"
+    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test:theme-artifact && npm run test:typography"
   },
   "repository": {
     "type": "git",
