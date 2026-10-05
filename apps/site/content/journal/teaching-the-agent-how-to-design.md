@@ -35,9 +35,9 @@ So I've started thinking about design-system documentation differently.
 
 Traditionally, I might document a component for another designer or developer:
 
-Here's the component.  
-Here are the variants.  
-Here are the states.  
+Here's the component.\
+Here are the variants.\
+Here are the states.\
 Here's how to use it.
 
 For an agent, I also need to think about the decisions surrounding it.
