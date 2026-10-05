@@ -4,7 +4,7 @@ title: "Libraries: Core, Finance Domain, Product"
 slug: "libraries-core-finance-domain-product"
 summary: "When is a components core, financial or product specific."
 publishedDate: "2026-10-05"
-status: "draft"
+status: "published"
 tags:
   - "Design systems"
   - "categorisation"
