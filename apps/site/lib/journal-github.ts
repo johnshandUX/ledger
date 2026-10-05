@@ -108,7 +108,7 @@ export async function updateGitHubJournalDraft(originalSlug: string, input: Jour
   const existing = snapshot.entries.find((entry) => entry.slug === originalSlug);
   if (!existing) throw new JournalGitHubError("This draft no longer exists.");
   if (existing.status !== "draft") throw new JournalGitHubError("Published entries are read-only.");
-  const entry: JournalEntry = { ...existing, ...authorInput, slug: slugifyJournalTitle(authorInput.title), status, publishedDate: status === "published" ? getLondonDate(now) : existing.publishedDate };
+  const entry: JournalEntry = { ...existing, ...authorInput, slug: existing.slug, status, publishedDate: status === "published" ? getLondonDate(now) : existing.publishedDate };
   validateJournalEntries([...snapshot.entries.filter((item) => item.slug !== originalSlug), entry]);
   const oldPath = journalRepositoryPath(originalSlug); const newPath = journalRepositoryPath(entry.slug);
   const changes: CommitChanges = { additions: [{ path: newPath, contents: encodeEntry(entry) }] };

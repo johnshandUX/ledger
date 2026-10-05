@@ -12,5 +12,5 @@ export default async function NewJournalEntryPage() {
   await requireJournalAdmin();
   let number = "Next";
   try { number = getNextJournalNumber((await fetchGitHubJournalSnapshot()).entries); } catch { /* Form reports configuration and GitHub errors on submission. */ }
-  return <main id="main-content" className="page-shell inner-page journal-admin-page"><Link className="journal-back-link" href="/journal/admin">← Entries</Link><JournalEntryForm action={createJournalEntryAction} journalNumber={number} mode="new" /></main>;
+  return <main id="main-content" className="page-shell inner-page journal-admin-page"><Link className="journal-back-link" href="/journal/admin">← Entries</Link><JournalEntryForm key={`new-${number}`} action={createJournalEntryAction} journalNumber={number} mode="new" /></main>;
 }

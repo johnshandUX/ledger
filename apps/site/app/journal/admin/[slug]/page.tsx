@@ -14,5 +14,5 @@ export default async function EditJournalDraftPage({ params }: { params: Promise
   const entry = (await fetchGitHubJournalSnapshot()).entries.find((item) => item.slug === slug);
   if (!entry || entry.status !== "draft") notFound();
   const action = updateJournalDraftAction.bind(null, entry.slug);
-  return <main id="main-content" className="page-shell inner-page journal-admin-page"><Link className="journal-back-link" href="/journal/admin">← Entries</Link><JournalEntryForm action={action} journalNumber={entry.number} mode="draft" initialValues={{ title: entry.title, summary: entry.summary, tags: entry.tags.join(", "), body: entry.body }} /></main>;
+  return <main id="main-content" className="page-shell inner-page journal-admin-page"><Link className="journal-back-link" href="/journal/admin">← Entries</Link><JournalEntryForm key={`draft-${entry.slug}`} action={action} journalNumber={entry.number} mode="draft" initialValues={{ title: entry.title, summary: entry.summary, tags: entry.tags.join(", "), body: entry.body }} /></main>;
 }

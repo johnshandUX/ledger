@@ -70,20 +70,32 @@ describe("GitHub Journal adapter", () => {
     await expect(updateGitHubJournalDraft("existing-entry", { title: "Changed", summary: "Changed summary.", tags: ["LedgerOS"], body: "Changed body." }, "draft", config, successfulFetch())).rejects.toEqual(expect.objectContaining({ message: "Published entries are read-only." }));
   });
 
-  it("updates a renamed draft while retaining its number, date, and expected head", async () => {
+  it("updates a draft in place while retaining its number, slug, filename, date, and expected head", async () => {
     const fetcher = draftFetch();
     const result = await updateGitHubJournalDraft("draft-entry", { title: "Renamed draft", summary: "An updated draft entry.", tags: ["LedgerOS"], body: "Updated body." }, "draft", config, fetcher, new Date("2026-10-05T12:00:00Z"));
-    expect(result.entry).toMatchObject({ number: "005", slug: "renamed-draft", publishedDate: "2026-09-30", status: "draft" });
+    expect(result.entry).toMatchObject({ number: "005", title: "Renamed draft", slug: "draft-entry", publishedDate: "2026-09-30", status: "draft" });
     const graphqlCall = vi.mocked(fetcher).mock.calls.find(([url]) => String(url) === "https://api.github.com/graphql");
     const body = JSON.parse(String((graphqlCall?.[1] as RequestInit).body));
     expect(body.variables.input.expectedHeadOid).toBe("draft-head-oid");
-    expect(body.variables.input.fileChanges.additions[0].path).toBe("apps/site/content/journal/renamed-draft.md");
-    expect(body.variables.input.fileChanges.deletions).toEqual([{ path: "apps/site/content/journal/draft-entry.md" }]);
+    expect(body.variables.input.fileChanges.additions[0].path).toBe("apps/site/content/journal/draft-entry.md");
+    expect(body.variables.input.fileChanges.deletions).toBeUndefined();
   });
 
-  it("sets the publication date only when a draft is first published", async () => {
-    const result = await updateGitHubJournalDraft("draft-entry", { title: draft.title, summary: draft.summary, tags: draft.tags, body: draft.body }, "published", config, draftFetch(), new Date("2026-10-05T12:00:00Z"));
-    expect(result.entry).toMatchObject({ number: "005", publishedDate: "2026-10-05", status: "published" });
+  it("publishes a draft in the same file with its number, slug, content, and expected head preserved", async () => {
+    const fetcher = draftFetch();
+    const result = await updateGitHubJournalDraft("draft-entry", { title: draft.title, summary: draft.summary, tags: draft.tags, body: draft.body }, "published", config, fetcher, new Date("2026-10-05T12:00:00Z"));
+    expect(result.entry).toEqual({ ...draft, publishedDate: "2026-10-05", status: "published" });
+    const graphqlCall = vi.mocked(fetcher).mock.calls.find(([url]) => String(url) === "https://api.github.com/graphql");
+    const body = JSON.parse(String((graphqlCall?.[1] as RequestInit).body));
+    expect(body.variables.input.expectedHeadOid).toBe("draft-head-oid");
+    expect(body.variables.input.fileChanges.additions).toHaveLength(1);
+    expect(body.variables.input.fileChanges.additions[0].path).toBe("apps/site/content/journal/draft-entry.md");
+    expect(body.variables.input.fileChanges.deletions).toBeUndefined();
+    const markdown = Buffer.from(body.variables.input.fileChanges.additions[0].contents, "base64").toString("utf8");
+    expect(markdown).toContain('number: "005"');
+    expect(markdown).toContain('slug: "draft-entry"');
+    expect(markdown).toContain('status: "published"');
+    expect(markdown).toContain("Draft body.");
   });
 
   it("fails without a mutation when the requested draft is missing", async () => {

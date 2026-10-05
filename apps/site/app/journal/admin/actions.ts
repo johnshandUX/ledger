@@ -32,9 +32,10 @@ export async function createJournalEntryAction(_state: JournalActionState, formD
   const values = formValues(formData);
   try {
     await assertJournalAdmin();
-    const result = await createGitHubJournalEntry(authorInput(values), parseJournalActionIntent(formData.get("intent")));
+    const actionIntent = parseJournalActionIntent(formData.get("intent"));
+    const result = await createGitHubJournalEntry(authorInput(values), actionIntent);
     revalidatePath("/journal/admin");
-    return { status: "success", message: "Commit created — deployment pending", commitUrl: result.url, values };
+    return { status: "success", intent: actionIntent, message: "Commit created — deployment pending", commitUrl: result.url, values };
   } catch (error) { return failure(error, values); }
 }
 
@@ -42,8 +43,9 @@ export async function updateJournalDraftAction(originalSlug: string, _state: Jou
   const values = formValues(formData);
   try {
     await assertJournalAdmin();
-    const result = await updateGitHubJournalDraft(originalSlug, authorInput(values), parseJournalActionIntent(formData.get("intent")));
+    const actionIntent = parseJournalActionIntent(formData.get("intent"));
+    const result = await updateGitHubJournalDraft(originalSlug, authorInput(values), actionIntent);
     revalidatePath("/journal/admin");
-    return { status: "success", message: "Commit created — deployment pending", commitUrl: result.url, values };
+    return { status: "success", intent: actionIntent, message: "Commit created — deployment pending", commitUrl: result.url, values };
   } catch (error) { return failure(error, values); }
 }

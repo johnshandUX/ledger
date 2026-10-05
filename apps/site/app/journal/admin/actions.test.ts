@@ -16,6 +16,7 @@ vi.mock("../../../lib/journal-github", async () => {
 
 import { createJournalEntryAction, updateJournalDraftAction } from "./actions";
 import { initialJournalActionState } from "./action-state";
+import { JournalGitHubError } from "../../../lib/journal-github";
 
 function form(intent: string | null = "draft") {
   const value = new FormData();
@@ -31,6 +32,7 @@ describe("Journal server actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.authorize.mockResolvedValue({ user: { githubId: "123" } });
+    mocks.update.mockResolvedValue({ oid: "published-commit", url: "https://github.com/johnshandUX/ledger/commit/published-commit" });
   });
 
   it("stops before GitHub access when creation authorization fails", async () => {
@@ -51,5 +53,19 @@ describe("Journal server actions", () => {
     const result = await createJournalEntryAction(initialJournalActionState, form(intent));
     expect(result).toEqual(expect.objectContaining({ status: "error", message: expect.stringContaining("Choose Save draft or Publish") }));
     expect(mocks.create).not.toHaveBeenCalled();
+  });
+
+  it("returns publish success feedback and the commit link for an existing draft", async () => {
+    const result = await updateJournalDraftAction("test-entry", initialJournalActionState, form("published"));
+    expect(mocks.update).toHaveBeenCalledWith("test-entry", expect.objectContaining({ title: "Test entry" }), "published");
+    expect(result).toEqual(expect.objectContaining({ status: "success", intent: "published", message: "Commit created — deployment pending", commitUrl: "https://github.com/johnshandUX/ledger/commit/published-commit" }));
+    expect(mocks.revalidate).toHaveBeenCalledWith("/journal/admin");
+  });
+
+  it("returns user-visible feedback when publishing an existing draft fails", async () => {
+    mocks.update.mockRejectedValue(new JournalGitHubError("The draft could not be published."));
+    const result = await updateJournalDraftAction("test-entry", initialJournalActionState, form("published"));
+    expect(result).toEqual(expect.objectContaining({ status: "error", message: "The draft could not be published." }));
+    expect(mocks.revalidate).not.toHaveBeenCalled();
   });
 });
