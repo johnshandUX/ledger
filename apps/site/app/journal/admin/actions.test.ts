@@ -59,7 +59,7 @@ describe("Journal server actions", () => {
     const result = await updateJournalDraftAction("test-entry", initialJournalActionState, form("published"));
     expect(mocks.update).toHaveBeenCalledWith("test-entry", expect.objectContaining({ title: "Test entry" }), "published");
     expect(result).toEqual(expect.objectContaining({ status: "success", intent: "published", message: "Commit created — deployment pending", commitUrl: "https://github.com/johnshandUX/ledger/commit/published-commit" }));
-    expect(mocks.revalidate).toHaveBeenCalledWith("/journal/admin");
+    expect(mocks.revalidate).not.toHaveBeenCalled();
   });
 
   it("returns user-visible feedback when publishing an existing draft fails", async () => {

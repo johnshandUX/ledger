@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { assertJournalAdmin } from "../../../lib/journal-auth";
 import { createGitHubJournalEntry, JournalConflictError, JournalConfigurationError, JournalGitHubError, updateGitHubJournalDraft } from "../../../lib/journal-github";
 import { JournalValidationError, type JournalAuthorInput } from "../../../lib/journal";
@@ -34,7 +33,6 @@ export async function createJournalEntryAction(_state: JournalActionState, formD
     await assertJournalAdmin();
     const actionIntent = parseJournalActionIntent(formData.get("intent"));
     const result = await createGitHubJournalEntry(authorInput(values), actionIntent);
-    revalidatePath("/journal/admin");
     return { status: "success", intent: actionIntent, message: "Commit created — deployment pending", commitUrl: result.url, values };
   } catch (error) { return failure(error, values); }
 }
@@ -45,7 +43,6 @@ export async function updateJournalDraftAction(originalSlug: string, _state: Jou
     await assertJournalAdmin();
     const actionIntent = parseJournalActionIntent(formData.get("intent"));
     const result = await updateGitHubJournalDraft(originalSlug, authorInput(values), actionIntent);
-    revalidatePath("/journal/admin");
     return { status: "success", intent: actionIntent, message: "Commit created — deployment pending", commitUrl: result.url, values };
   } catch (error) { return failure(error, values); }
 }
