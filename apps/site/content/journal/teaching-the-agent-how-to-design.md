@@ -4,7 +4,7 @@ title: "Teaching the agent how to design"
 slug: "teaching-the-agent-how-to-design"
 summary: "Making an agentic design system that's both human and machine readable."
 publishedDate: "2026-10-05"
-status: "draft"
+status: "published"
 tags:
   - "AI-design"
   - "design systems"
