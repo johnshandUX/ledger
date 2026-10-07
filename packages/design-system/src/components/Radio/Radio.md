@@ -4,7 +4,7 @@
 Radio selects one option from a mutually exclusive group using native browser behaviour.
 
 ## Anatomy
-A native radio input and visible clickable label are required. `name` should be shared by every option in the group. Optional `hint` and `error` content are linked to the input.
+A native 24px radio input and visible clickable label are required. `name` should be shared by every option in the group. Optional `hint` and `error` content are linked to the input.
 
 ## Behaviour
 Selection and arrow-key movement remain native. Standard input attributes except `type` pass through. Error content marks the individual input invalid.

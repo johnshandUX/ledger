@@ -9,6 +9,8 @@ describe("Checkbox", () => {
     expect(html).toContain('id="remittance"');
     expect(html).toContain('type="checkbox"');
     expect(html).toContain('name="remittance"');
+    expect(html).toContain('class="ledger-checkbox-indicator"');
+    expect(html).toContain('aria-hidden="true"');
   });
 
   it("links hint and error content and exposes invalid state", () => {

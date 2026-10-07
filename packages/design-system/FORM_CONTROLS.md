@@ -228,7 +228,7 @@ Checkbox should:
 - avoid clipping at any state
 - use a checked indicator that is visually prominent within the control and clearly distinguishable at normal viewing sizes
 
-The visual control should be approximately 20px in size unless testing shows a different size is more appropriate.
+The visual control should be 24px in size. This keeps the state legible on small screens while the clickable label provides a larger interaction target.
 
 ---
 
@@ -249,7 +249,7 @@ Radio should:
 - avoid clipping at any state
 - use a selected indicator that is visually prominent within the control and clearly distinguishable at normal viewing sizes; the inner dot should occupy enough of the control to communicate selection clearly without dominating the outer boundary
 
-The visual control should be approximately 20px in size unless testing shows a different size is more appropriate.
+The visual control should be 24px in size. This keeps the selected state legible on small screens while the clickable label provides a larger interaction target.
 
 ---
 

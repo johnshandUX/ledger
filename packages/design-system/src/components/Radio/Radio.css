@@ -14,8 +14,8 @@
 
 .ledger-radio {
   box-sizing: border-box;
-  width: 20px;
-  height: 20px;
+  width: var(--ledger-space-5);
+  height: var(--ledger-space-5);
   margin: 0;
   flex-shrink: 0;
   appearance: none;
@@ -25,13 +25,13 @@
   background-image: none;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 10px 10px;
+  background-size: 12px 12px;
 }
 
 .ledger-radio:checked {
   border-color: var(--ledger-color-action);
   background-color: var(--ledger-color-surface);
-  background-image: radial-gradient(circle, var(--ledger-color-action) 0 4px, transparent 4.5px);
+  background-image: radial-gradient(circle, var(--ledger-color-action) 0 5px, transparent 5.5px);
 }
 
 .ledger-radio:focus-visible {

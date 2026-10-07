@@ -30,14 +30,17 @@ export function Checkbox({
   return (
     <div className="ledger-checkbox-field">
       <label className="ledger-checkbox-label" htmlFor={checkboxId}>
-        <input
-          id={checkboxId}
-          type="checkbox"
-          className={`ledger-checkbox ${error ? "ledger-checkbox--error" : ""} ${className}`.trim()}
-          aria-invalid={invalid}
-          aria-describedby={describedBy}
-          {...props}
-        />
+        <span className="ledger-checkbox-control">
+          <input
+            id={checkboxId}
+            type="checkbox"
+            className={`ledger-checkbox ${error ? "ledger-checkbox--error" : ""} ${className}`.trim()}
+            aria-invalid={invalid}
+            aria-describedby={describedBy}
+            {...props}
+          />
+          <span className="ledger-checkbox-indicator" aria-hidden="true" />
+        </span>
         <span>{label}</span>
       </label>
 
