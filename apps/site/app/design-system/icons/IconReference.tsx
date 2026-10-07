@@ -9,9 +9,13 @@ const semanticStatuses = [
   { label: "Error", name: "error", token: "--ledger-color-icon-status-error", light: "red-800", dark: "red-300", className: "status-icon--error", usage: "Errors and failed validation" },
 ] as const;
 
+const semanticStatusClasses = Object.fromEntries(
+  semanticStatuses.map(({ name, className }) => [name, className]),
+) as Partial<Record<(typeof iconCatalog)[number]["name"], string>>;
+
 export function IconReference() {
   return <>
-    <section className="docs-section"><div className="doc-section-heading"><div><p className="eyebrow">Supported catalogue</p><h2>Semantic names, stable product meaning</h2></div><p>Use the Ledger name shown here. The underlying artwork can change without requiring a product-code migration.</p></div><div className="icon-catalogue">{iconCategories.map((category) => <section key={category} className="icon-category"><h3>{category}</h3><div className="icon-grid">{iconCatalog.filter((icon) => icon.category === category).map((icon) => <article key={icon.name} className="icon-card"><Icon name={icon.name} size="large" /><code>{icon.name}</code></article>)}</div></section>)}</div></section>
+    <section className="docs-section"><div className="doc-section-heading"><div><p className="eyebrow">Supported catalogue</p><h2>Semantic names, stable product meaning</h2></div><p>Use the Ledger name shown here. The underlying artwork can change without requiring a product-code migration.</p></div><div className="icon-catalogue">{iconCategories.map((category) => <section key={category} className="icon-category"><h3>{category}</h3><div className="icon-grid">{iconCatalog.filter((icon) => icon.category === category).map((icon) => <article key={icon.name} className="icon-card"><Icon className={semanticStatusClasses[icon.name]} name={icon.name} size="large" /><code>{icon.name}</code></article>)}</div></section>)}</div></section>
     <section className="docs-section"><div className="doc-section-heading"><div><p className="eyebrow">Usage</p><h2>One governed entry point</h2></div><p>Icons inherit the surrounding text colour and use the supported small, medium or large sizes.</p></div><pre><code>{`import { Icon } from
   "@johnshandux/ledger-design-system/icons";
 
