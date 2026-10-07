@@ -21,6 +21,7 @@ Dialog presents a temporary, focused task or information that needs attention wh
 - Focus remains trapped while the dialog is open and returns appropriately after dismissal.
 - Long body content scrolls within the available viewport while footer actions remain available.
 - Motion is disabled when the user prefers reduced motion.
+- `DialogTrigger` supports `asChild`, allowing a Ledger Button or a semantic native button with a text-style presentation. Opening a dialog is an action, not navigation.
 
 ## Actions
 
@@ -48,4 +49,4 @@ Do not use Dialog:
 - as a substitute for a full page when the task needs substantial space or surrounding context
 - for passive information that does not warrant interrupting the user
 
-Destructive confirmation belongs to a future Ledger `AlertDialog`, which will define stronger interruption and action conventions.
+Destructive or materially consequential confirmation belongs to the implemented Ledger `AlertDialog`, which requires explicit cancel and action elements.

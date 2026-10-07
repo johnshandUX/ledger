@@ -1,0 +1,6 @@
+.ledger-badge { display: inline-flex; align-items: center; width: fit-content; border: var(--ledger-border-width-thin) solid; border-radius: var(--ledger-radius-full); padding: var(--ledger-space-1) var(--ledger-space-2); font-size: var(--ledger-font-size-small); line-height: var(--ledger-line-height-small); font-weight: var(--ledger-font-weight-medium); }
+.ledger-badge--neutral { color: var(--ledger-color-status-neutral-text); background: var(--ledger-color-status-neutral-background); border-color: var(--ledger-color-status-neutral-border); }
+.ledger-badge--informational { color: var(--ledger-color-status-informational-text); background: var(--ledger-color-status-informational-background); border-color: var(--ledger-color-status-informational-border); }
+.ledger-badge--success { color: var(--ledger-color-status-success-text); background: var(--ledger-color-status-success-background); border-color: var(--ledger-color-status-success-border); }
+.ledger-badge--warning { color: var(--ledger-color-status-warning-text); background: var(--ledger-color-status-warning-background); border-color: var(--ledger-color-status-warning-border); }
+.ledger-badge--error { color: var(--ledger-color-status-error-text); background: var(--ledger-color-status-error-background); border-color: var(--ledger-color-status-error-border); }

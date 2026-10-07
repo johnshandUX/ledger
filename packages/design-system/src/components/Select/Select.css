@@ -19,9 +19,9 @@
   width: 100%;
   min-height: 44px;
   padding: var(--ledger-space-2) 40px var(--ledger-space-2) var(--ledger-space-3);
-  border: var(--ledger-border-width-thick) solid var(--ledger-color-control-border);
+  border: var(--ledger-border-width-thin) solid var(--ledger-color-control-border-resting);
   border-radius: var(--ledger-radius-medium);
-  background: var(--ledger-color-surface);
+  background-color: var(--ledger-color-control-background);
   color: var(--ledger-color-text);
   font-family: var(--ledger-font-family-sans);
   font-size: var(--ledger-font-size-body);
@@ -34,7 +34,8 @@
   background-position: right 16px center, right 10px center;
 }
 
-.ledger-select:disabled { color: var(--ledger-color-text-disabled); background-color: var(--ledger-color-surface-disabled); cursor: not-allowed; }
+.ledger-select:hover:not(:disabled, .ledger-select--error) { border-color: var(--ledger-color-control-border-hover); }
+.ledger-select:disabled { color: var(--ledger-color-text-disabled); background-color: var(--ledger-color-surface-disabled); border-color: var(--ledger-color-control-border-disabled); cursor: not-allowed; }
 
 .ledger-select:focus-visible {
   outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
@@ -42,7 +43,7 @@
 }
 
 .ledger-select--error {
-  border-color: var(--ledger-color-error);
+  border-color: var(--ledger-color-control-border-error);
 }
 
 .ledger-select-error {

@@ -1,0 +1,17 @@
+.ledger-separator {
+  flex-shrink: 0;
+  margin: 0;
+  border: 0;
+  background: var(--ledger-color-border-subtle);
+}
+
+.ledger-separator--horizontal {
+  width: 100%;
+  height: var(--ledger-border-width-thin);
+}
+
+.ledger-separator--vertical {
+  align-self: stretch;
+  width: var(--ledger-border-width-thin);
+  min-height: var(--ledger-space-5);
+}

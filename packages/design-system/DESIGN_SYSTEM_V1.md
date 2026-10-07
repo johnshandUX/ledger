@@ -6,9 +6,15 @@ Create a coherent first version of Ledger Design System that supports common com
 
 The v1 system should be broad enough to support the first Ledger Bank screens without attempting to cover every future pattern.
 
+## Historical scope and current result
+
+This document records the original v1 scope. Current implementation and roadmap truth live in the
+typed component manifest and component-family documentation. “Implemented” below describes the
+current repository; “planned” does not define a public API.
+
 ## Foundations
 
-Already established:
+Implemented in the original v1 baseline:
 
 - colour
 - typography
@@ -17,7 +23,7 @@ Already established:
 - borders
 - elevation
 
-To add:
+Implemented since the original plan:
 
 - minimal icon foundation using Lucide
   - information
@@ -29,7 +35,7 @@ Additional icons should be introduced only when required by a component or demon
 
 ## Core components
 
-Existing:
+Implemented:
 
 - Button
 - Input
@@ -38,18 +44,26 @@ Existing:
 - Checkbox
 - Radio
 
-To add:
+Implemented after the original v1 baseline:
 
-- Link React component (deferred; `.ledger-link` visual convention exists)
-- Badge (planned; no public component exists)
+- Link remains a `.ledger-link` visual convention; no React component is published
+- Badge
 - Alert
-- Card (planned; no public component exists)
-- Tabs
+- Card
 - Table
+- Dialog and AlertDialog
+- DropdownMenu
+- Tooltip, Popover and Sheet
+- Separator, Skeleton, Spinner and AspectRatio
+- DataTable
+- Progress and Avatar
+
+Approved planned records, without public APIs:
+
+- Tabs
 - Pagination
 - Breadcrumb
-- Modal
-- Menu / Dropdown
+- Collapsible
 
 ## Form patterns
 
@@ -91,7 +105,9 @@ Do not create yet:
 - mobile-specific patterns
 - dark theme
 
-These should be introduced when Ledger Bank exposes a real requirement.
+Dark theme has since been implemented. Date controls and file upload now have approved planned
+manifest records but remain unimplemented until their family specifications are reviewed. The
+other exclusions remain evidence-led rather than implied public commitments.
 
 ## Implementation expectations
 

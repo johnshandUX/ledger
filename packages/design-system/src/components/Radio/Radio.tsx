@@ -13,6 +13,8 @@ export function Radio({
   error,
   id,
   className = "",
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
   ...props
 }: RadioProps) {
   const radioId = id ?? label.toLowerCase().replace(/\s+/g, "-");
@@ -21,7 +23,9 @@ export function Radio({
   const errorId = error ? `${radioId}-error` : undefined;
 
   const describedBy =
-    [hintId, errorId].filter(Boolean).join(" ") || undefined;
+    [hintId, errorId, ariaDescribedBy].filter(Boolean).join(" ") || undefined;
+
+  const invalid = error ? true : ariaInvalid;
 
   return (
     <div className="ledger-radio-field">
@@ -30,7 +34,7 @@ export function Radio({
           id={radioId}
           type="radio"
           className={`ledger-radio ${error ? "ledger-radio--error" : ""} ${className}`.trim()}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={invalid}
           aria-describedby={describedBy}
           {...props}
         />

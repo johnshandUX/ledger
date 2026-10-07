@@ -1,0 +1,10 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { AlertExample } from "../../examples/componentExamples";
+import { Alert, AlertDescription, AlertTitle } from "./Alert";
+const meta = { title: "Components/Alert", component: Alert, tags: ["autodocs"], parameters: { layout: "centered" }, args: { children: "Important account information", variant: "neutral" } } satisfies Meta<typeof Alert>;
+export default meta;
+type Story = StoryObj<typeof meta>;
+export const Informational: Story = { render: () => <div style={{ width: 480 }}><AlertExample /></div> };
+const StatusExamples = () => <div style={{ display: "grid", gap: 16, width: "min(480px, 100%)" }}>{(["neutral", "informational", "success", "warning", "error"] as const).map((variant) => <Alert key={variant} variant={variant}><AlertTitle>{variant[0].toUpperCase() + variant.slice(1)} message</AlertTitle><AlertDescription>This longer message can wrap across lines while the semantic icon remains aligned with the start of the alert content.</AlertDescription></Alert>)}</div>;
+export const StatusesLight: Story = { globals: { theme: "light" }, render: () => <StatusExamples /> };
+export const StatusesDark: Story = { globals: { theme: "dark" }, render: () => <StatusExamples /> };

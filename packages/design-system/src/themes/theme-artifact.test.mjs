@@ -22,6 +22,9 @@ test("published stylesheet contains the complete appearance theme contract", asy
     ["control border semantic", /--ledger-color-control-border:/],
     ["resting control border semantic", /--ledger-color-control-border-resting:/],
     ["hover control border semantic", /--ledger-color-control-border-hover:/],
+    ["control background semantic", /--ledger-color-control-background:/],
+    ["error control border semantic", /--ledger-color-control-border-error:/],
+    ["disabled control border semantic", /--ledger-color-control-border-disabled:/],
     ["explicit light selector", /:root\[data-theme=["']?light["']?\]/],
     ["explicit dark selector", /:root\[data-theme=["']?dark["']?\]/],
     ["system dark media query", /@media\s*\(prefers-color-scheme:\s*dark\)/],
@@ -30,6 +33,7 @@ test("published stylesheet contains the complete appearance theme contract", asy
     ["success status icon semantic", /--ledger-color-icon-status-success:/],
     ["warning status icon semantic", /--ledger-color-icon-status-warning:/],
     ["error status icon semantic", /--ledger-color-icon-status-error:/],
+    ["status icon foreground semantic", /--ledger-color-icon-status-foreground:/],
   ];
 
   for (const [label, pattern] of requirements) {

@@ -8,7 +8,7 @@ Applications consume `Icon` from `@johnshandux/ledger-design-system/icons` and m
 
 ## Anatomy
 
-An icon is a single outline SVG that inherits `currentColor`. Its semantic `name` selects the implementation from the governed registry.
+An icon is a single SVG that inherits `currentColor`. Most catalogue icons use Lucide outlines. The four semantic status icons use Ledger-owned filled shapes with a theme-stable light foreground glyph; Error uses an octagonal stop-sign silhouette. Its semantic `name` selects the implementation from the governed registry.
 
 ## API
 
@@ -30,13 +30,13 @@ Icons are non-interactive. Without an `aria-label`, an icon is decorative and re
 
 Colour inherits from surrounding text through `currentColor`. Use a semantic Ledger colour token on the owning context. Icons do not create status meaning through colour alone.
 
-Ledger defines exactly four status-icon colour roles: `--ledger-color-icon-status-info`, `--ledger-color-icon-status-success`, `--ledger-color-icon-status-warning`, and `--ledger-color-icon-status-error`. Higher-level feedback components own when those roles apply. `Icon` deliberately has no `status` or arbitrary colour prop: ordinary information, success, warning, and error glyphs still inherit the standard surrounding colour unless they are communicating explicit semantic state.
+Ledger defines exactly four status-icon colour roles: `--ledger-color-icon-status-info`, `--ledger-color-icon-status-success`, `--ledger-color-icon-status-warning`, and `--ledger-color-icon-status-error`. Their internal glyph uses `--ledger-color-icon-status-foreground`. Higher-level feedback components own when those roles apply. `Icon` deliberately has no `status` or arbitrary colour prop: ordinary information, success, warning, and error glyphs still inherit the standard surrounding colour unless they are communicating explicit semantic state.
 
 ## Usage guidance
 
 Use icons to reinforce an action, destination, object or status. Prefer visible text when an unfamiliar symbol could be ambiguous. Use one of the supported sizes and preserve the icon's proportions.
 
-Do not import from `lucide-react` in product applications, select arbitrary Lucide artwork, use icons as the only expression of important information, or override Ledger's stroke and sizing contract.
+Do not import from `lucide-react` in product applications, select arbitrary Lucide artwork, use icons as the only expression of important information, or override Ledger's colour and sizing contract.
 
 ## Relationships
 

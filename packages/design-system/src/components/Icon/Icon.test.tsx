@@ -25,6 +25,14 @@ describe("Icon", () => {
     expect(html).toContain('height="24"');
   });
 
+  it("uses filled semantic status artwork with a theme-stable foreground glyph", () => {
+    const information = renderToStaticMarkup(<Icon name="information" />);
+    const error = renderToStaticMarkup(<Icon name="error" />);
+    expect(information).toContain('fill="currentColor"');
+    expect(information).toContain('var(--ledger-color-icon-status-foreground)');
+    expect(error).toContain('d="m8.1 2 7.8 0L22 8.1v7.8L15.9 22H8.1L2 15.9V8.1Z"');
+  });
+
   it("keeps every catalogue entry addressable by IconName", () => {
     expect(iconCatalog).toHaveLength(36);
     expectTypeOf<IconName>().toEqualTypeOf<(typeof iconCatalog)[number]["name"]>();
@@ -33,8 +41,8 @@ describe("Icon", () => {
   it("exposes the approved warning and appearance semantics", () => {
     const catalogueNames: ReadonlyArray<string> = iconCatalog.map(({ name }) => name);
 
-    expect(iconCatalog.find(({ name }) => name === "warning")?.lucideName).toBe("TriangleAlert");
-    expect(iconCatalog.find(({ name }) => name === "success")?.lucideName).toBe("CircleCheck");
+    expect(iconCatalog.find(({ name }) => name === "warning")?.lucideName).toBe("Ledger filled warning");
+    expect(iconCatalog.find(({ name }) => name === "success")?.lucideName).toBe("Ledger filled success");
     expect(catalogueNames).not.toContain("account");
     expect(catalogueNames).toContain("sun");
     expect(catalogueNames).toContain("moon");

@@ -8,3 +8,13 @@
 @import "../themes/dark.css";
 @import "./tailwind.css";
 @import "./global.css";
+@import "../components/Separator/Separator.css";
+@import "../components/Skeleton/Skeleton.css";
+@import "../components/Spinner/Spinner.css";
+@import "../components/AspectRatio/AspectRatio.css";
+@import "../components/Badge/Badge.css";
+@import "../components/Alert/Alert.css";
+@import "../components/Card/Card.css";
+@import "../components/Progress/Progress.css";
+@import "../components/Avatar/Avatar.css";
+@import "../examples/componentExamples.css";

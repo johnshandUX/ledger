@@ -25,4 +25,10 @@ describe("Input", () => {
     expect(html).toContain('class="ledger-input-label"');
     expect(html).not.toContain("ledger-input-label--visually-hidden");
   });
+
+  it("combines hint, error and consumer-provided description relationships", () => {
+    const html = renderToStaticMarkup(<Input id="account" label="Account" hint="Use the registered name." error="Enter an account." aria-describedby="account-policy" />);
+    expect(html).toContain('aria-describedby="account-hint account-error account-policy"');
+    expect(html).toContain('aria-invalid="true"');
+  });
 });

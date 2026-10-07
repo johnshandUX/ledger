@@ -5,7 +5,7 @@ import type { IconSize } from "./Icon.types";
 
 const sizes: IconSize[] = ["small", "medium", "large"];
 const semanticStatuses = [
-  { label: "Info", name: "information", token: "--ledger-color-icon-status-info", usage: "Informational feedback and guidance" },
+  { label: "Information", name: "information", token: "--ledger-color-icon-status-info", usage: "Informational feedback and guidance" },
   { label: "Success", name: "success", token: "--ledger-color-icon-status-success", usage: "Completed or confirmed outcomes" },
   { label: "Warning", name: "warning", token: "--ledger-color-icon-status-warning", usage: "Conditions requiring attention" },
   { label: "Error", name: "error", token: "--ledger-color-icon-status-error", usage: "Errors and failed validation" },
@@ -42,7 +42,7 @@ export const Accessibility: Story = {
 
 export const SemanticStatusLight: Story = {
   globals: { theme: "light" },
-  parameters: { docs: { description: { story: "Status colour is reserved for explicit feedback meaning. Ordinary icons continue to inherit currentColor." } } },
+  parameters: { docs: { description: { story: "Filled status shapes use semantic currentColor with a theme-stable light internal glyph. Status colour is reserved for explicit feedback meaning." } } },
   render: () => <SemanticStatusSpecimens />,
 };
 

@@ -1,0 +1,5 @@
+.ledger-progress { position: relative; width: 100%; height: var(--ledger-space-2); overflow: hidden; border-radius: var(--ledger-radius-full); background: var(--ledger-color-surface-selected); }
+.ledger-progress__indicator { width: 100%; height: 100%; border-radius: inherit; background: var(--ledger-color-action); transition: transform 160ms ease-out; }
+.ledger-progress[data-state="indeterminate"] .ledger-progress__indicator { width: 45%; animation: ledger-progress-indeterminate 1.4s ease-in-out infinite; }
+@keyframes ledger-progress-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(225%); } }
+@media (prefers-reduced-motion: reduce) { .ledger-progress__indicator { transition: none; } .ledger-progress[data-state="indeterminate"] .ledger-progress__indicator { animation: none; transform: translateX(60%); } }

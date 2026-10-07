@@ -28,7 +28,7 @@ Dialog presents a temporary, focused task or information while preserving the co
 
 **Use when:** A task or piece of information needs focused attention and can be completed without leaving the current page context.
 
-**Do not use for:** Destructive confirmation, complex multi-step journeys, or tasks needing the space and context of a full page. Destructive confirmation belongs in the future Ledger AlertDialog.
+**Do not use for:** Destructive confirmation, complex multi-step journeys, or tasks needing the space and context of a full page. Use the implemented Ledger AlertDialog for destructive or materially consequential confirmation.
         `.trim(),
       },
     },
@@ -53,6 +53,10 @@ export const Basic: Story = {
       </DialogContent>
     </Dialog>
   ),
+};
+
+export const TextActionTrigger: Story = {
+  render: () => <Dialog><DialogTrigger asChild><button className="ledger-link" style={{ appearance: "none", border: 0, padding: 0, background: "transparent", cursor: "pointer" }} type="button">Why is this payment pending?</button></DialogTrigger><DialogContent title="Pending payments"><DialogBody>A payment remains pending until it has been authorised.</DialogBody></DialogContent></Dialog>,
 };
 
 export const WithDescription: Story = {
@@ -127,7 +131,7 @@ export const LongContent: Story = {
 
 export const InitiallyOpenFocusBehaviour: Story = {
   render: () => (
-    <Dialog defaultOpen>
+    <Dialog>
       <DialogTrigger asChild>
         <Button>Open focus example</Button>
       </DialogTrigger>
@@ -146,6 +150,8 @@ export const InitiallyOpenFocusBehaviour: Story = {
   ),
   play: async ({ canvasElement }) => {
     const documentBody = within(canvasElement.ownerDocument.body);
+    const trigger = documentBody.getByRole("button", { name: "Open focus example" });
+    await userEvent.click(trigger);
     const dialog = await documentBody.findByRole("dialog");
 
     await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
@@ -154,8 +160,6 @@ export const InitiallyOpenFocusBehaviour: Story = {
 
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(documentBody.queryByRole("dialog")).not.toBeInTheDocument());
-    await waitFor(() =>
-      expect(documentBody.getByRole("button", { name: "Open focus example" })).toHaveFocus(),
-    );
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };

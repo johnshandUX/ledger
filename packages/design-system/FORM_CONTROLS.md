@@ -56,22 +56,24 @@ Error text should use the Ledger error colour.
 Interactive form controls should preserve their border geometry across default, hover, focus,
 error, and disabled states so state changes do not move layout.
 
-Checkbox, Radio, Select, and Textarea use the full 2px boundary by default. Input uses a constant
-1px border whose semantic colour may be transparent at rest when the themed control surface
-provides sufficient identification. Hover should strengthen the boundary, while focus and
-validation must remain more prominent than hover.
+Input, Select and Textarea use a constant 1px boundary so their geometry and visual weight remain
+consistent. Hover should strengthen the boundary, while focus and validation must remain more
+prominent than hover. Checkbox and Radio retain geometry appropriate to their native control shape.
 
 Control boundaries should use:
 
-- `--ledger-color-control-border` for controls with a persistent boundary
-- `--ledger-color-control-border-resting` for Input at rest
-- `--ledger-color-control-border-hover` for Input hover
+- `--ledger-color-control-border` for persistent control geometry such as Checkbox and Radio
+- `--ledger-color-control-border-resting` for the default boundary
+- `--ledger-color-control-border-hover` for hover
+- `--ledger-color-control-border-error` for invalid controls
+- `--ledger-color-control-border-disabled` for disabled controls
+- `--ledger-color-control-background` for the control surface
 
 Focus treatment should remain clearly visible and should not rely on colour alone.
 
-Theme mappings may make Input's resting border transparent only where its surface and context
-preserve a clear control affordance. Light appearance retains a visible resting boundary because
-its input and surrounding surfaces are similar.
+The resting boundary remains subtly visible and reaches at least 3:1 against the control background
+in both appearances. The general control-border role remains stronger for compact control geometry
+and other existing consumers; these two roles must not be collapsed into one mapping.
 
 ---
 
@@ -174,7 +176,7 @@ Input should:
 Textarea should:
 
 - follow the same visual language as Input
-- use the shared 2px control border
+- use the shared 1px control border
 - use medium radius
 - use Ledger typography
 - use responsive width
@@ -193,7 +195,7 @@ Its visual appearance should be styled to match Ledger rather than relying on th
 
 Select should:
 
-- use the shared 2px control border
+- use the shared 1px control border
 - use medium radius
 - use Ledger typography
 - use generous horizontal padding

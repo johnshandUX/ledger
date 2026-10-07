@@ -1,8 +1,8 @@
 # DataTable
 
-> Status: approved component-family contract. The foundation slice is implemented; search,
-> filtering, copy, sticky headers and server-mode integration remain future slices. API sections
-> describing those capabilities define their approved direction but are not yet package exports.
+> Status: the foundation slice is implemented. Search/filtering, selection/bulk actions and column
+> management are the approved priority order for later slices. Future sections describe direction,
+> not current props, exports or supported behaviour.
 
 ## Purpose
 
@@ -33,21 +33,17 @@ Table does not own sorting, filtering, pagination, copy behavior, loading states
 selection or responsive alternatives. DataTable must compose Table rather than reproduce its
 semantic elements or base visual rules where practical.
 
-### DataTable responsibilities
+### Implemented DataTable responsibilities
 
 `DataTable` is the interactive, client-side pattern. It owns:
 
 - rendering configured columns and rows through Table
 - sortable-header controls for explicitly sortable columns
-- generic search and filter controls configured by the consumer
-- active-filter presentation and clearing behavior
-- client-side row processing when configured for client mode
+- client-side stable sorting for explicitly sortable columns
 - page navigation, page size and result summaries
-- per-value copy actions when configured by a column
 - comfortable and compact density
 - optional zebra row treatment, independently of density
 - a deliberate horizontal-overflow viewport
-- optional sticky headers
 - consistent loading, empty, no-results and error presentation
 - accessible names, relationships, focus treatment and status feedback for its own controls
 
@@ -67,27 +63,53 @@ Product and domain implementations own:
 - alternative responsive representations such as `AccountCard`
 - ensuring equivalent records, ordering, important fields and actions across representations
 
-## Public package boundary
+## Implemented public package boundary
 
-DataTable requires client state and browser APIs such as Clipboard. It must be published from a
-dedicated client entry, proposed as:
+DataTable requires client state, layout measurement and browser observers. It is published from a
+dedicated client entry:
 
 ```ts
 import {
   DataTable,
   createDataTableRowModel,
   type DataTableColumn,
-  type DataTableFilterDefinition,
   type DataTableProps,
   type DataTableState,
 } from "@johnshandux/ledger-design-system/data-table";
 ```
 
-The package's root entry must remain safe for Server Component consumers. Adding DataTable must not
-pull client-only runtime into that entry. Pure types or helpers may be exposed from the dedicated
-entry without changing this boundary.
+The package's root entry remains safe for Server Component consumers.
 
-## TypeScript contract
+### Implemented exports and props
+
+The dedicated entry currently exports `DataTable`, `createDataTableRowModel` and the types defined
+in `DataTable.types.ts`. The implemented component accepts:
+
+- `rows`, `columns`, `getRowId` and `caption`
+- visible or visually hidden caption presentation
+- controlled or uncontrolled sort and page state
+- `comfortable` or `compact` density
+- `plain` or `zebra` row treatment
+- ascending, duplicate-free page-size options
+- `ready`, `loading`, `no-results` and `error` presentation
+- consumer-supplied loading, empty, no-results and error content
+
+The current state type retains `query` and `filters` as reserved serialisable fields. Consumers must
+pass an empty string and empty object; no search or filtering behaviour is implemented. Current
+columns support rendering, alignment, numeric/nowrap presentation and optional sorting. They do
+not support copy, selection, visibility, ordering, pinning or resizing.
+
+## Archived full-family proposal and future direction — not API reference
+
+The remainder of this document preserves the original reviewed full-family proposal so later
+slices retain their design rationale. Some passages overlap behaviour that the foundation slice
+has since implemented; other passages describe unimplemented search, filtering, copy, sticky-header
+and server-mode behaviour. This archive is not authoritative for current props or exports.
+Consumers must use the implemented summary above and the types exported from
+`@johnshandux/ledger-design-system/data-table`. Do not copy types or infer support from this
+proposal.
+
+## Archived proposed TypeScript contract
 
 The public API must not use `any`. Row callbacks remain typed to the consumer's data type. Rendered
 content is deliberately separate from values used for sorting, filtering and copying.

@@ -26,7 +26,13 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
-            provider: playwright({}),
+            provider: playwright({
+              // Use Playwright's managed browser by default. Older hosts can
+              // point this at a compatible system Chrome installation.
+              launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+                ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
+                : undefined,
+            }),
             instances: [{ browser: 'chromium' }],
           },
         },

@@ -1,0 +1,3 @@
+.ledger-card { overflow-wrap: anywhere; border: var(--ledger-border-width-thin) solid var(--ledger-color-border); border-radius: var(--ledger-radius-medium); background: var(--ledger-color-surface); color: var(--ledger-color-text); }
+.ledger-card__header, .ledger-card__body, .ledger-card__footer { padding: var(--ledger-space-5); }
+.ledger-card__header + .ledger-card__body, .ledger-card__body + .ledger-card__footer, .ledger-card__header + .ledger-card__footer { border-top: var(--ledger-border-width-thin) solid var(--ledger-color-border-subtle); }

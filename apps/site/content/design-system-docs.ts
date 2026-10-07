@@ -1,4 +1,7 @@
-export type DocumentationStatus = "Implemented" | "Dedicated entry" | "Convention" | "Planned";
+import { availableComponentManifest, componentManifest } from "@johnshandux/ledger-design-system/docs";
+
+export const componentCatalog = availableComponentManifest;
+export const componentRoadmap = componentManifest.filter((component) => component.lifecycle === "Planned");
 
 export const tokenGroups = [
   { name: "Spacing", description: "A nine-step scale from 4px to 64px.", tokens: [
@@ -15,29 +18,6 @@ export const tokenGroups = [
   ] },
 ] as const;
 
-export const componentCatalog: ReadonlyArray<{ name: string; status: DocumentationStatus; entry: string; purpose: string; contract: string }> = [
-  { name: "Button", status: "Implemented", entry: "root", purpose: "Triggers an action.", contract: "Primary, secondary and destructive variants. Native button attributes pass through; disabled is not a supported Ledger pattern." },
-  { name: "Input", status: "Implemented", entry: "root", purpose: "Collects a single-line value.", contract: "Requires a label and supports hint and error text with linked accessible descriptions." },
-  { name: "Textarea", status: "Implemented", entry: "root", purpose: "Collects longer text.", contract: "Matches the Input field structure and remains vertically resizable." },
-  { name: "Select", status: "Implemented", entry: "root", purpose: "Chooses one value from a defined list.", contract: "Uses a native select and preserves native keyboard and form behaviour." },
-  { name: "Checkbox", status: "Implemented", entry: "root", purpose: "Toggles an independent choice.", contract: "Uses a native checkbox with a clickable label, hint and error support." },
-  { name: "Radio", status: "Implemented", entry: "root", purpose: "Chooses one option in a group.", contract: "Uses a native radio input and retains browser arrow-key behaviour within a named group." },
-  { name: "FormField", status: "Implemented", entry: "root", purpose: "Composes shared field state.", contract: "Passes identifiers, labels and state to a compatible child control. It is a composition pattern, not a replacement for native semantics." },
-  { name: "Table", status: "Implemented", entry: "root", purpose: "Presents structured tabular data.", contract: "Composable semantic table primitives with accessible naming and left, centre or right alignment." },
-  { name: "DataTable", status: "Dedicated entry", entry: "./data-table", purpose: "Helps users scan, compare, sort and page through structured datasets.", contract: "Typed columns and product-owned data configuration composed over the semantic Table primitive." },
-  { name: "Dialog", status: "Dedicated entry", entry: "./dialog", purpose: "Contains a compact focused task.", contract: "Requires a visible title. Radix supplies modal semantics, focus management, Escape dismissal and focus return." },
-  { name: "Tooltip", status: "Dedicated entry", entry: "./tooltip", purpose: "Adds brief non-interactive supplementary text.", contract: "Accepts one trigger element and required content; opens after a 400ms default delay." },
-  { name: "Popover", status: "Dedicated entry", entry: "./popover", purpose: "Shows contextual interactive content.", contract: "Non-modal, trigger-anchored content with dismissal and focus return." },
-  { name: "DropdownMenu", status: "Dedicated entry", entry: "./dropdown-menu", purpose: "Offers a compact keyboard-navigable action list.", contract: "Supports default and destructive item intent, disabled items and separators." },
-  { name: "AlertDialog", status: "Dedicated entry", entry: "./alert-dialog", purpose: "Confirms a high-consequence decision.", contract: "Requires a visible title plus explicit cancel and action elements." },
-  { name: "Sheet", status: "Dedicated entry", entry: "./sheet", purpose: "Presents supporting content from a viewport edge.", contract: "Requires a title and supports left or right placement, an optional description and close control." },
-  { name: "AppearanceToggle", status: "Dedicated entry", entry: "./appearance-toggle", purpose: "Switches the effective application appearance.", contract: "Controlled light/dark presentation with a stable pressed-state accessibility contract; applications own system preference and runtime state." },
-  { name: "Icon", status: "Dedicated entry", entry: "./icons", purpose: "Renders an approved semantic icon from the governed Ledger catalogue.", contract: "Small, medium and large sizes; currentColor; decorative by default, with aria-label support for meaningful standalone use." },
-  { name: "Link", status: "Convention", entry: "styles.css", purpose: "Navigates to another destination.", contract: "Use a semantic anchor with the .ledger-link class. Routing remains application-owned." },
-  { name: "Badge", status: "Planned", entry: "—", purpose: "Will communicate compact status or classification.", contract: "Specified in principle but no public React component exists." },
-  { name: "Card", status: "Planned", entry: "—", purpose: "Will group related content where a surface improves comprehension.", contract: "Specified in principle but no public React component exists." },
-];
-
 export const packageEntries = [
   ["@johnshandux/ledger-design-system", "Server-safe controls, Table and formatCurrencyAmount"],
   ["@johnshandux/ledger-design-system/data-table", "Interactive DataTable and typed row-model utilities"],
@@ -50,6 +30,10 @@ export const packageEntries = [
   ["@johnshandux/ledger-design-system/alert-dialog", "AlertDialog family"],
   ["@johnshandux/ledger-design-system/sheet", "Sheet family"],
   ["@johnshandux/ledger-design-system/appearance-toggle", "Appearance toggle"],
+  ["@johnshandux/ledger-design-system/docs", "Framework-neutral component documentation manifest"],
+  ["@johnshandux/ledger-design-system/examples", "Client-aware reusable public-API component examples"],
+  ["@johnshandux/ledger-design-system/progress", "Accessible determinate and indeterminate Progress"],
+  ["@johnshandux/ledger-design-system/avatar", "Load-aware Avatar image and fallback"],
 ] as const;
 
 export const agentRules = [

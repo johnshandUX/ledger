@@ -22,9 +22,12 @@
   --ledger-color-table-header-surface: var(--ledger-color-neutral-50);
   --ledger-color-table-header-hover: var(--ledger-color-neutral-100);
   --ledger-color-table-row-zebra: var(--ledger-color-neutral-50);
+  --ledger-color-control-background: var(--ledger-color-neutral-0);
   --ledger-color-control-border: var(--ledger-color-neutral-500);
-  --ledger-color-control-border-resting: var(--ledger-color-neutral-500);
-  --ledger-color-control-border-hover: var(--ledger-color-neutral-700);
+  --ledger-color-control-border-resting: color-mix(in srgb, var(--ledger-color-neutral-400) 60%, var(--ledger-color-neutral-500));
+  --ledger-color-control-border-hover: var(--ledger-color-neutral-600);
+  --ledger-color-control-border-error: var(--ledger-color-red-700);
+  --ledger-color-control-border-disabled: var(--ledger-color-neutral-200);
   --ledger-color-action: var(--ledger-color-neutral-900);
   --ledger-color-action-hover: var(--ledger-color-neutral-700);
   --ledger-color-action-pressed: var(--ledger-color-neutral-800);
@@ -50,6 +53,7 @@
   --ledger-color-icon-status-success: var(--ledger-color-green-800);
   --ledger-color-icon-status-warning: var(--ledger-color-amber-800);
   --ledger-color-icon-status-error: var(--ledger-color-red-800);
+  --ledger-color-icon-status-foreground: var(--ledger-color-neutral-0);
   --ledger-color-error: var(--ledger-color-red-700);
   --ledger-color-error-hover: var(--ledger-color-red-800);
   --ledger-color-error-pressed: var(--ledger-color-red-800);

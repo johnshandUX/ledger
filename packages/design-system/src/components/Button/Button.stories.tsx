@@ -35,3 +35,7 @@ export const Destructive: Story = {
     variant: "destructive",
   },
 };
+
+export const Sizes: Story = {
+  render: () => <div style={{ display: "flex", alignItems: "center", gap: "var(--ledger-space-4)" }}><Button>Default size</Button><Button size="small">Small size</Button></div>,
+};

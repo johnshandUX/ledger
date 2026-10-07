@@ -34,7 +34,7 @@
   padding: var(--ledger-space-2) var(--ledger-space-3);
   border: var(--ledger-border-width-thin) solid var(--ledger-color-control-border-resting);
   border-radius: var(--ledger-radius-medium);
-  background: var(--ledger-color-surface);
+  background: var(--ledger-color-control-background);
   color: var(--ledger-color-text);
   font-family: var(--ledger-font-family-sans);
   font-size: var(--ledger-font-size-body);
@@ -46,7 +46,7 @@
 .ledger-input-field > input.ledger-input:hover:not(:disabled, .ledger-input--error) {
   border-color: var(--ledger-color-control-border-hover);
 }
-.ledger-input:disabled { color: var(--ledger-color-text-disabled); background: var(--ledger-color-surface-disabled); cursor: not-allowed; }
+.ledger-input:disabled { color: var(--ledger-color-text-disabled); background: var(--ledger-color-surface-disabled); border-color: var(--ledger-color-control-border-disabled); cursor: not-allowed; }
 
 .ledger-input:focus-visible {
   outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
@@ -54,7 +54,7 @@
 }
 
 .ledger-input--error {
-  border-color: var(--ledger-color-error);
+  border-color: var(--ledger-color-control-border-error);
 }
 
 .ledger-input-error {

@@ -36,4 +36,7 @@ test("status icon semantics map to governed light and dark primitives", async ()
   for (const [meaning, value] of Object.entries(expectedDarkMappings)) {
     assert.equal(countMapping(darkCss, meaning, value), 2, `Expected matching system and explicit dark ${meaning} icon mappings`);
   }
+
+  assert.equal(countMapping(lightCss, "foreground", "var(--ledger-color-neutral-0)"), 1);
+  assert.equal(countMapping(darkCss, "foreground", "var(--ledger-color-neutral-0)"), 2);
 });

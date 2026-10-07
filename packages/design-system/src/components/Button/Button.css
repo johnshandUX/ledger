@@ -5,6 +5,14 @@
   font: inherit;
   font-weight: var(--ledger-font-weight-semibold);
   cursor: pointer;
+  min-height: 48px;
+}
+
+.ledger-button--small {
+  min-height: 36px;
+  padding: var(--ledger-space-2) var(--ledger-space-3);
+  font-size: var(--ledger-font-size-body-small);
+  line-height: var(--ledger-line-height-body-small);
 }
 
 .ledger-button--primary {

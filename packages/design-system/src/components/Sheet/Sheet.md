@@ -8,6 +8,8 @@ Sheet presents supporting content or a contextual task from the viewport edge wh
 
 Ledger intentionally supports only left and right placement, defaulting to right. Radix supplies modal focus trapping, Escape/outside-click dismissal, accessible title/description relationships, and focus return. Body content scrolls independently so footer actions stay available.
 
+`SheetTrigger` supports `asChild`, allowing a Ledger Button or a semantic native button with a text-style presentation. Opening a Sheet is an action, not navigation.
+
 ## Usage guidance
 
 Use Sheet when the relationship with the underlying page remains useful and more space is needed than a Popover provides. Use Dialog for a compact centred task demanding focus, AlertDialog for consequential confirmation, and a full page for complex or multi-step work.

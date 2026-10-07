@@ -1,0 +1,15 @@
+.ledger-alert { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--ledger-space-3); align-items: start; border: var(--ledger-border-width-thin) solid; border-radius: var(--ledger-radius-medium); padding: var(--ledger-space-4); }
+.ledger-alert__content { display: grid; gap: var(--ledger-space-1); min-width: 0; }
+.ledger-alert__icon { display: block; flex-shrink: 0; margin-top: 2px; }
+.ledger-alert--informational .ledger-alert__icon { color: var(--ledger-color-icon-status-info); }
+.ledger-alert--success .ledger-alert__icon { color: var(--ledger-color-icon-status-success); }
+.ledger-alert--warning .ledger-alert__icon { color: var(--ledger-color-icon-status-warning); }
+.ledger-alert--error .ledger-alert__icon { color: var(--ledger-color-icon-status-error); }
+.ledger-alert--neutral { grid-template-columns: minmax(0, 1fr); }
+.ledger-alert__title { font-weight: var(--ledger-font-weight-semibold); }
+.ledger-alert__description { font-size: var(--ledger-font-size-body-small); line-height: var(--ledger-line-height-body-small); }
+.ledger-alert--neutral { color: var(--ledger-color-status-neutral-text); background: var(--ledger-color-status-neutral-background); border-color: var(--ledger-color-status-neutral-border); }
+.ledger-alert--informational { color: var(--ledger-color-status-informational-text); background: var(--ledger-color-status-informational-background); border-color: var(--ledger-color-status-informational-border); }
+.ledger-alert--success { color: var(--ledger-color-status-success-text); background: var(--ledger-color-status-success-background); border-color: var(--ledger-color-status-success-border); }
+.ledger-alert--warning { color: var(--ledger-color-status-warning-text); background: var(--ledger-color-status-warning-background); border-color: var(--ledger-color-status-warning-border); }
+.ledger-alert--error { color: var(--ledger-color-status-error-text); background: var(--ledger-color-status-error-background); border-color: var(--ledger-color-status-error-border); }

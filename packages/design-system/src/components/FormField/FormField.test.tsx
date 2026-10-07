@@ -21,8 +21,18 @@ describe("FormField", () => {
     expect(html).toContain("Use the name shown on your account.");
     expect(html).toContain("Enter an account name.");
     expect(html).toContain('id="account-name"');
-    expect(html).toContain('aria-describedby="account-name-helper account-name-error"');
+    expect(html).toContain('aria-describedby="account-name-hint account-name-error"');
     expect(html).toContain('aria-invalid="true"');
     expect(html).toContain("required");
+    expect(html).toContain('class="ledger-input ledger-input--error"');
+  });
+
+  it("preserves explicit child state instead of overwriting it with defaults", () => {
+    const html = renderToStaticMarkup(<FormField label="Account" helperText="Outer hint" disabled><Input id="custom-account" label="Custom account label" hint="Child hint" disabled={false} required /></FormField>);
+    expect(html).toContain('id="custom-account"');
+    expect(html).toContain('>Custom account label</label>');
+    expect(html).toContain('>Child hint</div>');
+    expect(html).not.toContain('disabled=""');
+    expect(html).toContain('required=""');
   });
 });

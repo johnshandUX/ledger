@@ -42,7 +42,7 @@ export const Error: Story = {
   args: {
     error: "Enter an account name.",
     children: (
-      <Input label="Account name" placeholder="Enter account name" value="" aria-invalid={true} />
+      <Input label="Account name" placeholder="Enter account name" defaultValue="" aria-invalid={true} />
     ),
   },
 };

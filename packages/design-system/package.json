@@ -6,17 +6,20 @@
   ],
   "description": "The shared tokens, components, patterns and guidance for LedgerOS and Ledger Bank",
   "scripts": {
-    "test": "npm run test:data-table",
-    "test:data-table": "vitest run --config vitest.unit.config.ts",
+    "test": "vitest run --config vitest.unit.config.ts",
+    "test:data-table": "vitest run --config vitest.unit.config.ts src/components/DataTable",
+    "typecheck": "../../node_modules/.bin/tsc --noEmit",
+    "test:storybook": "vitest run --project storybook",
     "test:theme-parity": "node --test src/themes/dark.parity.test.mjs",
     "test:theme-artifact": "node --test src/themes/theme-artifact.test.mjs",
     "test:status-icon-colors": "node --test src/themes/status-icon-colors.test.mjs",
+    "test:control-colors": "node --test src/themes/control-colors.test.mjs",
     "test:table-colors": "node --test src/themes/table-colors.test.mjs",
     "test:typography": "node --test src/tokens/typography.test.mjs",
     "test:data-table-boundary": "node --test src/data-table-boundary.test.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test && npm run test:theme-artifact && npm run test:status-icon-colors && npm run test:table-colors && npm run test:typography && npm run test:data-table-boundary"
+    "build": "vite build && node scripts/verify-package-exports.mjs && npm run test && npm run test:theme-artifact && npm run test:status-icon-colors && npm run test:control-colors && npm run test:table-colors && npm run test:typography && npm run test:data-table-boundary"
   },
   "repository": {
     "type": "git",
@@ -52,8 +55,8 @@
     "@types/react-dom": "^19.2.7",
     "@typescript/typescript6": "^6.0.2",
     "@vitejs/plugin-react": "^6.1.1",
-    "@vitest/browser-playwright": "latest",
-    "@vitest/coverage-v8": "latest",
+    "@vitest/browser-playwright": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "playwright": "latest",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -62,7 +65,7 @@
     "typescript": "^7.0.2",
     "vite": "^8.2.2",
     "vite-plugin-dts": "^5.1.0",
-    "vitest": "latest"
+    "vitest": "^4.1.11"
   },
   "main": "./dist/ledger-design-system.js",
   "module": "./dist/ledger-design-system.js",
@@ -127,6 +130,30 @@
       "import": "./dist/data-table.js",
       "require": "./dist/data-table.cjs",
       "default": "./dist/data-table.js"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.ts",
+      "import": "./dist/docs.js",
+      "require": "./dist/docs.cjs",
+      "default": "./dist/docs.js"
+    },
+    "./examples": {
+      "types": "./dist/examples.d.ts",
+      "import": "./dist/examples.js",
+      "require": "./dist/examples.cjs",
+      "default": "./dist/examples.js"
+    },
+    "./progress": {
+      "types": "./dist/progress.d.ts",
+      "import": "./dist/progress.js",
+      "require": "./dist/progress.cjs",
+      "default": "./dist/progress.js"
+    },
+    "./avatar": {
+      "types": "./dist/avatar.d.ts",
+      "import": "./dist/avatar.js",
+      "require": "./dist/avatar.cjs",
+      "default": "./dist/avatar.js"
     },
     "./styles.css": "./dist/ledger-design-system.css"
   },

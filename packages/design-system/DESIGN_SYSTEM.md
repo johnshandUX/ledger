@@ -84,9 +84,9 @@ Examples include:
 - Radio
 - Textarea
 - Link (visual convention only; not an implemented React component)
-- Badge (planned; not an implemented public component)
+- Badge
 - Alert
-- Card (planned; not an implemented public component)
+- Card
 - Table
 - Tabs
 - Pagination
@@ -331,13 +331,14 @@ Components should only expose states that are deliberately supported by the desi
 
 Do not automatically implement every technically possible HTML state.
 
-For example, Ledger Button currently supports:
+For example, Ledger Button currently supports these visual intent variants:
 
 - primary
 - secondary
 - destructive, reserved for actions with destructive or irreversible consequences
 
-Disabled Button is not currently a supported Ledger Design System pattern.
+Native disabled Button behaviour is available through standard button attributes. Its use should
+remain deliberate and must not replace explanatory validation or permission messaging.
 
 New states and variants should be added because of demonstrated product requirements rather than pre-emptively.
 
@@ -358,6 +359,10 @@ Storybook should be used to:
 - compare implementation against Figma
 
 Storybook is not a separate design system. It displays the implementation of Ledger Design System.
+
+Run `npm run test:storybook` for the browser story and accessibility suite. Playwright's managed
+Chromium is the default. On an older host that Playwright does not support, set
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a compatible system Chrome executable for that command.
 
 ---
 
@@ -435,7 +440,11 @@ Changes should maintain conceptual parity across these representations.
 
 ## 13. Current status
 
-Ledger Design System is currently in its initial foundation stage.
+Ledger Design System has implemented foundations, server-safe components, dedicated client
+interaction entries, Storybook browser/accessibility checks and a typed component manifest.
+Implementation lifecycle (`Planned`, `In progress`, `Implemented`, `Deprecated`) is tracked
+separately from publication status. Planned records communicate roadmap intent only: they do not
+define an API, package export or usable component.
 
 Foundations currently include:
 
@@ -448,5 +457,13 @@ Foundations currently include:
 
 Components currently include:
 
-- Button
-- Input
+- server-safe root components: Button, Input, Textarea, Select, Checkbox, Radio, FormField, Table,
+  Separator, Skeleton, Spinner, AspectRatio, Badge, Alert and Card
+- dedicated client entries: DataTable, Dialog, Tooltip, Popover, DropdownMenu, AlertDialog, Sheet,
+  AppearanceToggle, Progress and Avatar
+- a dedicated governed Icon entry
+- the framework-neutral `.ledger-link` convention
+
+Approved future components appear as planned records in the typed manifest. Until their lifecycle
+changes and publication is approved, they must not appear as imports, examples or generated
+component-detail routes.

@@ -43,10 +43,10 @@ export function FormField({
         error: children.props.error ?? error,
         disabled: children.props.disabled ?? disabled,
         required: children.props.required ?? required,
-        "aria-describedby":
-          [children.props["aria-describedby"], helperText ? `${fieldId}-helper` : undefined, error ? `${fieldId}-error` : undefined]
-            .filter(Boolean)
-            .join(" ") || undefined,
+        // Controls such as Input derive their description IDs from the hint and
+        // error content above. Preserve only an explicitly supplied relationship
+        // here so those controls do not announce duplicate or nonexistent IDs.
+        "aria-describedby": children.props["aria-describedby"],
         "aria-invalid": error ? true : children.props["aria-invalid"],
       })
     : children;

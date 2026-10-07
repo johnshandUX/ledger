@@ -1,0 +1,15 @@
+.ledger-skeleton {
+  min-height: var(--ledger-space-4);
+  border-radius: var(--ledger-radius-small);
+  background: var(--ledger-color-surface-selected);
+  animation: ledger-skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes ledger-skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger-skeleton { animation: none; }
+}

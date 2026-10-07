@@ -13,6 +13,8 @@ export function Checkbox({
   error,
   id,
   className = "",
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
   ...props
 }: CheckboxProps) {
   const checkboxId = id ?? label.toLowerCase().replace(/\s+/g, "-");
@@ -21,7 +23,9 @@ export function Checkbox({
   const errorId = error ? `${checkboxId}-error` : undefined;
 
   const describedBy =
-    [hintId, errorId].filter(Boolean).join(" ") || undefined;
+    [hintId, errorId, ariaDescribedBy].filter(Boolean).join(" ") || undefined;
+
+  const invalid = error ? true : ariaInvalid;
 
   return (
     <div className="ledger-checkbox-field">
@@ -30,7 +34,7 @@ export function Checkbox({
           id={checkboxId}
           type="checkbox"
           className={`ledger-checkbox ${error ? "ledger-checkbox--error" : ""} ${className}`.trim()}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={invalid}
           aria-describedby={describedBy}
           {...props}
         />

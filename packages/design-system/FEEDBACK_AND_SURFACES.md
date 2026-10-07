@@ -9,9 +9,8 @@ It applies to:
 - Card
 - Link
 
-Alert is implemented. Badge and Card remain specifications for planned components. Link is
-implemented only as the framework-neutral `.ledger-link` CSS convention; there is no public React
-component for Badge, Card, or Link.
+Badge, Alert and Card are implemented as server-safe root components. Link is implemented only as
+the framework-neutral `.ledger-link` CSS convention; there is no public React component for Link.
 
 These components should remain visually restrained and consistent with Ledger's institutional, professional banking direction.
 
@@ -99,6 +98,7 @@ Alert should:
 - use appropriate spacing
 - support optional heading and supporting content where required
 - remain readable in dense banking interfaces
+- include the shared filled semantic icon for informational, success, warning and error variants
 
 Alert should not resemble advertising, promotional banners or decorative cards.
 
@@ -181,7 +181,7 @@ Feedback and surface components should:
 - avoid communicating critical meaning through colour alone
 - preserve logical reading order
 
-Status icons, if introduced later, should not duplicate accessible text unnecessarily.
+Status icons are decorative reinforcement and must not duplicate the accessible text already supplied by an Alert title or description.
 
 ---
 
