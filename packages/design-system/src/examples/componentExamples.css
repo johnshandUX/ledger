@@ -1,5 +1,5 @@
 .ledger-example-stack { display: grid; gap: var(--ledger-space-3); }
-.ledger-example-row { display: flex; align-items: center; gap: var(--ledger-space-4); min-height: var(--ledger-space-6); }
+.ledger-example-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ledger-space-4); min-width: 0; min-height: var(--ledger-space-6); }
 .ledger-example-skeleton { display: grid; grid-template-columns: var(--ledger-space-8) 1fr; gap: var(--ledger-space-4); align-items: center; width: min(100%, 24rem); }
 .ledger-example-skeleton__avatar { width: var(--ledger-space-8); min-height: var(--ledger-space-8); border-radius: var(--ledger-radius-full); }
 .ledger-example-skeleton__line { width: 100%; }
