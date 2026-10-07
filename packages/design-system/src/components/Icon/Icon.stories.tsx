@@ -48,7 +48,7 @@ export const SemanticStatusLight: Story = {
 
 export const SemanticStatusDark: Story = {
   globals: { theme: "dark" },
-  parameters: { docs: { description: { story: "The same semantic tokens map to lighter primitives in Ledger's dark theme." } } },
+  parameters: { docs: { description: { story: "The same saturated semantic fills remain distinct on Ledger's dark surfaces while preserving contrast with the light internal glyph." } } },
   render: () => <SemanticStatusSpecimens />,
 };
 

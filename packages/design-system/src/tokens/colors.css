@@ -16,16 +16,19 @@
   /* Information / blue */
   --ledger-color-blue-50: #eff6ff;
   --ledger-color-blue-300: #93c5fd;
+  --ledger-color-blue-600: #2563eb;
   --ledger-color-blue-900: #1e3a8a;
 
   /* Success / green */
   --ledger-color-green-50: #f0fdf4;
   --ledger-color-green-300: #86efac;
+  --ledger-color-green-600: #16a34a;
   --ledger-color-green-800: #166534;
 
   /* Warning / amber */
   --ledger-color-amber-50: #fffbeb;
   --ledger-color-amber-300: #fcd34d;
+  --ledger-color-amber-600: #d97706;
   --ledger-color-amber-800: #92400e;
 
   /* Error / red */

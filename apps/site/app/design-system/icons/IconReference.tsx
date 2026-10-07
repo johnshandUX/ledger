@@ -3,10 +3,10 @@
 import { Icon, iconCatalog, iconCategories } from "@johnshandux/ledger-design-system/icons";
 
 const semanticStatuses = [
-  { label: "Information", name: "information", token: "--ledger-color-icon-status-info", light: "blue-900", dark: "blue-300", className: "status-icon--info", usage: "Informational feedback" },
-  { label: "Success", name: "success", token: "--ledger-color-icon-status-success", light: "green-800", dark: "green-300", className: "status-icon--success", usage: "Confirmed outcomes" },
-  { label: "Warning", name: "warning", token: "--ledger-color-icon-status-warning", light: "amber-800", dark: "amber-300", className: "status-icon--warning", usage: "States requiring attention" },
-  { label: "Error", name: "error", token: "--ledger-color-icon-status-error", light: "red-800", dark: "red-300", className: "status-icon--error", usage: "Errors and failed validation" },
+  { label: "Information", name: "information", token: "--ledger-color-icon-status-info", light: "blue-600", dark: "blue-600", className: "status-icon--info", usage: "Informational feedback" },
+  { label: "Success", name: "success", token: "--ledger-color-icon-status-success", light: "green-600", dark: "green-600", className: "status-icon--success", usage: "Confirmed outcomes" },
+  { label: "Warning", name: "warning", token: "--ledger-color-icon-status-warning", light: "amber-600", dark: "amber-600", className: "status-icon--warning", usage: "States requiring attention" },
+  { label: "Error", name: "error", token: "--ledger-color-icon-status-error", light: "red-600", dark: "red-600", className: "status-icon--error", usage: "Errors and failed validation" },
 ] as const;
 
 const semanticStatusClasses = Object.fromEntries(
