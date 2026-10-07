@@ -31,6 +31,16 @@ export const WithHint: Story = {
   },
 };
 
+export const VerticalGroup: Story = {
+  render: () => (
+    <div role="group" aria-label="Statement delivery preferences">
+      <Checkbox name="delivery" label="Email statements" defaultChecked />
+      <Checkbox name="delivery" label="Paper statements" />
+      <Checkbox name="delivery" label="Monthly account summary" />
+    </div>
+  ),
+};
+
 export const Error: Story = {
   args: {
     error: "You must agree before continuing.",

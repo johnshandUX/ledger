@@ -4,7 +4,7 @@
 Checkbox toggles an independent choice while preserving native form behaviour.
 
 ## Anatomy
-A native checkbox input and visible clickable label are required. The 24px visual control uses a conventional token-coloured checkmark. Optional `hint` and `error` content are linked to the control. Standard input attributes except `type` pass through.
+A native checkbox input and visible clickable label are required. The 24px visual control uses a conventional token-coloured checkmark. Adjacent Checkbox fields receive consistent vertical spacing when rendered as a group. Optional `hint` and `error` content are linked to the control. Standard input attributes except `type` pass through.
 
 ## Behaviour
 The consumer may use controlled or uncontrolled native checkbox state. A supplied error marks the control invalid. The label expands the clickable target beyond the visible control.

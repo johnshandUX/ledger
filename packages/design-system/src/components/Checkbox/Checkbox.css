@@ -4,6 +4,10 @@
   gap: var(--ledger-space-2);
 }
 
+.ledger-checkbox-field + .ledger-checkbox-field {
+  margin-top: var(--ledger-space-2);
+}
+
 .ledger-checkbox-label {
   display: inline-flex;
   align-items: center;

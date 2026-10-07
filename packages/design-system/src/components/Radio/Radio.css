@@ -4,6 +4,10 @@
   gap: var(--ledger-space-2);
 }
 
+.ledger-radio-field + .ledger-radio-field {
+  margin-top: var(--ledger-space-2);
+}
+
 .ledger-radio-label {
   display: inline-flex;
   align-items: center;
