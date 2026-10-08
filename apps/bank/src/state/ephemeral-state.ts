@@ -14,6 +14,7 @@ export type OverlayPatch<Entity extends { id: string }> = Readonly<
 
 export type EntityOverlay<Entity extends { id: string }> = Readonly<{
   created: Readonly<Record<string, DeepReadonly<Entity>>>;
+  createdOrder: readonly Entity["id"][];
   updated: Readonly<Record<string, OverlayPatch<Entity>>>;
   tombstones: Readonly<Record<string, true>>;
 }>;
@@ -58,7 +59,7 @@ export type BankEphemeralAction =
   | Readonly<{ type: "reset-overlay" }>;
 
 function createEntityOverlay<Entity extends { id: string }>(): EntityOverlay<Entity> {
-  return { created: {}, updated: {}, tombstones: {} };
+  return { created: {}, createdOrder: [], updated: {}, tombstones: {} };
 }
 
 export function createInitialFinanceOverlay(): FinanceOverlay {
@@ -103,6 +104,9 @@ function applyOverlayChange<Entity extends { id: string }>(
     const id = change.record.id;
     return {
       created: { ...overlay.created, [id]: change.record },
+      createdOrder: overlay.created[id]
+        ? overlay.createdOrder
+        : [...overlay.createdOrder, id],
       updated: withoutKey(overlay.updated, id),
       tombstones: withoutKey(overlay.tombstones, id),
     };
@@ -131,6 +135,7 @@ function applyOverlayChange<Entity extends { id: string }>(
 
   return {
     created: withoutKey(overlay.created, change.id),
+    createdOrder: overlay.createdOrder.filter((id) => id !== change.id),
     updated: withoutKey(overlay.updated, change.id),
     tombstones: { ...overlay.tombstones, [change.id]: true },
   };

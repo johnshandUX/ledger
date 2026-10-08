@@ -12,6 +12,7 @@ import {
   useBankDispatch,
   useBankState,
 } from "./BankStateProvider";
+import { useEffectivePayments } from "./useBankEffectiveState";
 
 beforeAll(() => {
   (
@@ -49,6 +50,24 @@ function StateProbe({ route, onDispatch }: StateProbeProps) {
       {state.baseline.businesses[0]?.id}:{Object.keys(state.overlay.payments.created).length}
     </output>
   );
+}
+
+type EffectivePaymentsProbeProps = Readonly<{
+  onDispatch: (dispatch: Dispatch<BankEphemeralAction>) => void;
+  onPayments: (payments: ReturnType<typeof useEffectivePayments>) => void;
+}>;
+
+function EffectivePaymentsProbe({
+  onDispatch,
+  onPayments,
+}: EffectivePaymentsProbeProps) {
+  const dispatch = useBankDispatch();
+  const payments = useEffectivePayments();
+
+  useEffect(() => onDispatch(dispatch), [dispatch, onDispatch]);
+  useEffect(() => onPayments(payments), [onPayments, payments]);
+
+  return <output>{payments.at(-1)?.id}</output>;
 }
 
 async function mountProvider(
@@ -148,5 +167,62 @@ describe("BankStateProvider", () => {
 
     expect(first.container.textContent).toBe("business-caldermere:1");
     expect(second.container.textContent).toBe("business-caldermere:0");
+  });
+
+  it("updates effective selector consumers and preserves results for unrelated overlays", async () => {
+    let dispatch: Dispatch<BankEphemeralAction> | undefined;
+    const paymentResults: ReturnType<typeof useEffectivePayments>[] = [];
+    const captureDispatch = (value: Dispatch<BankEphemeralAction>) => {
+      dispatch = value;
+    };
+    const capturePayments = (payments: ReturnType<typeof useEffectivePayments>) => {
+      paymentResults.push(payments);
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    mountedRoots.push(root);
+
+    await act(async () => {
+      root.render(
+        <BankStateProvider>
+          <EffectivePaymentsProbe
+            onDispatch={captureDispatch}
+            onPayments={capturePayments}
+          />
+        </BankStateProvider>,
+      );
+    });
+    const baselineResult = paymentResults.at(-1)!;
+
+    await act(async () => {
+      dispatch?.({
+        type: "apply-overlay-delta",
+        delta: {
+          collection: "payments",
+          change: { kind: "create", record: createdPayment },
+        },
+      });
+    });
+    const withCreatedPayment = paymentResults.at(-1)!;
+    expect(container.textContent).toBe(createdPayment.id);
+    expect(withCreatedPayment).not.toBe(baselineResult);
+
+    await act(async () => {
+      dispatch?.({
+        type: "apply-overlay-delta",
+        delta: {
+          collection: "users",
+          change: {
+            kind: "update",
+            id: bankFinanceEnvironment.users[0]!.id,
+            changes: { firstName: "Unrelated" },
+          },
+        },
+      });
+    });
+
+    expect(paymentResults).toHaveLength(2);
+    expect(paymentResults.at(-1)).toBe(withCreatedPayment);
   });
 });

@@ -58,6 +58,7 @@ describe("bank ephemeral state", () => {
 
     expect(initial.overlay.payments.created).toEqual({});
     expect(next.overlay.payments.created[createdPayment.id]).toEqual(createdPayment);
+    expect(next.overlay.payments.createdOrder).toEqual([createdPayment.id]);
     expect(next.overlay.payments).not.toBe(initial.overlay.payments);
     expect(next.overlay.accounts).toBe(initial.overlay.accounts);
     expect(next.baseline).toBe(initial.baseline);
@@ -113,6 +114,7 @@ describe("bank ephemeral state", () => {
     });
 
     expect(next.overlay.payments.tombstones[baselinePayment.id]).toBe(true);
+    expect(next.overlay.payments.createdOrder).toEqual([]);
     expect(next.baseline.payments[0]).toBe(baselinePayment);
     expect(initial.overlay.payments.tombstones).toEqual({});
   });

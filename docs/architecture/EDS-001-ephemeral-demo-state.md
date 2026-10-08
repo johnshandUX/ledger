@@ -95,6 +95,23 @@ For the current React and Next.js application, start with a narrowly typed React
 
 Prefer an overlay that records only deltas, for example typed additions, replacements/status patches and ID tombstones. Domain operations should validate against the current effective state, then produce one atomic transition. Selectors should accept baseline plus overlay explicitly and return effective records without mutation. IDs and operation timestamps must be deterministic under test: accept an injected ID source and clock rather than reading randomness or the uncontrolled current time inside domain logic.
 
+### Effective-state resolution
+
+Ledger Bank resolves each mutable collection through pure selectors in `apps/bank/src/state/effective-state.ts`. Resolution follows one explicit precedence contract:
+
+1. A tombstone excludes the identifier, regardless of any baseline, created or updated entry.
+2. A created record replaces a baseline record with the same identifier; this predictable conflict handling is not permission to create duplicate identifiers.
+3. A partial update is shallowly applied to the selected created or baseline record. It cannot change the canonical `id`; nested values such as `roleIds` are replaced as complete fields rather than deep-merged.
+4. A baseline record with no applicable delta is returned by reference without copying.
+
+Collections preserve baseline order and positions. Genuinely new records are appended using the overlay’s explicit `createdOrder`; a stable identifier sort is the defensive fallback for a malformed or externally constructed overlay that omits order metadata. Business-specific sorting remains the responsibility of a domain query or presentation adapter, not the fundamental merge operation.
+
+Selectors do not cascade tombstones, validate relationships or manufacture replacements. A surviving approval may therefore retain the identifier of a tombstoned payment, for example. Phase 2B operations must prevent invalid states where the domain requires it; Phase 2A always returns the stored relationship predictably.
+
+Client Components consume these selectors through memoised hooks in `apps/bank/app/useBankEffectiveState.ts`. Each hook depends only on its baseline and overlay collection references, so an unrelated collection delta does not recalculate its result. Existing Server Components continue to render the deterministic baseline through Bank finance adapters. A future interactive view should introduce the smallest client boundary that needs current ephemeral state and must not expect a Server Component to observe the client overlay.
+
+Phase 2A is read-only. It does not define financial commands, validation, lifecycle transitions, multi-record atomic actions, calculated effective summaries or persistence. Those responsibilities remain with Phase 2B and later feature integration.
+
 ## Expected behaviour
 
 - Creating a valid payment adds an instruction to effective payment lists and detail lookup, applies the correct initial status and approval requirements, and updates relevant balance measures only when the domain lifecycle says funds are affected.
@@ -110,9 +127,10 @@ Prefer an overlay that records only deltas, for example typed additions, replace
 | **Compliant** | `src/finance/environment.ts` creates one deterministic `normal-trading` Caldermere environment, and the finance adapter provides a narrow boundary between Synthetic Finance and product UI. |
 | **Compliant** | Synthetic Finance dataset creation deep-clones its anchor; selectors and calculations are read-only; the query context keeps its dataset private and returns cloned results. Existing explicit `asOf` and integer-minor-unit conventions support deterministic domain logic. |
 | **Compliant** | Bank navigation uses `next/link`, providing the client-navigation mechanism required for continuity. No Bank application database, API write path, cookie, Web Storage or IndexedDB persistence was found. |
-| **Partially compliant** | Overview and detail routes are Server Components that read the module-level baseline directly. This is appropriate for today’s read-only app, but those components cannot observe a future client-only overlay without moving effective-state reads behind a client boundary. |
-| **Partially compliant** | Client components currently own only local presentation behaviour such as table sorting and appearance control. The root layout has no application state owner spanning routes. |
-| **Not yet implemented** | There is no shared overlay, tombstone model, reducer/store contract, effective-state selector layer, typed mutation API, or reset/navigation test suite. Interactive finance and administration operations are also not implemented, so their absence is not a current defect. |
+| **Compliant** | The root layout owns a per-application React provider with a normalized delta overlay, tombstones, immutable reducer transitions and reset semantics. Browser verification covers client navigation, reload reset and separate-instance isolation. |
+| **Compliant** | Pure effective-state selectors resolve accounts, balances, payments, payment approvals and users without React, browser APIs, storage, clocks or randomness. Memoised client hooks expose them without moving existing routes across the client boundary. |
+| **Partially compliant** | Overview and detail routes remain Server Components that read the deterministic baseline directly. This preserves the current read-only experience, but future interactive views must read effective state in focused client descendants rather than expecting Server Components to observe the client overlay. |
+| **Not yet implemented** | Typed financial mutation operations, domain validation, lifecycle rules, effective calculated summaries and atomic multi-record actions are deliberately deferred to Phase 2B and later feature work. Their absence is not a current defect. |
 | **Not compliant** | None identified in the current implementation. |
 
 The module-level baseline is safe only while treated as immutable. Future infrastructure should make that constraint explicit and should initialise per application instance rather than using a mutable module singleton, which could leak between server requests.
