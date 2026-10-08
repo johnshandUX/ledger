@@ -109,6 +109,7 @@ Use an independent Builder and Reviewer for component families, architecture cha
 
 ## Current architectural notes
 
+- Ledger applications that simulate interactive product experiences must follow [EDS-001: Ephemeral Demo State](docs/architecture/EDS-001-ephemeral-demo-state.md): combine immutable Synthetic Finance baseline data with a per-application in-memory overlay, preserve it across client navigation, and discard it on full reload. Do not add persistence without a separate architecture decision.
 - Interactive components use dedicated client package entries; the root design-system entry must remain Server Component-safe.
 - `Dialog`, `AlertDialog`, and `Sheet` are distinct public components.
 - Introduce shared internal abstractions only when actual drift justifies them.

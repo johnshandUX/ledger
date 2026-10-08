@@ -14,6 +14,8 @@ The migrated Accounts and account-detail experiences now use the complete Calder
 
 Future Bank features should consume shared synthetic-finance selectors and calculations through this adapter. Replacing Caldermere with a backend should change the adapter rather than presentation components.
 
+Interactive simulations follow [EDS-001: Ephemeral Demo State](../../docs/architecture/EDS-001-ephemeral-demo-state.md). Synthetic Finance remains the immutable baseline; Bank-owned in-memory state will hold temporary changes for the current page lifecycle and derive a consistent effective view across client-side navigation.
+
 ## Local development
 
 From the repository root:
