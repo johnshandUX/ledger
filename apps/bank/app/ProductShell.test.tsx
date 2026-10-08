@@ -13,6 +13,7 @@ describe("ProductShell", () => {
     expect(html).toContain('aria-current="page"');
     expect(html).toContain("Amelia Hart");
     expect(html).toContain("Finance Leadership");
+    expect(html).toContain('href="/payments"');
     expect(html).not.toContain("J. Finance");
   });
 });

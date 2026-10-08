@@ -10,7 +10,7 @@ type ProductShellProps = {
 
 const primaryRoutes = [
   { id: "accounts", label: "Accounts", href: "/" },
-  { id: "payments", label: "Payments" },
+  { id: "payments", label: "Payments", href: "/payments" },
   { id: "reporting", label: "Reporting" },
 ] as const;
 

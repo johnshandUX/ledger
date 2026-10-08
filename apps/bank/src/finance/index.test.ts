@@ -17,6 +17,8 @@ import {
 import {
   getBankApprovalSummary,
   getBankPaymentSummary,
+  getBankPaymentById,
+  getBankPaymentOverviewFromEnvironment,
 } from "./payments";
 import {
   BANK_RECENT_TRANSACTION_LIMIT,
@@ -64,6 +66,28 @@ describe("Ledger Bank finance adapter", () => {
     expect(getBankApprovalSummary()).toEqual(
       getApprovalSummary(bankFinanceEnvironment, direct),
     );
+  });
+
+  it("resolves payment relationships and approval actors", () => {
+    const payment = getBankPaymentById("payment-awaiting-01");
+    expect(payment).toMatchObject({
+      reference: "APX-10482",
+      beneficiary: { name: "Apex Steelworks" },
+      sourceAccount: { name: "Supplier Payments" },
+    });
+    expect(payment?.approvals.map(({ approver }) => approver.firstName)).toEqual(
+      expect.arrayContaining(["Amelia", "Daniel", "Priya"]),
+    );
+    expect(getBankPaymentById("unknown-payment")).toBeUndefined();
+  });
+
+  it.each([
+    ["approval-backlog", 9, 19],
+    ["large-outgoing-payments", 4, 7],
+  ] as const)("builds the same payment view model for %s", (scenario, awaiting, actions) => {
+    const overview = getBankPaymentOverviewFromEnvironment(createCaldermereScenario({ scenario }));
+    expect(overview.approvalSummary).toEqual({ paymentsAwaitingApproval: awaiting, outstandingApprovalActions: actions });
+    expect(overview.payments.every(payment => payment.sourceAccount && payment.beneficiary)).toBe(true);
   });
 
   it("maps the deterministic demo identity to Caldermere", () => {

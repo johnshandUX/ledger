@@ -9,6 +9,7 @@ describe("Caldermere Storybook environment", () => {
     "approval-backlog",
     "restricted-account",
     "cash-flow-pressure",
+    "large-outgoing-payments",
   ] as const)("provides a valid %s story state", (scenario) => {
     expect(validateFinanceDataset(getCaldermereStoryEnvironment(scenario))).toEqual({
       valid: true,
