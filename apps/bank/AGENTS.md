@@ -12,6 +12,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 All simulated Bank mutations must follow [EDS-001: Ephemeral Demo State](../../docs/architecture/EDS-001-ephemeral-demo-state.md). Treat Synthetic Finance as an immutable baseline; place shared temporary changes in a per-application in-memory overlay that survives client navigation and resets on full reload. Keep state infrastructure, finance-domain operations and UI presentation separate, and do not introduce durable browser or server persistence without a new architecture decision.
 
+Domain mutations follow the canonical document’s [Feature-driven domain operations](../../docs/architecture/EDS-001-ephemeral-demo-state.md#feature-driven-domain-operations) guidance. Add the minimum named, typed and atomic operations required by an approved customer task; feature components must not dispatch arbitrary overlay deltas or introduce a generic mutation engine speculatively.
+
 ## Responsive data equivalence
 
 When the same dataset has separate desktop and mobile presentations, both representations must

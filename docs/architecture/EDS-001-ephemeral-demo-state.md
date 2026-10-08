@@ -106,11 +106,34 @@ Ledger Bank resolves each mutable collection through pure selectors in `apps/ban
 
 Collections preserve baseline order and positions. Genuinely new records are appended using the overlay’s explicit `createdOrder`; a stable identifier sort is the defensive fallback for a malformed or externally constructed overlay that omits order metadata. Business-specific sorting remains the responsibility of a domain query or presentation adapter, not the fundamental merge operation.
 
-Selectors do not cascade tombstones, validate relationships or manufacture replacements. A surviving approval may therefore retain the identifier of a tombstoned payment, for example. Phase 2B operations must prevent invalid states where the domain requires it; Phase 2A always returns the stored relationship predictably.
+Selectors do not cascade tombstones, validate relationships or manufacture replacements. A surviving approval may therefore retain the identifier of a tombstoned payment, for example. Feature-owned domain operations must prevent invalid states where the domain requires it; selectors always return the stored relationship predictably.
 
 Client Components consume these selectors through memoised hooks in `apps/bank/app/useBankEffectiveState.ts`. Each hook depends only on its baseline and overlay collection references, so an unrelated collection delta does not recalculate its result. Existing Server Components continue to render the deterministic baseline through Bank finance adapters. A future interactive view should introduce the smallest client boundary that needs current ephemeral state and must not expect a Server Component to observe the client overlay.
 
-Phase 2A is read-only. It does not define financial commands, validation, lifecycle transitions, multi-record atomic actions, calculated effective summaries or persistence. Those responsibilities remain with Phase 2B and later feature integration.
+The selector layer is read-only. It does not define financial commands, validation, lifecycle transitions, multi-record atomic actions, calculated effective summaries or persistence. Those responsibilities are introduced with the product features that require them.
+
+### Feature-driven domain operations
+
+Ledger implements financial domain operations incrementally alongside product capabilities rather than building a generic mutation engine in advance. Every operation must:
+
+1. Represent a clearly defined customer or business task.
+2. Accept an explicitly typed command.
+3. Validate against the current effective application state.
+4. Respect the relevant financial relationships, permissions and lifecycle rules.
+5. Apply all related changes atomically under EDS-001.6, or apply none.
+6. Produce deterministic results through explicit dependencies such as clocks, identifiers or policy inputs where needed.
+7. Modify only the ephemeral overlay and never the Synthetic Finance baseline.
+8. Remain independent of React and presentation components.
+
+Feature components must not construct arbitrary overlay deltas. They invoke named domain operations, which own validation and produce one atomic transition at the application-state boundary. Shared state infrastructure remains reusable, while commands and rules remain feature-owned. Extract shared domain utilities only after multiple real operations demonstrate the same need.
+
+For example, Payments may introduce payment-instruction submission and permitted lifecycle transitions; User Management may introduce user creation, role changes and deactivation; Account Administration may introduce settings changes, restrictions and closure. These examples establish ownership boundaries, not a requirement to implement all operations or a comprehensive finance framework.
+
+The separation remains:
+
+`application state infrastructure → effective-state selectors → named domain operations → product experience`
+
+The Ledger Design System remains outside this chain and owns reusable presentation and interaction contracts, not finance-specific state or business logic.
 
 ## Expected behaviour
 
@@ -130,47 +153,38 @@ Phase 2A is read-only. It does not define financial commands, validation, lifecy
 | **Compliant** | The root layout owns a per-application React provider with a normalized delta overlay, tombstones, immutable reducer transitions and reset semantics. Browser verification covers client navigation, reload reset and separate-instance isolation. |
 | **Compliant** | Pure effective-state selectors resolve accounts, balances, payments, payment approvals and users without React, browser APIs, storage, clocks or randomness. Memoised client hooks expose them without moving existing routes across the client boundary. |
 | **Partially compliant** | Overview and detail routes remain Server Components that read the deterministic baseline directly. This preserves the current read-only experience, but future interactive views must read effective state in focused client descendants rather than expecting Server Components to observe the client overlay. |
-| **Not yet implemented** | Typed financial mutation operations, domain validation, lifecycle rules, effective calculated summaries and atomic multi-record actions are deliberately deferred to Phase 2B and later feature work. Their absence is not a current defect. |
+| **Not yet implemented** | Named financial mutation operations, feature-specific validation, lifecycle rules, effective calculated summaries and atomic multi-record actions are deliberately introduced with the product capabilities that need them. Their absence is not a current defect. |
 | **Not compliant** | None identified in the current implementation. |
 
 The module-level baseline is safe only while treated as immutable. Future infrastructure should make that constraint explicit and should initialise per application instance rather than using a mutable module singleton, which could leak between server requests.
 
-## Phased implementation plan
+## Implementation sequence
 
-### Phase 1: Shared ephemeral state infrastructure
+### Completed foundation: shared ephemeral state infrastructure
 
 - **Scope:** Define overlay and action types, create a per-instance provider/reducer above Bank routes, initialise from a deterministic baseline, and expose read and dispatch hooks. No feature mutations yet.
 - **Dependencies:** Agree the overlay granularity, client bootstrap path and provider placement.
 - **Acceptance criteria:** One overlay instance survives `next/link` navigation, reload/new instance produces an empty overlay, baseline references are never written, and the design system remains uninvolved.
 - **Tests:** Reducer immutability and reset unit tests; provider remount and route-boundary integration tests; static persistence audit.
 
-### Phase 2: Effective-state selectors and typed domain operations
+### Completed foundation: effective-state selectors
 
-- **Scope:** Add pure merge/select functions, tombstones, typed results/errors, injected clock/ID sources, validation and lifecycle transition functions outside React.
-- **Dependencies:** Phase 1 state contract and Synthetic Finance domain types/selectors.
-- **Acceptance criteria:** Selectors derive related records consistently; operations validate the current effective state and commit atomic changes; baseline remains deeply equal to its original value.
-- **Tests:** Selector and operation unit tests covering relationships, currency, amount, available balance, permissions, approvals, duplicates, transitions and deletions. Use fixed clocks and IDs.
+- **Scope:** Pure merge and lookup functions for accounts, balances, payments, payment approvals and users, plus memoised client hooks.
+- **Acceptance criteria:** Baseline and overlay resolve deterministically; tombstones and conflicts follow documented precedence; unchanged records retain references; existing routes remain Server Components.
+- **Tests:** Selector, ordering, relationship, immutability and provider-consumption tests.
 
-### Phase 3: Payments as the first journey
+### Feature increments
 
-- **Scope:** Add create/schedule/inspect and, where designed, approve/reject flows to the shared model; migrate payment overview/detail reads to effective selectors.
-- **Dependencies:** Phases 1–2 and approved payment lifecycle/approval rules.
-- **Acceptance criteria:** A created payment appears in overview and detail; summaries, statuses, approvals, messages and affected balance measures agree; invalid commands make no partial change.
-- **Tests:** Domain tests plus component/journey tests for successful and rejected commands and cross-view consistency.
+For each product capability:
 
-### Phase 4: Navigation and reset validation
+1. Define the customer task and expected outcomes.
+2. Identify the minimum named domain commands required by that task.
+3. Define validation, relationships, permissions and lifecycle rules.
+4. Implement typed, deterministic and atomic operations against current effective state.
+5. Connect those operations to the smallest appropriate client-side product boundary.
+6. Verify resulting state, cross-route consistency, reload reset and baseline immutability.
 
-- **Scope:** Exercise a complete mutation journey across routes, reloads and independent application instances; guard against accidental persistence.
-- **Dependencies:** A working Payments journey and browser test environment.
-- **Acceptance criteria:** Client navigation retains mutations; reload and a new tab/app instance restore baseline without storage cleanup; direct full-document navigation has documented reset behaviour.
-- **Tests:** Deterministic browser tests for navigation, reload and two isolated contexts; repository scan/assertion for prohibited persistence APIs in the ephemeral-state path.
-
-### Phase 5: Extend by domain
-
-- **Scope:** Add transfers, users, account administration, approval journeys and later Ledger products through domain-specific operations and selectors over the shared infrastructure.
-- **Dependencies:** Phase 4 evidence and an approved contract for each domain.
-- **Acceptance criteria:** Each feature defines realistic rules, related-record effects, permissions, transitions and reset semantics; shared infrastructure stays domain-neutral; no speculative generic APIs are added.
-- **Tests:** Domain contract, integration and journey tests for each increment, including tombstones and calculated-state consistency.
+Payments is the proposed first feature increment. Its assessment and approval decisions are recorded in [Payments ephemeral operations plan](payments-ephemeral-operations-plan.md). User Management, Account Administration and later domains follow the same sequence only when their product work begins.
 
 ## Compliance verification
 
@@ -187,15 +201,16 @@ Every EDS-001 feature should provide deterministic evidence that:
 
 Unit tests should use fixed baseline inputs, clocks and ID generators. Integration tests should mount a fresh provider per case. Browser tests should distinguish `next/link` transitions from `page.reload()` and use isolated contexts for independent instances. Code review should include an explicit persistence search and Server/Client Component boundary check.
 
-## Open implementation decisions
+## Implementation decisions
 
-EDS-001 fixes the lifecycle and ownership model, but the first implementation should return for approval with evidence on these details:
+The completed foundation established these choices:
 
-- **Provider boundary:** choose the deepest persistent application layout that covers every route sharing mutations without unnecessarily converting unrelated UI to client rendering.
-- **Baseline bootstrap:** compare a serialisable server-provided snapshot with client-side deterministic initialisation. The Caldermere environment includes substantial transaction history, so measure RSC payload and client bundle impact before passing the whole dataset through a layout.
-- **Overlay shape:** confirm whether per-entity normalized additions/replacements/tombstones or a domain-event representation gives the clearest atomic finance operations. Do not turn this choice into a second canonical dataset.
-- **Payments semantics:** approve the exact lifecycle, approval thresholds, balance reservation/booking points, duplicate definition and confirmation-message contract before the Payments phase.
-- **Explicit reset control:** a full reload is mandatory reset behaviour; decide separately whether the product also needs a visible “Reset demo” action.
+- **Provider boundary:** a client provider in the persistent Ledger Bank root layout wraps route content without converting route modules into Client Components.
+- **Baseline bootstrap:** the provider constructs the deterministic normal-trading environment in the client boundary; bundle/bootstrap cost remains subject to measurement as domains grow.
+- **Overlay shape:** per-entity normalized created records, shallow updates, explicit creation order and tombstones; this remains a delta overlay rather than a second canonical dataset or event log.
+- **Effective reads:** pure collection and identifier selectors with focused memoised client hooks.
+
+Feature-specific decisions remain intentionally open until their product capability is approved. Payments lifecycle, actor trust, approval policy, balance reservation/booking, duplicate behavior and confirmation scope are recorded in the [Payments ephemeral operations plan](payments-ephemeral-operations-plan.md). A visible “Reset demo” control is also optional product scope; full reload remains the required reset boundary.
 
 ## Guidance for future features
 

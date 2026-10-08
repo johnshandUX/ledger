@@ -16,6 +16,8 @@ Future Bank features should consume shared synthetic-finance selectors and calcu
 
 Interactive simulations follow [EDS-001: Ephemeral Demo State](../../docs/architecture/EDS-001-ephemeral-demo-state.md). Synthetic Finance remains the immutable baseline; Bank-owned in-memory state will hold temporary changes for the current page lifecycle and derive a consistent effective view across client-side navigation.
 
+Financial mutations are introduced as [feature-driven domain operations](../../docs/architecture/EDS-001-ephemeral-demo-state.md#feature-driven-domain-operations): named, typed and atomic customer tasks implemented alongside the product feature that needs them, rather than through a speculative general-purpose mutation framework.
+
 ## Local development
 
 From the repository root:
