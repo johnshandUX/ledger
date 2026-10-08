@@ -6,11 +6,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build:design-system && npm -w apps/bank run build:app && npm -w apps/site run build:app",
-    "build:bank": "npm run build:design-system && npm -w apps/bank run build:app",
+    "build": "npm run build:synthetic-finance && npm run build:design-system && npm -w apps/bank run build:app && npm -w apps/site run build:app",
+    "build:bank": "npm run build:synthetic-finance && npm run build:design-system && npm -w apps/bank run build:app",
     "build:design-system": "npm -w packages/design-system run build",
+    "build:synthetic-finance": "npm -w packages/synthetic-finance run build",
     "build:site": "npm run build:design-system && npm -w apps/site run build:app",
-    "dev:bank": "npm run build:design-system && npm -w apps/bank run dev",
+    "dev:bank": "npm run build:synthetic-finance && npm run build:design-system && npm -w apps/bank run dev",
     "dev:site": "npm run build:design-system && npm -w apps/site run dev"
   }
 }

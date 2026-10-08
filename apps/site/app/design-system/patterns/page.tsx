@@ -1,7 +1,7 @@
 import { DocsLayout } from "../../_components/DocsLayout";
 
 const evidence = [
-  { title: "Sterling account overview", source: "Ledger Bank · Accounts", implemented: "The active Northstar fixture presents three GBP accounts using DataTable, Input, Button and shared currency formatting.", boundary: "Summary cards, balance aggregation, account data and the mobile account list remain product-owned." },
+  { title: "Sterling account overview", source: "Ledger Bank · Accounts", implemented: "The Caldermere environment presents 30 multi-currency accounts using DataTable, Input, Button and shared currency formatting.", boundary: "Summary cards, balance aggregation, account data and the mobile account list remain product-owned." },
   { title: "Account transaction history", source: "Ledger Bank · Account detail", implemented: "DataTable and currency formatting support the same transaction records in the desktop table and product-owned mobile list.", boundary: "Transaction direction, status meaning, record data and responsive list presentation remain product-owned. Search and filtering are not implemented." },
   { title: "Financial amount presentation", source: "Design system utility", implemented: "formatCurrencyAmount provides server-safe Intl.NumberFormat output with an en-GB default locale.", boundary: "The utility does not aggregate currencies, infer direction, convert FX, define placeholders or perform financial arithmetic." },
 ] as const;

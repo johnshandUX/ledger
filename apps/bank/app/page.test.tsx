@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import Home from "./page";
-import { getAccountsForProfile, getActiveBusinessProfile } from "../src/data/selectors";
+import { getBankAccounts } from "../src/finance/accounts";
 import { createAccountsPresentationRowModel } from "./AccountsDataTable";
 
 describe("accounts overview", () => {
@@ -32,8 +32,7 @@ describe("accounts overview", () => {
   });
 
   it("derives the responsive account order from the shared controlled row model", () => {
-    const profile = getActiveBusinessProfile();
-    const accounts = profile ? getAccountsForProfile(profile.id) : [];
+    const accounts = getBankAccounts();
     const rowModel = createAccountsPresentationRowModel(accounts, {
       query: "",
       filters: {},
@@ -42,20 +41,19 @@ describe("accounts overview", () => {
       sort: { columnId: "availableBalance", direction: "ascending" },
     });
 
-    expect(rowModel.visibleRows.map(account => account.id)).toEqual([
-      "acc-ns-pay",
-      "acc-ns-tax",
-      "acc-ns-op",
-    ]);
+    expect(rowModel.visibleRows).toHaveLength(20);
+    expect(rowModel.sortedRows).toHaveLength(30);
+    expect(rowModel.sortedRows[0]?.availableBalanceMinor).toBeLessThanOrEqual(
+      rowModel.sortedRows[1]!.availableBalanceMinor,
+    );
   });
 
   it("keeps the full sorted account dataset available beyond the desktop page size", () => {
-    const profile = getActiveBusinessProfile();
-    const fixtures = profile ? getAccountsForProfile(profile.id) : [];
+    const fixtures = getBankAccounts();
     const accounts = Array.from({ length: 21 }, (_, index) => ({
       ...fixtures[index % fixtures.length],
       id: `account-${index}`,
-      availableBalance: 21 - index,
+      availableBalanceMinor: 21 - index,
     }));
     const rowModel = createAccountsPresentationRowModel(accounts, {
       query: "",
@@ -67,6 +65,6 @@ describe("accounts overview", () => {
 
     expect(rowModel.visibleRows).toHaveLength(20);
     expect(rowModel.sortedRows).toHaveLength(21);
-    expect(rowModel.sortedRows[0]?.availableBalance).toBe(1);
+    expect(rowModel.sortedRows[0]?.availableBalanceMinor).toBe(1);
   });
 });

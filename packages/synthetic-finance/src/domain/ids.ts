@@ -1,0 +1,13 @@
+export type BusinessId = string;
+export type LegalEntityId = string;
+export type UserId = string;
+export type RoleId = string;
+export type PermissionId = string;
+export type AccountId = string;
+export type BalanceSnapshotId = string;
+export type TransactionId = string;
+export type CounterpartyId = string;
+export type BeneficiaryId = string;
+export type PaymentId = string;
+export type PaymentApprovalId = string;
+export type InvoiceId = string;

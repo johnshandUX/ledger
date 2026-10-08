@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { formatCurrencyAmount } from "@johnshandux/ledger-design-system";
 import { createDataTableRowModel, DataTable, type DataTableColumn, type DataTableState } from "@johnshandux/ledger-design-system/data-table";
-import type { Account } from "../src/domain/Account";
+import type { BankAccount } from "../src/finance/accounts";
 import { formatAccountType } from "../src/presentation/accountDetail";
+import { formatMinorCurrencyAmount } from "../src/presentation/money";
 import { MobileTableSortControls } from "./MobileTableSortControls";
 
-export const accountColumns: readonly DataTableColumn<Account>[] = [
+export const accountColumns: readonly DataTableColumn<BankAccount>[] = [
   {
     id: "account",
     label: "Account",
@@ -16,7 +16,7 @@ export const accountColumns: readonly DataTableColumn<Account>[] = [
     cell: ({ row }) => (
       <div>
         <div className="acc-name"><Link className="ledger-link" href={`/accounts/${row.id}`}>{row.name}</Link></div>
-        {row.description && <div className="acc-sub">{row.description}</div>}
+        <div className="acc-sub">{row.status}</div>
       </div>
     ),
     sort: { value: row => row.name },
@@ -26,14 +26,14 @@ export const accountColumns: readonly DataTableColumn<Account>[] = [
     label: "Account number",
     header: "Number / Sort",
     nowrap: true,
-    cell: ({ row }) => <div><div className="mono">{row.accountNumber}</div><div className="mono">{row.sortCode}</div></div>,
+    cell: ({ row }) => <div><div className="mono">{row.accountNumber ?? "—"}</div><div className="mono">{row.sortCode ?? "—"}</div></div>,
   },
   {
     id: "type",
     label: "Account type",
     header: "Type",
-    cell: ({ row }) => formatAccountType(row.type),
-    sort: { value: row => formatAccountType(row.type) },
+    cell: ({ row }) => formatAccountType(row.accountType),
+    sort: { value: row => formatAccountType(row.accountType) },
   },
   {
     id: "currentBalance",
@@ -43,8 +43,8 @@ export const accountColumns: readonly DataTableColumn<Account>[] = [
     headerAlign: "right",
     numeric: true,
     nowrap: true,
-    cell: ({ row }) => formatCurrencyAmount(row.currentBalance, row.currency),
-    sort: { value: row => row.currentBalance },
+    cell: ({ row }) => formatMinorCurrencyAmount(row.ledgerBalanceMinor, row.currency),
+    sort: { value: row => row.ledgerBalanceMinor },
   },
   {
     id: "availableBalance",
@@ -54,8 +54,8 @@ export const accountColumns: readonly DataTableColumn<Account>[] = [
     headerAlign: "right",
     numeric: true,
     nowrap: true,
-    cell: ({ row }) => formatCurrencyAmount(row.availableBalance, row.currency),
-    sort: { value: row => row.availableBalance },
+    cell: ({ row }) => formatMinorCurrencyAmount(row.availableBalanceMinor, row.currency),
+    sort: { value: row => row.availableBalanceMinor },
   },
 ];
 
@@ -67,11 +67,11 @@ const accountSortOptions = [
   { columnId: "availableBalance", label: "Available balance" },
 ] as const;
 
-export function createAccountsPresentationRowModel(accounts: readonly Account[], state: DataTableState) {
+export function createAccountsPresentationRowModel(accounts: readonly BankAccount[], state: DataTableState) {
   return createDataTableRowModel({ rows: accounts, columns: accountColumns, state, pageSizeOptions: accountPageSizeOptions });
 }
 
-export function AccountsDataTable({ accounts }: { accounts: readonly Account[] }) {
+export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount[] }) {
   const [state, setState] = useState<DataTableState>({ query: "", filters: {}, pageIndex: 0, pageSize: 20 });
   const rowModel = createAccountsPresentationRowModel(accounts, state);
 
@@ -97,14 +97,14 @@ export function AccountsDataTable({ accounts }: { accounts: readonly Account[] }
             <div className="acc-top">
               <div>
                 <div className="acc-name"><Link className="ledger-link" href={`/accounts/${account.id}`}>{account.name}</Link></div>
-                <div className="acc-sub">{formatAccountType(account.type)} • {account.accountNumber}</div>
+                <div className="acc-sub">{formatAccountType(account.accountType)} • {account.accountNumber ?? "—"} • {account.status}</div>
               </div>
-              <div className="financial-value">{formatCurrencyAmount(account.availableBalance, account.currency)}</div>
+              <div className="financial-value">{formatMinorCurrencyAmount(account.availableBalanceMinor, account.currency)}</div>
             </div>
 
             <div className="acc-meta">
-              <div>Current: <span className="financial-value">{formatCurrencyAmount(account.currentBalance, account.currency)}</span></div>
-              <div>Sort: <span className="mono">{account.sortCode}</span></div>
+              <div>Current: <span className="financial-value">{formatMinorCurrencyAmount(account.ledgerBalanceMinor, account.currency)}</span></div>
+              <div>Sort: <span className="mono">{account.sortCode ?? "—"}</span></div>
             </div>
           </article>
         ))}

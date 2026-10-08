@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { makeTransaction } from "../../../src/domain/Transaction";
+import type { BankTransaction } from "../../../src/finance/transactions";
 import { createTransactionsPresentationRowModel, TransactionHistory } from "./TransactionHistory";
 
 describe("TransactionHistory", () => {
@@ -9,7 +9,7 @@ describe("TransactionHistory", () => {
   });
 
   it("represents transaction direction in desktop and mobile presentations", () => {
-    const transaction = makeTransaction({ id: "test", accountId: "account", direction: "debit", amount: 82.17, postedAt: "2026-09-15T10:00:00Z", description: "Courier services", counterpartyName: "Citywide Logistics", reference: "CW-88412", balanceAfter: 1000 });
+    const transaction: BankTransaction = { id: "test", accountId: "account", direction: "debit", amountMinor: 8217, currency: "GBP", bookedAt: "2026-09-15T10:00:00Z", valueDate: "2026-09-15", description: "Courier services", counterpartyName: "Citywide Logistics", reference: "CW-88412" };
     const html = renderToStaticMarkup(<TransactionHistory transactions={[transaction]} />);
     expect(html).toContain("transactions-desktop");
     expect(html).toContain("transactions-mobile");
@@ -20,8 +20,8 @@ describe("TransactionHistory", () => {
   });
 
   it("derives desktop and mobile ordering from the shared controlled row model", () => {
-    const older = makeTransaction({ id: "older", accountId: "account", direction: "credit", amount: 10, postedAt: "2026-09-01T10:00:00Z", description: "Older" });
-    const newer = makeTransaction({ id: "newer", accountId: "account", direction: "credit", amount: 20, postedAt: "2026-09-15T10:00:00Z", description: "Newer" });
+    const older: BankTransaction = { id: "older", accountId: "account", direction: "credit", amountMinor: 1000, currency: "GBP", bookedAt: "2026-09-01T10:00:00Z", valueDate: "2026-09-01", description: "Older" };
+    const newer: BankTransaction = { id: "newer", accountId: "account", direction: "credit", amountMinor: 2000, currency: "GBP", bookedAt: "2026-09-15T10:00:00Z", valueDate: "2026-09-15", description: "Newer" };
     const rowModel = createTransactionsPresentationRowModel(
       [older, newer],
       { query: "", filters: {}, pageIndex: 0, pageSize: 2, sort: { columnId: "date", direction: "descending" } },

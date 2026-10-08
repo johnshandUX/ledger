@@ -1,26 +1,26 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatCurrencyAmount } from "@johnshandux/ledger-design-system";
 import { createDataTableRowModel, DataTable, type DataTableColumn, type DataTableState } from "@johnshandux/ledger-design-system/data-table";
-import type { Transaction } from "../../../src/domain/Transaction";
+import type { BankTransaction } from "../../../src/finance/transactions";
 import { formatPostedDate, getTransactionAmounts } from "../../../src/presentation/accountDetail";
+import { formatMinorCurrencyAmount } from "../../../src/presentation/money";
 import { MobileTableSortControls } from "../../MobileTableSortControls";
 
-type TransactionHistoryProps = { transactions: Transaction[] };
+type TransactionHistoryProps = { transactions: BankTransaction[] };
 
-function TransactionContext({ transaction }: { transaction: Transaction }) {
+function TransactionContext({ transaction }: { transaction: BankTransaction }) {
   return <><span className="transaction-description">{transaction.description}</span>{transaction.counterpartyName && <span className="transaction-secondary">{transaction.counterpartyName}</span>}{transaction.reference && <span className="transaction-reference">Reference: {transaction.reference}</span>}</>;
 }
 
-export const transactionColumns: readonly DataTableColumn<Transaction>[] = [
+export const transactionColumns: readonly DataTableColumn<BankTransaction>[] = [
   {
     id: "date",
     label: "Date",
     header: "Date",
     nowrap: true,
-    cell: ({ row }) => <span className="transaction-date">{formatPostedDate(row.postedAt)}</span>,
-    sort: { value: row => new Date(row.postedAt) },
+    cell: ({ row }) => <span className="transaction-date">{formatPostedDate(row.bookedAt)}</span>,
+    sort: { value: row => row.bookedAt },
   },
   {
     id: "transaction",
@@ -32,8 +32,8 @@ export const transactionColumns: readonly DataTableColumn<Transaction>[] = [
     id: "status",
     label: "Status",
     header: "Status",
-    cell: ({ row }) => <span className="transaction-status">{row.status}</span>,
-    sort: { value: row => row.status },
+    cell: () => <span className="transaction-status">Booked</span>,
+    sort: { value: () => "booked" },
   },
   {
     id: "moneyOut",
@@ -44,10 +44,10 @@ export const transactionColumns: readonly DataTableColumn<Transaction>[] = [
     numeric: true,
     nowrap: true,
     cell: ({ row }) => {
-      const { moneyOut } = getTransactionAmounts(row);
-      return moneyOut === undefined ? "—" : formatCurrencyAmount(moneyOut, row.currency);
+      const { moneyOutMinor } = getTransactionAmounts(row);
+      return moneyOutMinor === undefined ? "—" : formatMinorCurrencyAmount(moneyOutMinor, row.currency);
     },
-    sort: { value: row => getTransactionAmounts(row).moneyOut },
+    sort: { value: row => getTransactionAmounts(row).moneyOutMinor },
   },
   {
     id: "moneyIn",
@@ -58,26 +58,15 @@ export const transactionColumns: readonly DataTableColumn<Transaction>[] = [
     numeric: true,
     nowrap: true,
     cell: ({ row }) => {
-      const { moneyIn } = getTransactionAmounts(row);
-      return moneyIn === undefined ? "—" : formatCurrencyAmount(moneyIn, row.currency);
+      const { moneyInMinor } = getTransactionAmounts(row);
+      return moneyInMinor === undefined ? "—" : formatMinorCurrencyAmount(moneyInMinor, row.currency);
     },
-    sort: { value: row => getTransactionAmounts(row).moneyIn },
-  },
-  {
-    id: "balance",
-    label: "Balance",
-    header: "Balance",
-    align: "right",
-    headerAlign: "right",
-    numeric: true,
-    nowrap: true,
-    cell: ({ row }) => row.balanceAfter === undefined ? "—" : formatCurrencyAmount(row.balanceAfter, row.currency),
-    sort: { value: row => row.balanceAfter },
+    sort: { value: row => getTransactionAmounts(row).moneyInMinor },
   },
 ];
 
 export function createTransactionsPresentationRowModel(
-  transactions: readonly Transaction[],
+  transactions: readonly BankTransaction[],
   state: DataTableState,
   pageSizeOptions: readonly number[],
 ) {
@@ -89,7 +78,6 @@ const transactionSortOptions = [
   { columnId: "status", label: "Status" },
   { columnId: "moneyOut", label: "Money out" },
   { columnId: "moneyIn", label: "Money in" },
-  { columnId: "balance", label: "Balance" },
 ] as const;
 
 export function TransactionHistory({ transactions }: TransactionHistoryProps) {
@@ -119,7 +107,7 @@ function TransactionHistoryWithRows({ transactions }: TransactionHistoryProps) {
     </div>
     <ol className="transactions-mobile" aria-label="Transactions for this account">
       <li className="transactions-mobile-controls"><MobileTableSortControls label="Sort transactions by" options={transactionSortOptions} state={state} onStateChange={setState} /></li>
-      {rowModel.sortedRows.map((transaction) => { const { moneyIn, moneyOut } = getTransactionAmounts(transaction); const amount = moneyIn ?? moneyOut; return <li className="transaction-card" key={transaction.id}><div className="transaction-card-header"><div className="transaction-copy"><TransactionContext transaction={transaction} /></div><strong className="financial-value">{moneyOut !== undefined ? "−" : "+"}{formatCurrencyAmount(amount ?? 0, transaction.currency)}</strong></div><dl className="transaction-card-meta"><div><dt>Date</dt><dd>{formatPostedDate(transaction.postedAt)}</dd></div><div><dt>Status</dt><dd className="transaction-status">{transaction.status}</dd></div><div><dt>Balance</dt><dd className="financial-value">{transaction.balanceAfter === undefined ? "—" : formatCurrencyAmount(transaction.balanceAfter, transaction.currency)}</dd></div></dl></li>; })}
+      {rowModel.sortedRows.map((transaction) => { const { moneyInMinor, moneyOutMinor } = getTransactionAmounts(transaction); const amountMinor = moneyInMinor ?? moneyOutMinor ?? 0; return <li className="transaction-card" key={transaction.id}><div className="transaction-card-header"><div className="transaction-copy"><TransactionContext transaction={transaction} /></div><strong className="financial-value">{moneyOutMinor !== undefined ? "−" : "+"}{formatMinorCurrencyAmount(amountMinor, transaction.currency)}</strong></div><dl className="transaction-card-meta"><div><dt>Date</dt><dd>{formatPostedDate(transaction.bookedAt)}</dd></div><div><dt>Status</dt><dd className="transaction-status">Booked</dd></div></dl></li>; })}
     </ol>
   </>;
 }

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { ProductShell } from "./ProductShell";
 
 describe("ProductShell", () => {
-  it("presents the selected route and active fixture identity", () => {
+  it("presents the selected route and Caldermere demo identity", () => {
     const html = renderToStaticMarkup(
       <ProductShell activeRoute="accounts">
         <main>Content</main>
@@ -11,8 +11,8 @@ describe("ProductShell", () => {
     );
 
     expect(html).toContain('aria-current="page"');
-    expect(html).toContain("Alex Morgan");
-    expect(html).toContain("Finance Director");
+    expect(html).toContain("Amelia Hart");
+    expect(html).toContain("Finance Leadership");
     expect(html).not.toContain("J. Finance");
   });
 });

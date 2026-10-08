@@ -21,16 +21,16 @@ const bankAccounts = [
 ] as const;
 
 export function AccountPreview({ compact = false, source = "playground" }: { compact?: boolean; source?: "playground" | "bank" }) {
-  const isBankFixture = source === "bank";
-  const accounts = isBankFixture ? bankAccounts : playgroundAccounts;
+  const isBankPreview = source === "bank";
+  const accounts = isBankPreview ? bankAccounts : playgroundAccounts;
   const visibleAccounts = accounts.slice(0, compact ? 4 : 6).map(([name, currency, balance]) => ({ name, currency, balance }));
   return (
     <div className={`bank-preview ${compact ? "bank-preview--compact" : ""}`}>
-      <div className="bank-preview__bar"><span>Ledger Bank</span><span className="status-dot">{isBankFixture ? "Current prototype fixture" : "Curated example data"}</span></div>
+      <div className="bank-preview__bar"><span>Ledger Bank</span><span className="status-dot">{isBankPreview ? "Illustrative preview" : "Curated example data"}</span></div>
       <div className="bank-preview__body">
-        <div className="bank-preview__heading"><div><span className="eyebrow">Northstar Trading Ltd</span><h3>Accounts</h3></div><span className="preview-action">Make a payment</span></div>
-        <div className="balance-grid"><div><span>Total available · GBP</span><strong>{isBankFixture ? "£305,000.50" : "£459,225.60"}</strong></div><div><span>Accounts</span><strong>{isBankFixture ? "3" : "6"}</strong></div><div><span>Currencies</span><strong>{isBankFixture ? "1" : "3"}</strong></div></div>
-        <div className="preview-table"><DataTable caption={isBankFixture ? "Current Ledger Bank account fixtures" : "Curated commercial bank account example"} rows={visibleAccounts} columns={columns} getRowId={account => account.name} pageSizeOptions={[visibleAccounts.length]} /></div>
+        <div className="bank-preview__heading"><div><span className="eyebrow">Example Manufacturing Ltd</span><h3>Accounts</h3></div><span className="preview-action">Make a payment</span></div>
+        <div className="balance-grid"><div><span>Total available · GBP</span><strong>{isBankPreview ? "£305,000.50" : "£459,225.60"}</strong></div><div><span>Accounts</span><strong>{isBankPreview ? "3" : "6"}</strong></div><div><span>Currencies</span><strong>{isBankPreview ? "1" : "3"}</strong></div></div>
+        <div className="preview-table"><DataTable caption={isBankPreview ? "Illustrative Ledger Bank account preview" : "Curated commercial bank account example"} rows={visibleAccounts} columns={columns} getRowId={account => account.name} pageSizeOptions={[visibleAccounts.length]} /></div>
       </div>
     </div>
   );

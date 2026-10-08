@@ -5,6 +5,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: "@johnshandux/ledger-synthetic-finance",
+        replacement: resolve(__dirname, "../../packages/synthetic-finance/src/index.ts"),
+      },
+      {
         find: "@johnshandux/ledger-design-system/data-table",
         replacement: resolve(__dirname, "../../packages/design-system/src/data-table.ts"),
       },

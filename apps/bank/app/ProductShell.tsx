@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { getActiveBusinessProfile, getActiveUser } from "../src/data/selectors";
-import { userFullName } from "../src/domain/User";
+import { getBankDemoUser, getBankRolesForUser } from "../src/finance/users";
 import { ThemeControl } from "./ThemeControl";
 
 type ProductShellProps = {
@@ -16,8 +15,8 @@ const primaryRoutes = [
 ] as const;
 
 export function ProductShell({ activeRoute, children }: ProductShellProps) {
-  const activeUser = getActiveUser();
-  const activeProfile = getActiveBusinessProfile();
+  const activeUser = getBankDemoUser();
+  const activeRole = getBankRolesForUser(activeUser.id)[0];
 
   return (
     <div className="product-shell">
@@ -51,8 +50,8 @@ export function ProductShell({ activeRoute, children }: ProductShellProps) {
         <ThemeControl />
 
         <div className="profile">
-          <span>{activeUser ? userFullName(activeUser) : "Signed-in user"}</span>
-          {activeProfile?.jobTitle && <small>{activeProfile.jobTitle}</small>}
+          <span>{activeUser.firstName} {activeUser.lastName}</span>
+          {activeRole && <small>{activeRole.name}</small>}
         </div>
       </header>
 

@@ -1,6 +1,18 @@
 # Ledger Bank
 
-Ledger Bank is the separate reference implementation for LedgerOS. It is a fictional commercial banking prototype using fixture data and the local Ledger Design System package. It is not a production banking service.
+Ledger Bank is the separate reference implementation for LedgerOS. It is a fictional commercial banking prototype using the shared Caldermere synthetic-finance environment and the local Ledger Design System package. It is not a production banking service.
+
+## Finance data
+
+The consumer boundary is intentionally narrow:
+
+`Caldermere finance environment → shared selectors/calculations → Bank finance adapter → product UI`
+
+`src/finance` creates the default `normal-trading` environment once and exposes typed account, transaction, payment, user and reporting queries. Presentation components do not construct scenarios, inspect raw fixture arrays or redefine finance rules. Account balances remain integer minor units until the shared Bank formatting adapter converts them for display.
+
+The migrated Accounts and account-detail experiences now use the complete Caldermere account estate and recent Caldermere transactions. The old app-local account, transaction, payment, beneficiary, business and user fixtures were removed so there is one finance source of truth. Amelia Hart (`user-amelia-hart`) is the deterministic development identity; this is presentation context, not authentication or session management.
+
+Future Bank features should consume shared synthetic-finance selectors and calculations through this adapter. Replacing Caldermere with a backend should change the adapter rather than presentation components.
 
 ## Local development
 
@@ -35,10 +47,10 @@ The bank is deployed as a dedicated Vercel project, separate from the LedgerOS w
 - **Framework Preset:** Next.js
 - **Install Command:** leave automatically detected
 - **Build Command from the app root:** `npm run build`
-- **Required workspace access:** `packages/design-system`
+- **Required workspace access:** `packages/design-system` and `packages/synthetic-finance`
 - **Environment variables:** none currently
 
-In the Root Directory settings, keep **Include source files outside of the Root Directory in the Build Step** enabled so Vercel can read the root lockfile and `packages/design-system`. Vercel enables this by default for modern projects, but it should be verified during import. The repository uses standard npm workspaces, so the install command should remain auto-detected rather than overridden.
+In the Root Directory settings, keep **Include source files outside of the Root Directory in the Build Step** enabled so Vercel can read the root lockfile and both shared packages. Vercel enables this by default for modern projects, but it should be verified during import. The repository uses standard npm workspaces, so the install command should remain auto-detected rather than overridden.
 
 When moving to another production URL:
 
