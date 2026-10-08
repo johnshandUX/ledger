@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@johnshandux/ledger-design-system/styles.css";
 import "./globals.css";
+import { BankStateProvider } from "./BankStateProvider";
 import { PrototypeNotice } from "./PrototypeNotice";
 
 const inter = Inter({
@@ -20,7 +21,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><PrototypeNotice />{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PrototypeNotice />
+        <BankStateProvider>{children}</BankStateProvider>
+      </body>
     </html>
   );
 }

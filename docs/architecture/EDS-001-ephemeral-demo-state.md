@@ -50,6 +50,10 @@ A full browser reload restores the Synthetic Finance starting state. A separate 
 
 Ephemeral operations enforce realistic domain rules: valid entity relationships; currency and integer-minor-unit amount validation; sufficient available balance where applicable; valid lifecycle transitions; permissions and approval rules; duplicate prevention where applicable; and consistent calculated balances and statuses. Ephemeral state changes durability, not business correctness.
 
+### EDS-001.6: Atomic domain transitions
+
+Financial operations involving multiple related records must be validated and applied as a single atomic state transition. An operation must either apply all required state changes or apply none. Validation failure must leave the complete effective state unchanged; intermediate or partially applied financial states must never become observable.
+
 ## Architectural boundaries
 
 ### Memory is not browser session storage
