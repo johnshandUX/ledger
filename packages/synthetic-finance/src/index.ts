@@ -1,4 +1,6 @@
 export type {
+  AdditionalAccessDefinition,
+  AdditionalAccessId,
   Account,
   AccountId,
   AccountStatus,
@@ -40,6 +42,8 @@ export type {
   UserId,
   UserStatus,
 } from "./domain/index.js";
+
+export { additionalAccessCatalogue } from "./domain/index.js";
 
 export {
   validateFinanceDataset,

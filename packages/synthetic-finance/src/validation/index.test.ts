@@ -17,6 +17,7 @@ function createValidDataset(): FinanceDataset {
         id: "role-1",
         businessId: "business-1",
         name: "Approver",
+        description: "Approves payments.",
         permissionIds: ["permission-1"],
       },
     ],
@@ -28,6 +29,7 @@ function createValidDataset(): FinanceDataset {
         lastName: "Morgan",
         email: "alex@example.test",
         roleIds: ["role-1"],
+        additionalAccessIds: [],
         status: "active",
       },
     ],
@@ -153,6 +155,41 @@ describe("validateFinanceDataset", () => {
         expect.objectContaining({ path: "paymentApprovals[0].paymentId" }),
       ]),
     );
+  });
+
+  it("enforces zero or one banking role and valid unique additional access", () => {
+    const dataset = createValidDataset();
+    dataset.roles.push({
+      id: "role-2",
+      businessId: "business-1",
+      name: "Viewer",
+      description: "Views financial information.",
+      permissionIds: [],
+    });
+    dataset.users[0]!.roleIds.push("role-2");
+    dataset.users[0]!.additionalAccessIds = [
+      "developer",
+      "developer",
+      "unknown-access" as never,
+    ];
+
+    const result = validateFinanceDataset(dataset);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toEqual(expect.arrayContaining([
+      {
+        path: "users[0].roleIds",
+        message: "User must have zero or one banking role.",
+      },
+      {
+        path: "users[0].additionalAccessIds[1]",
+        message: 'Duplicate additional access id "developer".',
+      },
+      {
+        path: "users[0].additionalAccessIds[2]",
+        message: 'Additional access "unknown-access" does not exist.',
+      },
+    ]));
   });
 
   it("reports references that cross business boundaries", () => {

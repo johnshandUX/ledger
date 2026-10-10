@@ -69,7 +69,7 @@ type PaymentOperationContext = Readonly<{
 Payments 1A uses the existing configured Ledger Bank demo identity, Amelia Hart (`user-amelia-hart`), as the only independently authorised submitter:
 
 - Amelia is an active user belonging to `business-caldermere`.
-- Her existing role is `role-finance-leadership` (`Finance Leadership`).
+- Her existing role is `role-administrator` (`Administrator`).
 - That role includes `permission-payments-create` (`payments:create`) and `permission-payments-approve` (`payments:approve`), as well as `permission-administration-view`.
 - Ledger Bank already identifies her explicitly through `BANK_DEMO_USER_ID`; the operation must accept or resolve that trusted identity rather than select the first user or infer authority from collection order.
 
@@ -85,7 +85,7 @@ The submit operation should accumulate field/domain errors without changing stat
 
 1. The payment identifier does not already exist in effective payments.
 2. The business, creator, source account and beneficiary exist and belong to the same business.
-3. The trusted context actor resolves to `user-amelia-hart`, is active, belongs to the context business and has `payments:create` through the effective `role-finance-leadership` relationship. A missing, inactive, cross-business, unpermitted or differently identified actor is rejected with a structured authorisation error and no state change.
+3. The trusted context actor resolves to `user-amelia-hart`, is active, belongs to the context business and has `payments:create` through the effective `role-administrator` relationship. A missing, inactive, cross-business, unpermitted or differently identified actor is rejected with a structured authorisation error and no state change.
 4. The source account is active and eligible for outgoing payments; closed accounts are rejected. Treatment of restricted accounts requires product approval.
 5. Amount is a positive safe integer in minor units.
 6. Currency matches both source account and beneficiary.

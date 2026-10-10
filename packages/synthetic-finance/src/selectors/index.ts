@@ -4,5 +4,6 @@ export * from "./counterparties.js";
 export * from "./invoices.js";
 export * from "./payment-approvals.js";
 export * from "./payments.js";
+export * from "./roles.js";
 export * from "./transactions.js";
 export * from "./users.js";

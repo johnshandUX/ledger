@@ -94,6 +94,8 @@ describe("createCaldermereDataset", () => {
       caldermereDataset.transactions,
     );
     dataset.businesses[0]!.legalEntityIds.push("mutation-test");
+    dataset.users[0]!.roleIds.length = 0;
+    dataset.users[0]!.additionalAccessIds.length = 0;
     dataset.counterparties[0]!.roles.push("supplier");
     expect(JSON.stringify(caldermereDataset)).toBe(anchorBefore);
   });

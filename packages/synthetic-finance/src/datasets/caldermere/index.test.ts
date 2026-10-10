@@ -22,6 +22,26 @@ describe("caldermereDataset", () => {
       .toBe(true);
   });
 
+  it("provides the four banking roles and representative additional access", () => {
+    expect(caldermereDataset.roles.map(({ name }) => name)).toEqual([
+      "Administrator",
+      "Payment operator",
+      "Payment approver",
+      "Viewer",
+    ]);
+    expect(caldermereDataset.roles.every(({ description }) => description.length > 0))
+      .toBe(true);
+    expect(caldermereDataset.users.every(({ roleIds }) => roleIds.length <= 1)).toBe(true);
+    expect(caldermereDataset.users.find(({ id }) => id === "user-amelia-hart"))
+      .toMatchObject({ roleIds: ["role-administrator"], additionalAccessIds: ["developer"] });
+    expect(caldermereDataset.users.find(({ id }) => id === "user-emily-scott"))
+      .toMatchObject({ roleIds: ["role-viewer"], additionalAccessIds: ["developer"] });
+    expect(caldermereDataset.users.find(({ id }) => id === "user-sophie-bennett"))
+      .toMatchObject({ roleIds: ["role-payment-operator"], additionalAccessIds: [] });
+    expect(caldermereDataset.users.find(({ id }) => id === "user-noah-wilson"))
+      .toMatchObject({ roleIds: [], additionalAccessIds: ["developer"] });
+  });
+
   it("has a varied 30-account commercial estate", () => {
     const countBy = (key: "currency" | "status" | "accountType") =>
       caldermereDataset.accounts.reduce<Record<string, number>>((counts, account) => {

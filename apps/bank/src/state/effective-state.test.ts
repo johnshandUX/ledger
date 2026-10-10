@@ -125,6 +125,31 @@ describe("effective-state selectors", () => {
     expect(baseline).toEqual(before);
   });
 
+  it("replaces user banking role and additional access arrays without mutating baseline", () => {
+    const baseline = bankFinanceEnvironment.users.find(
+      ({ id }) => id === "user-amelia-hart",
+    )!;
+    const before = structuredClone(baseline);
+    const overlay = {
+      created: {},
+      createdOrder: [],
+      updated: {
+        [baseline.id]: {
+          roleIds: ["role-viewer"],
+          additionalAccessIds: [],
+        },
+      },
+      tombstones: {},
+    } satisfies EntityOverlay<typeof baseline>;
+    const source = { baseline: bankFinanceEnvironment.users, overlay };
+
+    expect(selectEffectiveUserById(source, baseline.id)).toMatchObject({
+      roleIds: ["role-viewer"],
+      additionalAccessIds: [],
+    });
+    expect(baseline).toEqual(before);
+  });
+
   it("gives tombstones precedence over baseline, created and updated records", () => {
     const baseline = bankFinanceEnvironment.payments[0]!;
     const created: Payment = { ...baseline, id: "payment-created-tombstoned" };

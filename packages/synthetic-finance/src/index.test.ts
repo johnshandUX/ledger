@@ -3,11 +3,14 @@ import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   CALDERMERE_AS_OF,
   CALDERMERE_DEFAULT_SEED,
+  additionalAccessCatalogue,
   createCaldermereDataset,
   createFinanceQueryContext,
   createCaldermereScenario,
   getAccounts,
+  getAdditionalAccessById,
   getFinancialSnapshot,
+  getRoles,
   financeScenarios,
   caldermereDataset,
   validateFinanceDataset,
@@ -32,6 +35,10 @@ describe("package root", () => {
   it("exports selectors and calculations", () => {
     expect(getAccounts).toBeTypeOf("function");
     expect(getFinancialSnapshot).toBeTypeOf("function");
+    expect(getRoles).toBeTypeOf("function");
+    expect(getAdditionalAccessById("developer")).toEqual(
+      additionalAccessCatalogue[0],
+    );
   });
 
   it("exports the enriched Caldermere factory", () => {

@@ -206,7 +206,7 @@ Primary label:
 - immediate: **Send payment**;
 - future-dated: **Schedule payment**.
 
-Before applying any overlay action, submission re-resolves and validates the complete instruction against current effective state and separately authorises Amelia Hart (`user-amelia-hart`). She must remain active, belong to `business-caldermere`, retain `payments:create` through `role-finance-leadership`, and satisfy the approved Amelia-only independent-submission policy.
+Before applying any overlay action, submission re-resolves and validates the complete instruction against current effective state and separately authorises Amelia Hart (`user-amelia-hart`). She must remain active, belong to `business-caldermere`, retain `payments:create` through `role-administrator`, and satisfy the approved Amelia-only independent-submission policy.
 
 No other user inherits this authority. Payments 1A introduces no threshold, second approver or pending approval action.
 

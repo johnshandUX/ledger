@@ -119,6 +119,32 @@ describe("bank ephemeral state", () => {
     expect(initial.overlay.payments.tombstones).toEqual({});
   });
 
+  it("stores user classification replacements only in the ephemeral overlay", () => {
+    const baselineUser = bankFinanceEnvironment.users.find(
+      ({ id }) => id === "user-amelia-hart",
+    )!;
+    const before = structuredClone(baselineUser);
+    const initial = createBankEphemeralState(bankFinanceEnvironment);
+    const next = bankEphemeralReducer(initial, {
+      type: "apply-overlay-delta",
+      delta: {
+        collection: "users",
+        change: {
+          kind: "update",
+          id: baselineUser.id,
+          changes: { roleIds: [], additionalAccessIds: [] },
+        },
+      },
+    });
+
+    expect(next.overlay.users.updated[baselineUser.id]).toEqual({
+      roleIds: [],
+      additionalAccessIds: [],
+    });
+    expect(bankFinanceEnvironment.users.find(({ id }) => id === baselineUser.id))
+      .toEqual(before);
+  });
+
   it("resets only the overlay and retains the immutable baseline reference", () => {
     const initial = createBankEphemeralState(bankFinanceEnvironment);
     const changed = bankEphemeralReducer(initial, {

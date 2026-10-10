@@ -27,6 +27,8 @@ Ledger Bank, Storybook, automated tests, screenshots, marketing, and the future 
 
 The domain defines the shared financial contracts and uses integer minor units for all monetary values. For example, `amountMinor: 1250400` with `currency: "GBP"` represents £12,504.00. Monetary values must be safe integers; the package does not use floating-point major-unit values for finance data.
 
+Caldermere users have zero or one descriptive banking role: Administrator, Payment operator, Payment approver, or Viewer. Additional access is independent of banking role; the customer-neutral catalogue currently defines Developer access for developer tools, APIs, and integrations. Developer access does not grant banking permissions. Existing permission metadata remains available for established Bank behaviour, but v1 does not provide configurable entitlement management.
+
 ## Caldermere
 
 Caldermere Ltd is the first canonical synthetic commercial banking customer. It currently contains one `Business` and one distinct `LegalEntity`, both named Caldermere Ltd, plus a deliberately broad estate of operating, reserve, restricted, historical, and foreign-currency accounts.

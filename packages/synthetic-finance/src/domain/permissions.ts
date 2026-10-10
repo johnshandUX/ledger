@@ -19,5 +19,6 @@ export interface Role {
   id: RoleId;
   businessId: BusinessId;
   name: string;
+  description: string;
   permissionIds: PermissionId[];
 }

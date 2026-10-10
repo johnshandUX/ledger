@@ -1,4 +1,5 @@
 import type {
+  AdditionalAccessId,
   BusinessId,
   PermissionKey,
   RoleId,
@@ -6,12 +7,15 @@ import type {
   UserId,
   UserStatus,
 } from "../domain/index.js";
+import { additionalAccessCatalogue } from "../domain/index.js";
 import type { FinanceDataset } from "../validation/index.js";
 
 export interface UserQueryOptions {
   businessId?: BusinessId;
   status?: UserStatus;
   roleId?: RoleId;
+  bankingRoleAssignment?: "assigned" | "unassigned";
+  additionalAccessId?: AdditionalAccessId;
 }
 
 /** Returns matching users in their stable dataset order. */
@@ -23,7 +27,13 @@ export function getUsers(
     (user) =>
       (options.businessId === undefined || user.businessId === options.businessId) &&
       (options.status === undefined || user.status === options.status) &&
-      (options.roleId === undefined || user.roleIds.includes(options.roleId)),
+      (options.roleId === undefined || user.roleIds.includes(options.roleId)) &&
+      (options.bankingRoleAssignment === undefined ||
+        (options.bankingRoleAssignment === "assigned"
+          ? user.roleIds.length > 0
+          : user.roleIds.length === 0)) &&
+      (options.additionalAccessId === undefined ||
+        user.additionalAccessIds.includes(options.additionalAccessId)),
   );
 }
 
@@ -32,6 +42,12 @@ export function getUserById(
   userId: UserId,
 ): User | undefined {
   return dataset.users.find(({ id }) => id === userId);
+}
+
+export function getAdditionalAccessById(
+  additionalAccessId: AdditionalAccessId,
+) {
+  return additionalAccessCatalogue.find(({ id }) => id === additionalAccessId);
 }
 
 export function getUsersWithPermission(

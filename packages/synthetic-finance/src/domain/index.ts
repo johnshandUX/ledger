@@ -1,3 +1,8 @@
+export {
+  additionalAccessCatalogue,
+  type AdditionalAccessDefinition,
+  type AdditionalAccessId,
+} from "./additional-access.js";
 export type { Account, AccountStatus, AccountType } from "./account.js";
 export type { BalanceSnapshot } from "./balance.js";
 export type { Beneficiary } from "./beneficiary.js";

@@ -41,5 +41,13 @@ if (
 if (typeof publicModule.createFinanceQueryContext !== "function") {
   throw new Error("Package root does not export the read-only finance query context.");
 }
+if (
+  publicModule.additionalAccessCatalogue?.[0]?.id !== "developer" ||
+  typeof publicModule.getAdditionalAccessById !== "function" ||
+  typeof publicModule.getRoles !== "function" ||
+  typeof publicModule.getRoleById !== "function"
+) {
+  throw new Error("Package root does not export the user classification surface.");
+}
 
 console.log("Verified package export artifacts and root import.");

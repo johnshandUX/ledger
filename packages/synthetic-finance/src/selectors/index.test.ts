@@ -15,7 +15,8 @@ import {
   getPendingPayments,
 } from "./payments.js";
 import { getTransactions } from "./transactions.js";
-import { getUsers, getUsersWithPermission } from "./users.js";
+import { getAdditionalAccessById, getUsers, getUsersWithPermission } from "./users.js";
+import { getRoleById, getRoles } from "./roles.js";
 
 function emptyDataset(): FinanceDataset {
   return {
@@ -78,18 +79,26 @@ describe("entity selectors", () => {
       { id: "permission-view", key: "accounts:view" },
     ];
     dataset.roles = [
-      { id: "role-approver", businessId: "business-1", name: "Approver", permissionIds: ["permission-approve"] },
-      { id: "role-viewer", businessId: "business-1", name: "Viewer", permissionIds: ["permission-view"] },
+      { id: "role-approver", businessId: "business-1", name: "Approver", description: "Approves payments.", permissionIds: ["permission-approve"] },
+      { id: "role-viewer", businessId: "business-1", name: "Viewer", description: "Views accounts.", permissionIds: ["permission-view"] },
     ];
     dataset.users = [
-      { id: "user-viewer", businessId: "business-1", firstName: "Vera", lastName: "Viewer", email: "vera@example.test", roleIds: ["role-viewer"], status: "active" },
-      { id: "user-approver", businessId: "business-1", firstName: "Ada", lastName: "Approver", email: "ada@example.test", roleIds: ["role-approver"], status: "active" },
+      { id: "user-viewer", businessId: "business-1", firstName: "Vera", lastName: "Viewer", email: "vera@example.test", roleIds: ["role-viewer"], additionalAccessIds: ["developer"], status: "active" },
+      { id: "user-approver", businessId: "business-1", firstName: "Ada", lastName: "Approver", email: "ada@example.test", roleIds: ["role-approver"], additionalAccessIds: [], status: "active" },
+      { id: "user-developer", businessId: "business-1", firstName: "Dev", lastName: "Only", email: "dev@example.test", roleIds: [], additionalAccessIds: ["developer"], status: "active" },
     ];
 
     expect(getUsersWithPermission(dataset, "payments:approve").map(({ id }) => id))
       .toEqual(["user-approver"]);
     expect(getUsers(dataset, { roleId: "role-viewer" }).map(({ id }) => id))
       .toEqual(["user-viewer"]);
+    expect(getUsers(dataset, { additionalAccessId: "developer" }).map(({ id }) => id))
+      .toEqual(["user-viewer", "user-developer"]);
+    expect(getUsers(dataset, { bankingRoleAssignment: "unassigned" }).map(({ id }) => id))
+      .toEqual(["user-developer"]);
+    expect(getRoles(dataset, { businessId: "business-1" })).toEqual(dataset.roles);
+    expect(getRoleById(dataset, "role-approver")?.name).toBe("Approver");
+    expect(getAdditionalAccessById("developer")?.name).toBe("Developer");
   });
 
   it("filters counterparties and beneficiaries without adding categories", () => {

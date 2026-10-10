@@ -13,6 +13,7 @@ import type {
   Transaction,
   User,
 } from "../domain/index.js";
+import { additionalAccessCatalogue } from "../domain/index.js";
 
 export interface FinanceDataset {
   businesses: Business[];
@@ -69,6 +70,9 @@ export function validateFinanceDataset(
   const users = new Map(dataset.users.map((item) => [item.id, item]));
   const roles = new Map(dataset.roles.map((item) => [item.id, item]));
   const permissions = new Set(dataset.permissions.map((item) => item.id));
+  const additionalAccessIds = new Set(
+    additionalAccessCatalogue.map(({ id }) => id as string),
+  );
   const accounts = new Map(dataset.accounts.map((item) => [item.id, item]));
   const counterparties = new Map(dataset.counterparties.map((item) => [item.id, item]));
   const beneficiaries = new Map(dataset.beneficiaries.map((item) => [item.id, item]));
@@ -148,6 +152,12 @@ export function validateFinanceDataset(
       user.businessId,
       businesses.has(user.businessId),
     );
+    if (user.roleIds.length > 1) {
+      errors.push({
+        path: `users[${index}].roleIds`,
+        message: "User must have zero or one banking role.",
+      });
+    }
     user.roleIds.forEach((roleId, roleIndex) => {
       const role = roles.get(roleId);
       const path = `users[${index}].roleIds[${roleIndex}]`;
@@ -158,6 +168,23 @@ export function validateFinanceDataset(
           message: `Role "${roleId}" belongs to Business "${role.businessId}", not "${user.businessId}".`,
         });
       }
+    });
+    const seenAdditionalAccessIds = new Set<string>();
+    user.additionalAccessIds.forEach((additionalAccessId, accessIndex) => {
+      const path = `users[${index}].additionalAccessIds[${accessIndex}]`;
+      requireReference(
+        path,
+        "Additional access",
+        additionalAccessId,
+        additionalAccessIds.has(additionalAccessId),
+      );
+      if (seenAdditionalAccessIds.has(additionalAccessId)) {
+        errors.push({
+          path,
+          message: `Duplicate additional access id "${additionalAccessId}".`,
+        });
+      }
+      seenAdditionalAccessIds.add(additionalAccessId);
     });
   });
 

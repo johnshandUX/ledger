@@ -3,9 +3,10 @@ import { CALDERMERE_BUSINESS_ID } from "./shared.js";
 
 export const caldermereRoles = [
   {
-    id: "role-finance-leadership",
+    id: "role-administrator",
     businessId: CALDERMERE_BUSINESS_ID,
-    name: "Finance Leadership",
+    name: "Administrator",
+    description: "Full banking and administrative access.",
     permissionIds: [
       "permission-accounts-view",
       "permission-transactions-view",
@@ -13,62 +14,44 @@ export const caldermereRoles = [
       "permission-payments-approve",
       "permission-beneficiaries-view",
       "permission-beneficiaries-manage",
-      "permission-administration-view",
-    ],
-  },
-  {
-    id: "role-treasury",
-    businessId: CALDERMERE_BUSINESS_ID,
-    name: "Treasury",
-    permissionIds: [
-      "permission-accounts-view",
-      "permission-transactions-view",
-      "permission-payments-create",
-      "permission-payments-approve",
-      "permission-beneficiaries-view",
-    ],
-  },
-  {
-    id: "role-payables",
-    businessId: CALDERMERE_BUSINESS_ID,
-    name: "Accounts Payable",
-    permissionIds: [
-      "permission-accounts-view",
-      "permission-transactions-view",
-      "permission-payments-create",
-      "permission-beneficiaries-view",
-      "permission-beneficiaries-manage",
-    ],
-  },
-  {
-    id: "role-receivables",
-    businessId: CALDERMERE_BUSINESS_ID,
-    name: "Accounts Receivable",
-    permissionIds: [
-      "permission-accounts-view",
-      "permission-transactions-view",
-      "permission-beneficiaries-view",
-    ],
-  },
-  {
-    id: "role-business-administration",
-    businessId: CALDERMERE_BUSINESS_ID,
-    name: "Business Administration",
-    permissionIds: [
       "permission-administration-view",
       "permission-administration-manage",
-      "permission-accounts-view",
     ],
   },
   {
-    id: "role-read-only",
+    id: "role-payment-operator",
     businessId: CALDERMERE_BUSINESS_ID,
-    name: "Viewer / Auditor",
+    name: "Payment operator",
+    description: "Creates and manages payments.",
+    permissionIds: [
+      "permission-accounts-view",
+      "permission-transactions-view",
+      "permission-payments-create",
+      "permission-beneficiaries-view",
+      "permission-beneficiaries-manage",
+    ],
+  },
+  {
+    id: "role-payment-approver",
+    businessId: CALDERMERE_BUSINESS_ID,
+    name: "Payment approver",
+    description: "Reviews and authorises payments.",
+    permissionIds: [
+      "permission-accounts-view",
+      "permission-transactions-view",
+      "permission-payments-approve",
+      "permission-beneficiaries-view",
+    ],
+  },
+  {
+    id: "role-viewer",
+    businessId: CALDERMERE_BUSINESS_ID,
+    name: "Viewer",
+    description: "Views financial information.",
     permissionIds: [
       "permission-accounts-view",
       "permission-transactions-view",
       "permission-beneficiaries-view",
-      "permission-administration-view",
     ],
   },
 ] satisfies Role[];

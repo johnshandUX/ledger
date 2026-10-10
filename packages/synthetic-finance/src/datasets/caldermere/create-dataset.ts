@@ -79,7 +79,11 @@ function cloneFinanceDataset(dataset: FinanceDataset): FinanceDataset {
       legalEntityIds: [...business.legalEntityIds],
     })),
     legalEntities: dataset.legalEntities.map((entity) => ({ ...entity })),
-    users: dataset.users.map((user) => ({ ...user, roleIds: [...user.roleIds] })),
+    users: dataset.users.map((user) => ({
+      ...user,
+      roleIds: [...user.roleIds],
+      additionalAccessIds: [...user.additionalAccessIds],
+    })),
     roles: dataset.roles.map((role) => ({
       ...role,
       permissionIds: [...role.permissionIds],
