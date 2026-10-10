@@ -20,6 +20,16 @@ export type DropdownMenuItemProps = ComponentProps<typeof DropdownMenuPrimitive.
 export function DropdownMenuItem({ className, intent = "default", ...props }: DropdownMenuItemProps) {
   return <DropdownMenuPrimitive.Item data-slot="dropdown-menu-item" data-intent={intent} className={cn("ledger-dropdown-menu__item", className)} {...props} />;
 }
+export function DropdownMenuRadioGroup(props: ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
+  return <DropdownMenuPrimitive.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />;
+}
+export type DropdownMenuRadioItemProps = ComponentProps<typeof DropdownMenuPrimitive.RadioItem>;
+export function DropdownMenuRadioItem({ children, className, ...props }: DropdownMenuRadioItemProps) {
+  return <DropdownMenuPrimitive.RadioItem data-slot="dropdown-menu-radio-item" className={cn("ledger-dropdown-menu__item", className)} {...props}>
+    <DropdownMenuPrimitive.ItemIndicator className="ledger-dropdown-menu__indicator">✓</DropdownMenuPrimitive.ItemIndicator>
+    <span>{children}</span>
+  </DropdownMenuPrimitive.RadioItem>;
+}
 export function DropdownMenuSeparator({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
   return <DropdownMenuPrimitive.Separator data-slot="dropdown-menu-separator" className={cn("ledger-dropdown-menu__separator", className)} {...props} />;
 }

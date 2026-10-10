@@ -31,6 +31,7 @@ export default defineConfig({
         examples: resolve("src/examples.ts"),
         progress: resolve("src/progress.ts"),
         avatar: resolve("src/avatar.ts"),
+        "application-navigation": resolve("src/application-navigation.ts"),
       },
       formats: ["es", "cjs"],
       fileName: (format, entryName) => format === "es" ? `${entryName}.js` : entryName === "ledger-design-system" ? "ledger-design-system.umd.cjs" : `${entryName}.cjs`,

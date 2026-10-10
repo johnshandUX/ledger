@@ -23,6 +23,7 @@ import "./components/Alert/Alert.css";
 import "./components/Card/Card.css";
 import "./components/Progress/Progress.css";
 import "./components/Avatar/Avatar.css";
+import "./components/ApplicationNavigation/ApplicationNavigation.css";
 
 export * from "./components/Button/Button";
 export * from "./components/FormField/FormField";

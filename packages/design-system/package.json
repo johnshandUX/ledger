@@ -155,6 +155,12 @@
       "require": "./dist/avatar.cjs",
       "default": "./dist/avatar.js"
     },
+    "./application-navigation": {
+      "types": "./dist/application-navigation.d.ts",
+      "import": "./dist/application-navigation.js",
+      "require": "./dist/application-navigation.cjs",
+      "default": "./dist/application-navigation.js"
+    },
     "./styles.css": "./dist/ledger-design-system.css"
   },
   "exportsIgnore": [],

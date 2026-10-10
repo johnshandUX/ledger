@@ -17,4 +17,5 @@
 @import "../components/Card/Card.css";
 @import "../components/Progress/Progress.css";
 @import "../components/Avatar/Avatar.css";
+@import "../components/ApplicationNavigation/ApplicationNavigation.css";
 @import "../examples/componentExamples.css";

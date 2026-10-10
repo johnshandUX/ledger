@@ -43,6 +43,7 @@ const implementedComponents = [
   ["Card", "card", "Published", "Core", "root", "Groups related content on a structured surface.", "Header, body and footer composition with no clickable or visual variants.", "needs-update"],
   ["Progress", "progress", "Published", "Core", "./progress", "Communicates measurable or indeterminate operation progress.", "Radix-backed, explicitly named progress with bounded determinate values or a null indeterminate state.", "not-created"],
   ["Avatar", "avatar", "Published", "Core", "./avatar", "Represents a person or organisation with resilient fallback text.", "Radix-backed image loading and fallback with three explicit sizes.", "not-created"],
+  ["ApplicationNavigation", "application-navigation", "Published", "Core Pattern", "./application-navigation", "Composes a responsive application shell and product-agnostic navigation.", "Open or closed inline navigation, modal small-screen navigation, semantic links and groups, organisation switching and personal context.", "not-created"],
 ] as const;
 
 const plannedComponents = [
@@ -50,8 +51,6 @@ const plannedComponents = [
   ["Breadcrumb", "breadcrumb", "Core", "Shows the current location in a hierarchy."],
   ["Pagination", "pagination", "Core", "Moves through a paged collection."],
   ["Collapsible", "collapsible", "Core", "Reveals or hides a section of content."],
-  ["Sidebar", "sidebar", "Core Pattern", "Composes fully expanded or fully closed application navigation."],
-  ["MobileNavigationOverlay", "mobile-navigation-overlay", "Core Pattern", "Presents application navigation in a dedicated small-screen overlay composition."],
   ["EmptyState", "empty-state", "Core", "Explains an empty collection or absent result."],
   ["ToastRegion", "toast-region", "Core", "Presents transient application feedback."],
   ["VisuallyHidden", "visually-hidden", "Core", "Keeps content available to assistive technology without visual display."],

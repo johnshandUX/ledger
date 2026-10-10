@@ -24,3 +24,12 @@ test("marks shared examples as client-aware in source and published output", asy
   assert.match(sourceEntry, /^"use client";/);
   assert.match(builtEntry, /^"use client";/);
 });
+
+test("keeps Application Navigation behind its dedicated client entry", async () => {
+  const rootEntry = await readFile(new URL("./index.ts", import.meta.url), "utf8");
+  const clientEntry = await readFile(new URL("./application-navigation.ts", import.meta.url), "utf8");
+  const builtEntry = await readFile(new URL("../dist/application-navigation.js", import.meta.url), "utf8");
+  assert.doesNotMatch(rootEntry, /export \* from ["'](?:\.\/components\/ApplicationNavigation|\.\/application-navigation)/);
+  assert.match(clientEntry, /^"use client";/);
+  assert.match(builtEntry, /^"use client";/);
+});
