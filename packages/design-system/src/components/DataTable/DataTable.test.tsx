@@ -50,6 +50,15 @@ describe("DataTable", () => {
     expect(html).not.toContain('aria-label="Previous page"');
   });
 
+  it("uses an optional item label to give visible and announced counts domain context", () => {
+    const rows = Array.from({ length: 12 }, (_, index) => ({ id: String(index), name: `Account ${index}` }));
+    const html = renderToStaticMarkup(
+      <DataTable caption="Accounts" rows={rows} columns={columns} getRowId={row => row.id} itemLabel={{ singular: "account", plural: "accounts" }} />,
+    );
+    expect(html).toContain("1–10 of 12 accounts");
+    expect(html).toContain("Showing 1–10 of 12 accounts");
+  });
+
   it("uses Ledger sort and direction icons", () => {
     const unsorted = renderToStaticMarkup(<DataTable caption="People" rows={[{ id: "1", name: "Ada" }]} columns={columns} getRowId={row => row.id} />);
     const sorted = renderToStaticMarkup(<DataTable caption="People" rows={[{ id: "1", name: "Ada" }]} columns={columns} getRowId={row => row.id} defaultState={{ sort: { columnId: "name", direction: "ascending" } }} />);

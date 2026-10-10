@@ -13,6 +13,12 @@ describe("accounts overview", () => {
     expect(html).toContain('id="search-accounts"');
   });
 
+  it("links the Make a payment action to the payment journey", () => {
+    const html = renderToStaticMarkup(<Home />);
+    expect(html).toContain('href="/payments/new"');
+    expect(html).toContain("Make a payment");
+  });
+
   it("keeps passive mobile account articles out of the tab order", () => {
     const html = renderToStaticMarkup(<Home />);
     const accountArticles = html.match(/<article\b[^>]*class="[^"]*\bacc-card\b[^"]*"[^>]*>/g);
@@ -29,6 +35,7 @@ describe("accounts overview", () => {
     expect(html).toContain("Sort by Available balance");
     expect(html).toContain("Sort accounts by");
     expect(html).toContain('class="accounts-table"');
+    expect(html).toContain("accounts");
   });
 
   it("derives the responsive account order from the shared controlled row model", () => {

@@ -3,6 +3,8 @@ import type {
   AccountId,
   BalanceSnapshot,
   BalanceSnapshotId,
+  Beneficiary,
+  BeneficiaryId,
   DeepReadonly,
   Payment,
   PaymentApproval,
@@ -36,6 +38,19 @@ export function selectEffectiveBalances(
   source: EffectiveCollectionSource<BalanceSnapshot>,
 ): readonly DeepReadonly<BalanceSnapshot>[] {
   return resolveEffectiveCollection(source.baseline, source.overlay);
+}
+
+export function selectEffectiveBeneficiaries(
+  source: EffectiveCollectionSource<Beneficiary>,
+): readonly DeepReadonly<Beneficiary>[] {
+  return resolveEffectiveCollection(source.baseline, source.overlay);
+}
+
+export function selectEffectiveBeneficiaryById(
+  source: EffectiveCollectionSource<Beneficiary>,
+  beneficiaryId: BeneficiaryId,
+): DeepReadonly<Beneficiary> | undefined {
+  return resolveEffectiveRecord(source.baseline, source.overlay, beneficiaryId);
 }
 
 export function selectEffectiveBalanceById(

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type {
   AccountId,
   BalanceSnapshotId,
+  BeneficiaryId,
   PaymentApprovalId,
   PaymentId,
   UserId,
@@ -13,6 +14,8 @@ import {
   selectEffectiveAccounts,
   selectEffectiveBalanceById,
   selectEffectiveBalances,
+  selectEffectiveBeneficiaries,
+  selectEffectiveBeneficiaryById,
   selectEffectivePaymentApprovalById,
   selectEffectivePaymentApprovals,
   selectEffectivePaymentById,
@@ -46,6 +49,25 @@ export function useEffectiveBalances() {
   return useMemo(
     () => selectEffectiveBalances({ baseline: baseline.balances, overlay: overlay.balances }),
     [baseline.balances, overlay.balances],
+  );
+}
+
+export function useEffectiveBeneficiaries() {
+  const { baseline, overlay } = useBankState();
+  return useMemo(
+    () => selectEffectiveBeneficiaries({ baseline: baseline.beneficiaries, overlay: overlay.beneficiaries }),
+    [baseline.beneficiaries, overlay.beneficiaries],
+  );
+}
+
+export function useEffectiveBeneficiaryById(beneficiaryId: BeneficiaryId) {
+  const { baseline, overlay } = useBankState();
+  return useMemo(
+    () => selectEffectiveBeneficiaryById(
+      { baseline: baseline.beneficiaries, overlay: overlay.beneficiaries },
+      beneficiaryId,
+    ),
+    [baseline.beneficiaries, beneficiaryId, overlay.beneficiaries],
   );
 }
 

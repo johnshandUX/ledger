@@ -55,6 +55,11 @@ export interface DataTableStateContent {
   action?: ReactNode;
 }
 
+export interface DataTableItemLabel {
+  singular: string;
+  plural: string;
+}
+
 export interface DataTableUncontrolledStateProps<TFilterId extends string = string> {
   state?: never;
   defaultState?: Partial<DataTableState<TFilterId>>;
@@ -86,6 +91,8 @@ export interface DataTableCommonProps<TData> {
   density?: DataTableDensity;
   rowTreatment?: DataTableRowTreatment;
   pageSizeOptions?: readonly number[];
+  /** Noun used to give visible and announced result counts domain context. */
+  itemLabel?: DataTableItemLabel;
   status?: DataTableStatus;
   loadingLabel?: string;
   emptyState?: DataTableStateContent;

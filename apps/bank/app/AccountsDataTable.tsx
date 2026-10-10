@@ -84,6 +84,7 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
           columns={accountColumns}
           getRowId={account => account.id}
           pageSizeOptions={accountPageSizeOptions}
+          itemLabel={{ singular: "account", plural: "accounts" }}
           state={state}
           onStateChange={setState}
           emptyState={{ title: "No accounts to display" }}

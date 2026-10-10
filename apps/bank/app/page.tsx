@@ -1,4 +1,5 @@
-import { Button, Input } from "@johnshandux/ledger-design-system";
+import Link from "next/link";
+import { Input } from "@johnshandux/ledger-design-system";
 import "./accounts.css";
 import { getBankAccountOverview } from "../src/finance/accounts";
 import { formatMinorCurrencyAmount } from "../src/presentation/money";
@@ -24,7 +25,9 @@ export default function Home() {
               placeholder="Search accounts"
               type="search"
             />
-            <Button className="primary-action">Make a payment</Button>
+            {process.env.NODE_ENV !== "production" && (
+              <Link className="ledger-button ledger-button--primary primary-action" href="/payments/new">Make a payment</Link>
+            )}
           </div>
         </div>
 

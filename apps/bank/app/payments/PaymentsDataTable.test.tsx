@@ -14,7 +14,9 @@ describe("PaymentsDataTable", () => {
     expect(html).toContain("£12,504.00");
     expect(html).toContain("Awaiting approval");
     expect(html).toContain('href="/payments/payment-awaiting-01"');
-    expect(html.match(/APX-10482/g)).toHaveLength(2);
+    expect(html).toContain('aria-label="View details for payment APX-10482"');
+    expect(html).toContain("View details");
+    expect(html.match(/>APX-10482</g)).toHaveLength(2);
   });
   it("sorts through the shared row model", () => {
     const model = createPaymentsPresentationRowModel(payments, { query: "", filters: {}, pageIndex: 0, pageSize: 20, sort: { columnId: "amount", direction: "descending" } });

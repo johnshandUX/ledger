@@ -17,6 +17,14 @@ export default defineConfig({
         replacement: resolve(__dirname, "../../packages/design-system/src/appearance-toggle.ts"),
       },
       {
+        find: "@johnshandux/ledger-design-system/dialog",
+        replacement: resolve(__dirname, "../../packages/design-system/src/dialog.ts"),
+      },
+      {
+        find: "@johnshandux/ledger-design-system/icons",
+        replacement: resolve(__dirname, "../../packages/design-system/src/icons.ts"),
+      },
+      {
         find: "@johnshandux/ledger-design-system",
         replacement: resolve(__dirname, "../../packages/design-system/src/index.ts"),
       },

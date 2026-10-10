@@ -18,6 +18,12 @@ Synthetic Finance defines `Payment` with a source account, beneficiary, integer 
 
 Payments refer to a business, source account, beneficiary and creating user. Accounts have business, legal-entity, currency and status relationships. Balance snapshots provide ledger and available balances for an account and currency. No reservation, hold or scheduled-execution entity exists.
 
+For Ledger Bank product language, one Synthetic Finance `Beneficiary` represents one saved **Recipient** payment-destination bank account. Its stable `BeneficiaryId`, display name and bank account fields are sufficient for the approved recipient model. Identical names may occur on separate records with different accounts. No separate Contact, person, organisation, supplier or recipient-to-multiple-destinations entity is required.
+
+Future recipient groups are optional Bank-owned collections of stable recipient IDs. Membership is many-to-many: a recipient may belong to zero, one or multiple groups and remains independently available in the complete directory. Removing membership never deletes the recipient. Groups do not store amounts and are not payment templates. Group creation and management remain a separate future capability and do not change the minimum payment-submission operation described here.
+
+A future Recipients Manager must preserve historical payment information after a recipient is edited or removed. The current `Payment` contract stores `beneficiaryId` rather than a recipient snapshot, so that future capability requires an explicit history-preservation decision—such as immutable versioning, tombstoning or payment-time presentation snapshots—before implementation. This handoff does not choose that mechanism or change the current payment contract.
+
 ### Existing validation
 
 `validateFinanceDataset()` provides dataset-level referential checks: unique identifiers, safe-integer monetary values, existing business/account/beneficiary/user relationships, matching business ownership, matching account and beneficiary currency, and valid payment/approval references. It does not validate positive amounts, account eligibility, available funds, permissions, duplicate submissions, execution dates, approval policy, status/date coherence or lifecycle transitions.
@@ -29,7 +35,7 @@ Payments refer to a business, source account, beneficiary and creating user. Acc
 - `PaymentsDataTable` is a Client Component for table sorting and responsive presentation only. It receives server-produced rows and does not read application state.
 - The Bank home/accounts overview shows a “Make a payment” button, but there is no payment form, submission route, confirmation journey or mutation handler.
 - Payment and approval summaries use Synthetic Finance calculations over the baseline `FinanceDataset`.
-- Effective-state selectors and hooks now exist for payments, approvals, accounts, balances and users. Beneficiaries remain immutable baseline records, which is sufficient until beneficiary management becomes a feature.
+- Effective-state selectors and hooks now exist for payments, approvals, accounts, balances and users. Beneficiaries remain immutable baseline recipient records, which is sufficient until the approved add-recipient loop or Recipients Manager becomes an implementation feature.
 
 Consequently, a created ephemeral payment cannot yet appear in the overview or detail journey. Server Components cannot observe the client overlay, and the detail route currently rejects identifiers that exist only in that overlay.
 
@@ -54,11 +60,22 @@ type PaymentOperationContext = Readonly<{
 }>;
 ```
 
-`submitPaymentInstruction(command, effectiveState, context, dependencies)` validates the complete command and returns either typed domain errors or one atomic application-state action containing the payment and any required approval records. It never dispatches sequential deltas and never changes balances or creates a transaction.
+`submitPaymentInstruction(command, effectiveState, context, dependencies)` authorises the acting user, validates the complete command and returns either typed domain errors or one atomic application-state action containing the payment. It never dispatches sequential deltas, creates approval records, changes balances, reserves funds or creates a transaction.
 
-`context` is trusted application context rather than form input and supplies the acting business and user. The operation derives `businessId` and `createdByUserId` from that context before checking permissions. Ledger Bank has no authentication today, so product implementation must first approve whether the trusted actor is the fixed Amelia Hart demo identity or a future simulated user-selection mechanism; form callers must never choose an arbitrary actor identifier.
+`context` is trusted application context rather than form input and supplies the acting business and user. The operation derives `businessId` and `createdByUserId` from that context before checking permissions. Form callers must never choose an arbitrary actor identifier.
 
-The operation receives explicit dependencies for the current instant, business date and approval policy. Identifiers are supplied deterministically: `paymentId` is a unique submission identifier, while any approval identifiers come from an injected deterministic identifier source. The proposed minimum behavior is duplicate rejection: if the identifier already exists in effective payments, the operation returns a typed `duplicate-payment-id` error and makes no change. It does not report an existing record as a successful replay. A genuinely separate payment with a new identifier but identical commercial details may still be valid.
+### Payments 1A acting administrator
+
+Payments 1A uses the existing configured Ledger Bank demo identity, Amelia Hart (`user-amelia-hart`), as the only independently authorised submitter:
+
+- Amelia is an active user belonging to `business-caldermere`.
+- Her existing role is `role-finance-leadership` (`Finance Leadership`).
+- That role includes `permission-payments-create` (`payments:create`) and `permission-payments-approve` (`payments:approve`), as well as `permission-administration-view`.
+- Ledger Bank already identifies her explicitly through `BANK_DEMO_USER_ID`; the operation must accept or resolve that trusted identity rather than select the first user or infer authority from collection order.
+
+The Synthetic Finance data does not contain an “administrator” flag or an independent-submission policy. Amelia's permission to create payments is grounded in the existing role relationship; her authority to submit without secondary approval is the approved Payments 1A product policy and applies only when `actorUserId === "user-amelia-hart"`. The `Business Administration` role name is not a substitute for this policy: its existing users do not have `payments:create`.
+
+The operation receives explicit dependencies for the current instant, business date and payment-authorisation policy. The `paymentId` is supplied as a deterministic unique submission identifier. The proposed minimum behavior is duplicate rejection: if the identifier already exists in effective payments, the operation returns a typed `duplicate-payment-id` error and makes no change. It does not report an existing record as a successful replay. A genuinely separate payment with a new identifier but identical commercial details may still be valid.
 
 No separate `createDraft`, `approve`, `reject`, `cancel` or `execute` command is required until an approved product journey needs it.
 
@@ -68,35 +85,38 @@ The submit operation should accumulate field/domain errors without changing stat
 
 1. The payment identifier does not already exist in effective payments.
 2. The business, creator, source account and beneficiary exist and belong to the same business.
-3. The trusted context actor is active, belongs to the context business and has `payments:create` through an effective role/permission relationship.
+3. The trusted context actor resolves to `user-amelia-hart`, is active, belongs to the context business and has `payments:create` through the effective `role-finance-leadership` relationship. A missing, inactive, cross-business, unpermitted or differently identified actor is rejected with a structured authorisation error and no state change.
 4. The source account is active and eligible for outgoing payments; closed accounts are rejected. Treatment of restricted accounts requires product approval.
 5. Amount is a positive safe integer in minor units.
 6. Currency matches both source account and beneficiary.
 7. The latest effective balance snapshot at or before the dependency’s explicit current instant exists, matches the account currency and has sufficient available funds. Snapshot selection sorts by `asOf` deterministically and ignores future snapshots.
 8. Reference is trimmed, non-empty and within an approved length.
 9. A scheduled date is a valid ISO date and is later than the explicit business date; same-day instructions use `immediate`.
-10. Any approval records reference active, permitted approvers in the same business and follow the approved self-approval rule.
 
 The existing dataset validator can remain a supporting invariant check in tests, but it is not the command validator and should not be made responsible for application workflow.
+
+Authorisation is evaluated separately from instruction validation. The initial policy can remain a small explicit function or dependency that answers whether this actor may submit this instruction independently. It should return an authorisation outcome such as `independent-submission` or a structured error such as `actor-not-found`, `actor-inactive`, `actor-business-mismatch`, `payment-create-not-permitted` or `independent-submission-not-authorised`. Amount, account, balance, currency, beneficiary, reference and execution-date validation remains unchanged and must not be used as a proxy for authorisation.
+
+This policy boundary is the extension point for later business rules. A future approved capability may return `approval-required` with its required approver policy instead, but Payments 1A needs only the independently authorised outcome for Amelia and a rejected outcome for every other actor. It does not require a generic policy engine, threshold framework or new approval infrastructure.
 
 ## Submission and lifecycle semantics
 
 Submission records an instruction; it does not mean settlement or execution.
 
-- If approval is required, create the payment as `awaiting-approval`, retain any future `scheduledFor` date, and create all required pending approval records atomically.
-- If approval is not required and execution is future-dated, create it as `scheduled`.
-- If approval is not required and execution is immediate, create it as `processing`.
+- For the authorised Payments 1A administrator, a future-dated instruction is created as `scheduled`.
+- For the authorised Payments 1A administrator, an immediate instruction is created as `processing`.
+- No monetary approval threshold applies, no secondary approver is required and no pending approval action is created.
 - Never create a submitted instruction directly as `completed`.
-- Do not create a transaction or change ledger/available balances in this first increment. Those effects belong to a separately defined execution capability or an explicitly approved reservation model.
+- Do not create a transaction, change ledger/available balances or reserve funds in this first increment. Those effects belong to a separately defined execution capability or an explicitly approved reservation model.
 - A scheduled instruction is represented accurately but is not executed by a background job under EDS-001.
+
+The existing `PaymentApproval` model, approval selectors, calculations and historical Caldermere approval records remain unchanged. The no-secondary-approval rule applies only to new Payments 1A submissions by Amelia; it does not reinterpret or simplify existing `awaiting-approval` payments.
 
 A successful result should expose the payment identifier, reference, status and scheduled date where applicable so the product can show a deterministic confirmation and link to detail. A rejected result contains typed, presentable error codes without partial overlay changes.
 
 ## Atomic state transition
 
-The Phase 1 reducer currently accepts a single collection delta. Before payment submission can create both a payment and approvals, application-state infrastructure needs one batch/transaction action that applies a prevalidated readonly list of typed deltas in one reducer call. The named domain operation—not the feature component—constructs this action. Reducer tests must prove that consumers never observe an intermediate payment-without-approvals state.
-
-The batch mechanism is shared infrastructure justified by this first real multi-record operation. It must not become a generic finance workflow engine or perform domain validation itself.
+Payments 1A creates one payment record and no approval records, transactions, balance updates or reservations. The existing single-collection overlay action is therefore sufficient for its atomic transition: the named operation validates and authorises first, then returns one payment creation action, or returns errors and no action. A shared batch/transaction action is not required for this increment. Future approval-required operations may justify one when they have an approved multi-record transition.
 
 ## Effective-state integration
 
@@ -120,11 +140,11 @@ Resolve the decisions below and write the submission contract and examples befor
 
 ### 2. Add operation and atomic action contracts
 
-Define the typed command, dependency interfaces, domain result/error union and the reducer’s single-dispatch batch action. Keep all validation and operation code in framework-independent Bank modules.
+Define the typed command, dependency interfaces, domain result/error union and the single payment-creation overlay action. Keep all validation and operation code in framework-independent Bank modules.
 
 ### 3. Implement submission domain tests
 
-Cover successful immediate, scheduled and approval-required outcomes; every validation failure; typed repeat-submission rejection; baseline immutability; deterministic clock/IDs; and all-or-none payment/approval creation.
+Cover successful immediate and scheduled outcomes for Amelia; authorisation rejection for every other actor; every validation failure; typed repeat-submission rejection; baseline immutability; deterministic clock/IDs; and proof that no approval, transaction, balance or reservation record is created.
 
 ### 4. Add effective Payments read models
 
@@ -140,23 +160,20 @@ Test valid and invalid submission, double-submit protection, atomic state, overv
 
 ## Required test coverage
 
-- **Unit:** command validation, policy outcomes, status selection, deterministic identifiers/times, duplicate payment ID, shallow domain errors and no input mutation.
-- **Reducer:** one batch transition, immutable collection updates, reset, and no intermediate observable state.
+- **Unit:** independent authorisation and instruction validation; exact Amelia identity, business, active status and `payments:create` permission; unauthorised actor outcomes; immediate/scheduled status selection; deterministic identifiers/times; duplicate payment ID; shallow domain errors; and no input mutation.
+- **Reducer:** one payment creation transition, immutable collection updates, reset, and no approval, transaction, balance or reservation deltas.
 - **Integration:** form invokes the named operation; valid results update overview, summaries and detail; invalid results leave effective state unchanged; unrelated collections retain references where possible.
 - **Browser:** submit immediate and scheduled examples, prevent repeat submission, navigate overview → detail while retaining the record, reload to baseline, and verify a separate context starts from baseline with no console/hydration errors.
 - **Architecture audits:** original Synthetic Finance records remain deeply equal, feature code does not dispatch raw overlay deltas, and no storage/API persistence is introduced.
 
 ## Product decisions requiring approval
 
-1. **Acting identity:** Approve the trusted actor source. The minimum demo recommendation is the configured Amelia Hart identity supplied by application context, never by form input; a user switcher would be a separate product capability.
-2. **Approval policy:** Which amounts, accounts or users require approval; how many approvals; which roles qualify; and whether the creator may approve. Existing fixtures demonstrate approvals but do not define the rule.
-3. **Initial lifecycle status:** Approve the proposed submission mapping: approval-required → `awaiting-approval`, future without approval → `scheduled`, and immediate without approval → `processing`. Submission never means `completed`.
-4. **Restricted accounts:** Whether outgoing payment submission is prohibited or conditionally allowed.
-5. **Funds treatment:** Confirm that submission checks the latest effective balance at or before the explicit current instant but does not reserve or deduct funds. If reservations are required, define their representation and effect on available balance first.
-6. **Duplicate semantics:** Approve typed rejection of an existing `paymentId` as the minimum repeat-submission protection while allowing intentionally repeated commercial details under a new ID. True idempotent replay or fingerprint/time-window blocking would require a different result/storage contract.
-7. **Reference contract:** Maximum length and permitted characters.
-8. **Scheduling:** Confirm that today means immediate and future dates mean scheduled; define weekends/holidays only if the product needs them.
-9. **Initial UX scope:** Confirm whether the first feature submits directly or also needs save-draft, review and edit steps. The minimum recommendation is direct submission with review-before-submit in the form, not a persistent draft operation.
-10. **Confirmation:** Approve the confirmation content and destination—recommended: reference, amount, beneficiary, status, execution date and a link to the effective detail route.
+The acting identity and initial approval policy are approved: Amelia Hart (`user-amelia-hart`) is the sole Payments 1A independently authorised submitter; immediate payments enter `processing`; future-dated payments enter `scheduled`; and the operation creates no approval actions, transactions, balance deductions or fund reservations.
+
+1. **Restricted accounts:** Whether outgoing payment submission is prohibited or conditionally allowed.
+2. **Duplicate semantics:** Approve typed rejection of an existing `paymentId` as the minimum repeat-submission protection while allowing intentionally repeated commercial details under a new ID. True idempotent replay or fingerprint/time-window blocking would require a different result/storage contract.
+3. **Reference contract:** Maximum length and permitted characters.
+4. **Scheduling:** Confirm that today means immediate and future dates mean scheduled; define weekends/holidays only if the product needs them.
+5. **Confirmation:** Approve the confirmation content and destination—recommended: reference, amount, recipient, status, execution date and a link to the effective detail route.
 
 Approval/rejection, cancellation, execution, transaction creation and balance booking should each be proposed as later named operations only when an approved product journey requires them.

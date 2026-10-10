@@ -77,8 +77,8 @@ function getResultText(pageIndex: number, pageSize: number, resultCount: number)
   return `${start}–${end} of ${resultCount}`;
 }
 
-function getResultAnnouncement(resultText: string) {
-  return `Showing ${resultText} ${resultText === "1" ? "result" : "results"}`;
+function getResultAnnouncement(resultText: string, resultCount: number, itemLabel: { singular: string; plural: string }) {
+  return `Showing ${resultText} ${resultCount === 1 ? itemLabel.singular : itemLabel.plural}`;
 }
 
 type PaginationItem = number | "ellipsis-start" | "ellipsis-end";
@@ -104,6 +104,7 @@ export function DataTable<TData, TFilterId extends string = string>({
   density = "comfortable",
   rowTreatment = "plain",
   pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+  itemLabel = { singular: "result", plural: "results" },
   status = "ready",
   loadingLabel = "Loading data",
   emptyState = { title: "No data to display" },
@@ -172,7 +173,9 @@ export function DataTable<TData, TFilterId extends string = string>({
   const isEmpty = status === "ready" && rows.length === 0;
   const showsState = status !== "ready" || isEmpty;
   const resultText = getResultText(effectiveState.pageIndex, effectiveState.pageSize, rowModel.resultRowCount);
-  const resultAnnouncement = getResultAnnouncement(resultText);
+  const itemNoun = rowModel.resultRowCount === 1 ? itemLabel.singular : itemLabel.plural;
+  const resultAnnouncement = getResultAnnouncement(resultText, rowModel.resultRowCount, itemLabel);
+  const visibleResultText = `${resultText} ${itemNoun}`;
   const paginationItems = getPaginationItems(effectiveState.pageIndex, rowModel.pageCount);
   const hasEffectivePageSizeChoice = pageSizeOptions.some((pageSize) => pageSize < rowModel.resultRowCount);
 
@@ -287,7 +290,7 @@ export function DataTable<TData, TFilterId extends string = string>({
                     className="ledger-data-table__range-trigger"
                     aria-label={`${resultAnnouncement}. Change rows per page`}
                   >
-                    <span>{resultText}</span>
+                    <span>{visibleResultText}</span>
                     <Icon name="chevron-down" size="small" />
                   </button>
                 </DropdownMenuTrigger>
@@ -307,7 +310,7 @@ export function DataTable<TData, TFilterId extends string = string>({
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : <span className="ledger-data-table__result-count" aria-hidden="true">{resultText}</span>}
+            ) : <span className="ledger-data-table__result-count" aria-hidden="true">{visibleResultText}</span>}
             {rowModel.pageCount > 1 && (
               <>
                 {effectiveState.pageIndex > 0 && (

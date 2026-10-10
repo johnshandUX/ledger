@@ -38,25 +38,25 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Foundation: Story = {
-  args: { caption: "Accounts", rows: accounts, columns, getRowId: row => row.id },
+  args: { caption: "Accounts", rows: accounts, columns, getRowId: row => row.id, itemLabel: { singular: "account", plural: "accounts" } },
   render: args => <DataTable {...args} pageSizeOptions={[10, 20, 50]} />,
 };
 
 export const PaginationInteraction: Story = {
-  args: { caption: "Interactive accounts", rows: accounts, columns, getRowId: row => row.id },
+  args: { caption: "Interactive accounts", rows: accounts, columns, getRowId: row => row.id, itemLabel: { singular: "account", plural: "accounts" } },
   render: args => <DataTable {...args} pageSizeOptions={[10, 20, 50]} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const sort = canvas.getByRole("button", { name: "Sort by Available balance" });
     await userEvent.click(sort);
     expect(sort).toHaveAccessibleName("Sort by Available balance, currently descending");
-    expect(canvas.getByText("1–10 of 23")).toBeVisible();
+    expect(canvas.getByText("1–10 of 23 accounts")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Previous page" })).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: /Showing 1–10 of 23 results. Change rows per page/ }));
+    await userEvent.click(canvas.getByRole("button", { name: /Showing 1–10 of 23 accounts. Change rows per page/ }));
     const body = within(canvasElement.ownerDocument.body);
     expect(await body.findByRole("menuitemradio", { name: "Show 10 results per page" })).toHaveAttribute("aria-checked", "true");
     await userEvent.click(body.getByRole("menuitemradio", { name: "Show 20 results per page" }));
-    expect(canvas.getByText("1–20 of 23")).toBeVisible();
+    expect(canvas.getByText("1–20 of 23 accounts")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next page" }));
     expect(canvas.getByRole("button", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
     await userEvent.click(sort);

@@ -91,6 +91,7 @@ in `DataTable.types.ts`. The implemented component accepts:
 - `comfortable` or `compact` density
 - `plain` or `zebra` row treatment
 - ascending, duplicate-free page-size options
+- optional singular and plural `itemLabel` copy for domain-contextual result counts
 - `ready`, `loading`, `no-results` and `error` presentation
 - consumer-supplied loading, empty, no-results and error content
 
@@ -405,7 +406,8 @@ DataTable uses zero-based `pageIndex` in state and presents one-based page numbe
 - When row or count changes make a page invalid, DataTable clamps to the final valid page.
 - Pagination controls are omitted when there is only one page, but result count remains available.
 - Page navigation changes the table rows without moving focus into the table body automatically.
-- The visible result range is a link-like menu trigger. It omits a redundant `results` suffix. Its
+- The visible result range is a link-like menu trigger. It uses the optional `itemLabel` noun,
+  defaulting to `result`/`results`, so consumers can present context such as `1–10 of 200 accounts`. Its
   menu lists the configured page sizes as `{size} results`; choosing one applies the page size and
   returns to the first page. Options use
   radio-menu semantics so the current page size is exposed programmatically. When no configured
@@ -415,8 +417,8 @@ DataTable uses zero-based `pageIndex` in state and presents one-based page numbe
   page numbers are direct controls; large page sets use non-interactive ellipses.
 - The current page uses `aria-current="page"` and a visual selected treatment.
 - Result changes are announced through a dedicated status region outside the page-size trigger.
-  The compact visible range omits `results`, but the status announcement and accessible control
-  names retain the noun so the quantities have context for screen-reader users.
+  The visible range, status announcement and accessible control names use the same item noun so
+  the quantities retain context for all users.
 
 Result text uses three distinct quantities: total rows before search/filter, matching rows after
 search/filter, and the one-based range on the visible page. Canonical forms are:

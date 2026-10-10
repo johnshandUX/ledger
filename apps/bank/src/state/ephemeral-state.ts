@@ -1,6 +1,7 @@
 import type {
   Account,
   BalanceSnapshot,
+  Beneficiary,
   DeepReadonly,
   FinanceDataset,
   Payment,
@@ -22,6 +23,7 @@ export type EntityOverlay<Entity extends { id: string }> = Readonly<{
 export type FinanceOverlay = Readonly<{
   accounts: EntityOverlay<Account>;
   balances: EntityOverlay<BalanceSnapshot>;
+  beneficiaries: EntityOverlay<Beneficiary>;
   payments: EntityOverlay<Payment>;
   paymentApprovals: EntityOverlay<PaymentApproval>;
   users: EntityOverlay<User>;
@@ -32,6 +34,7 @@ export type FinanceOverlayCollection = keyof FinanceOverlay;
 type OverlayEntityMap = {
   accounts: Account;
   balances: BalanceSnapshot;
+  beneficiaries: Beneficiary;
   payments: Payment;
   paymentApprovals: PaymentApproval;
   users: User;
@@ -56,6 +59,7 @@ export type BankEphemeralState = Readonly<{
 
 export type BankEphemeralAction =
   | Readonly<{ type: "apply-overlay-delta"; delta: FinanceOverlayDelta }>
+  | Readonly<{ type: "apply-overlay-deltas"; deltas: readonly FinanceOverlayDelta[] }>
   | Readonly<{ type: "reset-overlay" }>;
 
 function createEntityOverlay<Entity extends { id: string }>(): EntityOverlay<Entity> {
@@ -66,6 +70,7 @@ export function createInitialFinanceOverlay(): FinanceOverlay {
   return {
     accounts: createEntityOverlay<Account>(),
     balances: createEntityOverlay<BalanceSnapshot>(),
+    beneficiaries: createEntityOverlay<Beneficiary>(),
     payments: createEntityOverlay<Payment>(),
     paymentApprovals: createEntityOverlay<PaymentApproval>(),
     users: createEntityOverlay<User>(),
@@ -84,6 +89,13 @@ export function bankEphemeralReducer(
 ): BankEphemeralState {
   if (action.type === "reset-overlay") {
     return { baseline: state.baseline, overlay: createInitialFinanceOverlay() };
+  }
+
+  if (action.type === "apply-overlay-deltas") {
+    return action.deltas.reduce(
+      (current, delta) => bankEphemeralReducer(current, { type: "apply-overlay-delta", delta }),
+      state,
+    );
   }
 
   const collection = action.delta.collection;
