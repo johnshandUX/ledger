@@ -110,12 +110,12 @@ export function PaymentsV2Prototype({
   }
 
   if (!account) {
-    return <main className="page payments-v2-prototype-page"><Alert variant="error"><AlertDescription>No eligible GBP source accounts are available for this prototype.</AlertDescription></Alert></main>;
+    return <div className="page payments-v2-prototype-page"><Alert variant="error"><AlertDescription>No eligible GBP source accounts are available for this prototype.</AlertDescription></Alert></div>;
   }
 
   if (view !== "entry") {
     return (
-      <main className="page payments-v2-prototype-page payments-v2-prototype-page--wide">
+      <div className="page payments-v2-prototype-page payments-v2-prototype-page--wide">
         <MultipleRecipientSelection
           view={view}
           headingRef={subviewHeadingRef}
@@ -134,12 +134,12 @@ export function PaymentsV2Prototype({
           onReturnToRecipients={returnFromAllocation}
           onContinue={() => setView("allocation-placeholder")}
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="page payments-v2-prototype-page">
+    <div className="page payments-v2-prototype-page">
       <section className="payments-v2-entry" aria-labelledby="payments-v2-heading">
         <header className="payments-v2-entry-heading">
           <p>New payment</p>
@@ -207,7 +207,7 @@ export function PaymentsV2Prototype({
           </Alert>
         )}
       </section>
-    </main>
+    </div>
   );
 }
 

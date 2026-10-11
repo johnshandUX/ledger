@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <ProductShell activeRoute="accounts">
-      <main className="page">
+      <div className="page">
         <div className="page-header">
           <div>
             <h1>Accounts</h1>
@@ -55,7 +55,7 @@ export default function Home() {
         <section className="accounts-list">
           <AccountsDataTable accounts={accounts} />
         </section>
-      </main>
+      </div>
     </ProductShell>
   );
 }

@@ -10,3 +10,4 @@ export const bankFinanceEnvironment = createCaldermereScenario({
 });
 
 export const BANK_BUSINESS_ID = bankFinanceEnvironment.businesses[0]!.id;
+export const BANK_BUSINESS_NAME = bankFinanceEnvironment.businesses[0]!.name;

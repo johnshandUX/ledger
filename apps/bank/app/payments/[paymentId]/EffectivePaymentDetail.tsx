@@ -12,7 +12,7 @@ export function EffectivePaymentDetail({ paymentId }: { paymentId: string }) {
   const beneficiaries = useEffectiveBeneficiaries();
   const users = useEffectiveUsers();
   const approvals = useEffectivePaymentApprovals();
-  if (!payment) return <main className="page payment-detail-page"><h1>Payment not found</h1><p>This payment is no longer available.</p><Link className="ledger-link" href="/payments">Back to payments</Link></main>;
+  if (!payment) return <div className="page payment-detail-page"><h1>Payment not found</h1><p>This payment is no longer available.</p><Link className="ledger-link" href="/payments">Back to payments</Link></div>;
   const account = accounts.find(({ id }) => id === payment.sourceAccountId);
   const beneficiary = beneficiaries.find(({ id }) => id === payment.beneficiaryId);
   const creator = users.find(({ id }) => id === payment.createdByUserId);
@@ -23,7 +23,7 @@ export function EffectivePaymentDetail({ paymentId }: { paymentId: string }) {
     return approver ? [{ ...approval, approver }] : [];
   });
 
-  return <main className="page payment-detail-page">
+  return <div className="page payment-detail-page">
     <nav className="breadcrumb" aria-label="Breadcrumb"><ol><li><Link className="ledger-link" href="/payments">Payments</Link></li><li aria-current="page">{payment.reference}</li></ol></nav>
     <header className="payment-detail-header"><div><p className="eyebrow">Payment reference</p><h1>{payment.reference}</h1></div><Badge variant={getPaymentStatusVariant(payment.status)}>{formatPaymentStatus(payment.status)}</Badge></header>
     <section className="payment-amount" aria-labelledby="payment-amount-heading"><h2 id="payment-amount-heading" className="visually-hidden">Payment amount</h2><span>Amount</span><strong className="financial-value">{formatMinorCurrencyAmount(payment.amountMinor, payment.currency)}</strong><p>{payment.currency} payment to {beneficiary.name}</p></section>
@@ -33,5 +33,5 @@ export function EffectivePaymentDetail({ paymentId }: { paymentId: string }) {
       <section className="payment-detail-section" aria-labelledby="source-heading"><h2 id="source-heading">Source account</h2><dl><div><dt>Account</dt><dd><Link className="ledger-link" href={`/accounts/${account.id}`}>{account.name}</Link></dd></div><div><dt>Account number</dt><dd className="identifier">{account.accountNumber ?? "—"}</dd></div>{account.sortCode && <div><dt>Sort code</dt><dd className="identifier">{account.sortCode}</dd></div>}<div><dt>Currency</dt><dd>{account.currency}</dd></div><div><dt>Account status</dt><dd className="payment-capitalise">{account.status}</dd></div></dl></section>
     </div>
     {approvalRows.length > 0 && <section className="payment-approvals" aria-labelledby="approvals-heading"><div className="section-heading"><div><h2 id="approvals-heading">Approval information</h2><p>Payment status and individual approval decisions are shown separately.</p></div></div><ol className="approval-list">{approvalRows.map(approval => <li key={approval.id}><div><strong>{approval.approver.firstName} {approval.approver.lastName}</strong><span>Requested {formatPaymentDate(approval.createdAt, true)}</span></div><div className="approval-result"><Badge variant={getApprovalStatusVariant(approval.status)}>{formatApprovalStatus(approval.status)}</Badge>{approval.actedAt && <small>Acted {formatPaymentDate(approval.actedAt, true)}</small>}</div></li>)}</ol></section>}
-  </main>;
+  </div>;
 }

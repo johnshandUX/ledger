@@ -14,6 +14,10 @@ The migrated Accounts and account-detail experiences now use the complete Calder
 
 Future Bank features should consume shared synthetic-finance selectors and calculations through this adapter. Replacing Caldermere with a backend should change the adapter rather than presentation components.
 
+## Application navigation
+
+Ledger Bank composes the shared Application Navigation pattern in `app/ProductShell.tsx`. The design system owns the open/closed desktop shell, responsive modal navigation, menus, focus behaviour and visual treatment. Bank owns the route list, active-route resolution, product identity, organisation context and user data. A destination should only be added to the Bank configuration after its route and availability have been resolved by the application; the current Reporting entry remains visibly unavailable because no Bank route exists yet.
+
 Interactive simulations follow [EDS-001: Ephemeral Demo State](../../docs/architecture/EDS-001-ephemeral-demo-state.md). Synthetic Finance remains the immutable baseline; Bank-owned in-memory state will hold temporary changes for the current page lifecycle and derive a consistent effective view across client-side navigation.
 
 Financial mutations are introduced as [feature-driven domain operations](../../docs/architecture/EDS-001-ephemeral-demo-state.md#feature-driven-domain-operations): named, typed and atomic customer tasks implemented alongside the product feature that needs them, rather than through a speculative general-purpose mutation framework.

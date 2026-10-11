@@ -7,6 +7,9 @@
 }
 
 body {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
   background: var(--ledger-color-background);
   color: var(--ledger-color-text);
   font-family: var(--ledger-font-family-sans);

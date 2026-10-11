@@ -16,7 +16,7 @@ export default async function AccountPage({ params }: { params: Promise<{ accoun
 
   return (
     <ProductShell activeRoute="accounts">
-      <main className="page account-page">
+      <div className="page account-page">
         <nav className="breadcrumb" aria-label="Breadcrumb"><ol><li><Link className="ledger-link" href="/">Accounts</Link></li><li aria-current="page">{account.name}</li></ol></nav>
 
         <header className="account-header">
@@ -42,7 +42,7 @@ export default async function AccountPage({ params }: { params: Promise<{ accoun
           <div className="section-heading"><div><h2 id="transactions-heading">Transactions</h2><p>{transactions.length} recent transaction{transactions.length === 1 ? "" : "s"}</p></div></div>
           <TransactionHistory transactions={transactions} />
         </section>
-      </main>
+      </div>
     </ProductShell>
   );
 }
