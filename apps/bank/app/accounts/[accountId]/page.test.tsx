@@ -16,6 +16,7 @@ describe("account detail integration", () => {
       expect(html).toContain(account.name);
       expect(html).toContain(`· ${status}`);
       expect(html).toContain("Account details");
+      expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/"|<a[^>]*href="\/"[^>]*aria-current="page"/);
     },
   );
 });

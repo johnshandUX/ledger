@@ -16,7 +16,7 @@ Future Bank features should consume shared synthetic-finance selectors and calcu
 
 ## Application navigation
 
-Ledger Bank composes the shared Application Navigation pattern in `app/ProductShell.tsx`. The design system owns the open/closed desktop shell, responsive modal navigation, menus, focus behaviour and visual treatment. Bank owns the route list, active-route resolution, product identity, organisation context and user data. A destination should only be added to the Bank configuration after its route and availability have been resolved by the application; the current Reporting entry remains visibly unavailable because no Bank route exists yet.
+Ledger Bank composes the shared Application Navigation pattern in `app/ProductShell.tsx`. The design system owns the open/closed desktop shell, responsive modal navigation, menus, focus behaviour and visual treatment. Bank owns the route list, active-route resolution, product identity, organisation context and user data. Accounts and Payments provide the current working product journeys. Other approved destinations resolve to concise Bank-owned planned-feature pages until their product capabilities are implemented.
 
 Interactive simulations follow [EDS-001: Ephemeral Demo State](../../docs/architecture/EDS-001-ephemeral-demo-state.md). Synthetic Finance remains the immutable baseline; Bank-owned in-memory state will hold temporary changes for the current page lifecycle and derive a consistent effective view across client-side navigation.
 

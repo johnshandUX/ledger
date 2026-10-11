@@ -21,23 +21,82 @@ import { getBankDemoUser, getBankRolesForUser } from "../src/finance/users";
 import { ThemeControl } from "./ThemeControl";
 import "./ProductShell.css";
 
-export type BankNavigationRoute = "accounts" | "payments" | "reporting";
+export type BankNavigationRoute =
+  | "accounts"
+  | "payments"
+  | "expenses"
+  | "reports"
+  | "cash-flow"
+  | "fx"
+  | "liquidity"
+  | "forecasting"
+  | "receivables"
+  | "payables"
+  | "integrations"
+  | "admin";
 
 type ProductShellProps = {
   activeRoute: BankNavigationRoute;
   children: ReactNode;
 };
 
+type BankNavigationDestination = Readonly<{
+  id: BankNavigationRoute;
+  label: string;
+  href: string;
+}>;
+
+type BankNavigationGroup = Readonly<{
+  label?: string;
+  destinations: readonly BankNavigationDestination[];
+}>;
+
 export const bankNavigation = [
-  { id: "accounts", label: "Accounts", href: "/" },
-  { id: "payments", label: "Payments", href: "/payments" },
-  { id: "reporting", label: "Reporting" },
-] as const;
+  {
+    label: undefined,
+    destinations: [
+      { id: "accounts", label: "Accounts", href: "/" },
+      { id: "payments", label: "Payments", href: "/payments" },
+      { id: "expenses", label: "Expenses", href: "/expenses" },
+      { id: "reports", label: "Reports", href: "/reports" },
+    ],
+  },
+  {
+    label: "Treasury",
+    destinations: [
+      { id: "cash-flow", label: "Cash flow", href: "/treasury/cash-flow" },
+      { id: "fx", label: "FX", href: "/treasury/fx" },
+      { id: "liquidity", label: "Liquidity", href: "/treasury/liquidity" },
+      { id: "forecasting", label: "Forecasting", href: "/treasury/forecasting" },
+    ],
+  },
+  {
+    label: "Operations",
+    destinations: [
+      { id: "receivables", label: "Receivables", href: "/operations/receivables" },
+      { id: "payables", label: "Payables", href: "/operations/payables" },
+    ],
+  },
+] as const satisfies readonly BankNavigationGroup[];
+
+export const bankUtilityNavigation = [
+  { id: "integrations", label: "Integrations", href: "/integrations" },
+  { id: "admin", label: "Admin", href: "/admin" },
+] as const satisfies readonly BankNavigationDestination[];
 
 const workspaceTitles: Record<BankNavigationRoute, string> = {
   accounts: "Accounts",
   payments: "Payments",
-  reporting: "Reporting",
+  expenses: "Expenses",
+  reports: "Reports",
+  "cash-flow": "Cash flow",
+  fx: "FX",
+  liquidity: "Liquidity",
+  forecasting: "Forecasting",
+  receivables: "Receivables",
+  payables: "Payables",
+  integrations: "Integrations",
+  admin: "Admin",
 };
 
 export function ProductShell({ activeRoute, children }: ProductShellProps) {
@@ -57,26 +116,24 @@ export function ProductShell({ activeRoute, children }: ProductShellProps) {
         />
       </SideNavContext>
       <SideNavNavigation label="Primary">
-        <SideNavGroup>
-          {bankNavigation.map((route) =>
-            "href" in route ? (
+        {bankNavigation.map((group) => (
+          <SideNavGroup key={group.label ?? "primary"} label={group.label}>
+            {group.destinations.map((route) => (
               <SideNavItem key={route.id} asChild current={activeRoute === route.id}>
                 <Link href={route.href}>{route.label}</Link>
               </SideNavItem>
-            ) : (
-              <span
-                key={route.id}
-                className="ledger-side-nav-item bank-navigation-item--unavailable"
-                aria-disabled="true"
-                title="Reporting is not yet available"
-              >
-                {route.label}
-              </span>
-            ),
-          )}
-        </SideNavGroup>
+            ))}
+          </SideNavGroup>
+        ))}
       </SideNavNavigation>
       <SideNavUtility>
+        <nav className="bank-navigation-utility-links" aria-label="Utility">
+          {bankUtilityNavigation.map((route) => (
+            <SideNavItem key={route.id} asChild current={activeRoute === route.id}>
+              <Link href={route.href}>{route.label}</Link>
+            </SideNavItem>
+          ))}
+        </nav>
         <div className="bank-navigation-appearance">
           <span>Appearance</span>
           <ThemeControl />

@@ -16,6 +16,7 @@ describe("payment detail", () => {
     expect(html).toContain("Amelia Hart");
     expect(html).toContain("Daniel Okafor");
     expect(html).toContain("Approval information");
+    expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/payments"|<a[^>]*href="\/payments"[^>]*aria-current="page"/);
   });
   it("omits approval information when no approval records exist", async () => {
     const html = await renderPayment("payment-completed-04");
