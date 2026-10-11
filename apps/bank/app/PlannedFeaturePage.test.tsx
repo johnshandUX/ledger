@@ -8,10 +8,11 @@ describe("PlannedFeaturePage", () => {
     (feature) => {
       const html = renderToStaticMarkup(<PlannedFeaturePage feature={feature} />);
 
-      expect(html).toContain(`<h1 id="planned-feature-title">${feature.name}</h1>`);
+      const renderedName = feature.name.replaceAll("&", "&amp;");
+      expect(html).toContain(`<h1 id="planned-feature-title">${renderedName}</h1>`);
       expect(html).toContain(feature.summary);
       expect(html).toContain(feature.detail);
-      expect(html).toContain(`${feature.name} is planned for a future Ledger release.`);
+      expect(html).toContain(`${renderedName} is planned for a future Ledger release.`);
       expect(html).toContain('aria-current="page"');
       expect(html).not.toContain('aria-disabled="true"');
       const panel = html.match(/<section class="planned-feature-panel"[\s\S]*?<\/section>/)?.[0];

@@ -64,11 +64,41 @@ export const plannedFeatures = {
     summary: "Connect Ledger Bank with your business systems.",
     detail: "Review and manage connections with supported finance tools.",
   },
-  admin: {
+  peopleAccess: {
     route: "admin",
-    name: "Admin",
-    summary: "Manage Ledger Bank settings for your organisation.",
-    detail: "Review administrative settings, access and organisation details.",
+    name: "People & access",
+    summary: "Manage who can use Ledger Bank for your organisation.",
+    detail: "Review users and the roles that organise their access.",
+  },
+  businessDetails: {
+    route: "admin",
+    name: "Business details",
+    summary: "Manage your organisation information in Ledger Bank.",
+    detail: "Review the business profile, addresses and contact information.",
+  },
+  billing: {
+    route: "admin",
+    name: "Billing",
+    summary: "Review how your organisation is billed for Ledger Bank services.",
+    detail: "Access service charges, billing history and billing contacts.",
+  },
+  accountAdministration: {
+    route: "admin",
+    name: "Account administration",
+    summary: "Manage administrative settings for your bank accounts.",
+    detail: "Review account settings, access and mandates, and service requests.",
+  },
+  securityControls: {
+    route: "admin",
+    name: "Security & controls",
+    summary: "Manage the controls that protect your organisation in Ledger Bank.",
+    detail: "Review payment limits, security policies and authentication settings.",
+  },
+  auditActivity: {
+    route: "admin",
+    name: "Audit & activity",
+    summary: "Review administrative activity across your organisation.",
+    detail: "Access administrative changes, activity history and audit exports.",
   },
 } as const satisfies Record<string, PlannedFeature>;
 

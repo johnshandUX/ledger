@@ -1,0 +1,20 @@
+.admin-page { box-sizing: border-box; width: 100%; max-width: 1100px; margin: var(--ledger-space-6) auto; padding: 0 var(--ledger-space-5); }
+.admin-page-header { max-width: 680px; margin-bottom: var(--ledger-space-6); }
+.admin-page-header h1 { margin: 0; font-size: var(--ledger-font-size-heading-large); line-height: var(--ledger-line-height-heading-large); }
+.admin-page-header p { margin: var(--ledger-space-2) 0 0; color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-heading-small); line-height: var(--ledger-line-height-heading-small); }
+.admin-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ledger-space-4); margin: 0; padding: 0; list-style: none; }
+.admin-area-card { display: flex; height: 100%; box-sizing: border-box; gap: var(--ledger-space-4); padding: var(--ledger-space-5); border: var(--ledger-border-width-thin) solid var(--ledger-color-border); border-radius: var(--ledger-radius-medium); background: var(--ledger-color-surface); color: var(--ledger-color-text); text-decoration: none; }
+.admin-area-card:hover { background: var(--ledger-color-surface-hover); }
+.admin-area-card:focus-visible { outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus); outline-offset: var(--ledger-space-1); }
+.admin-area-icon { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; width: var(--ledger-space-7); height: var(--ledger-space-7); border-radius: var(--ledger-radius-medium); background: var(--ledger-color-action-subtle); }
+.admin-area-content { display: grid; min-width: 0; gap: var(--ledger-space-2); }
+.admin-area-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--ledger-space-3); }
+.admin-area-title { font-size: var(--ledger-font-size-heading-small); font-weight: var(--ledger-font-weight-semibold); line-height: var(--ledger-line-height-heading-small); }
+.admin-area-description, .admin-area-destinations { color: var(--ledger-color-text-secondary); line-height: var(--ledger-line-height-body); }
+.admin-area-destinations { font-size: var(--ledger-font-size-small); }
+@media (max-width: 780px) {
+  .admin-page { margin-block: var(--ledger-space-5); padding-inline: var(--ledger-space-4); }
+  .admin-page-header { margin-bottom: var(--ledger-space-5); }
+  .admin-area-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .admin-area-card { padding: var(--ledger-space-4); } }
