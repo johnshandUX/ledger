@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { DataTableColumn, DataTableState } from "./DataTable.types";
+import type { DataTableColumn, DataTableFilterDefinition, DataTableState } from "./DataTable.types";
 import { createDataTableRowModel } from "./rowModel";
 
 type Row = { id: string; name: string; amount: number };
@@ -16,6 +16,32 @@ const columns: readonly DataTableColumn<Row>[] = [
   { id: "amount", label: "Amount", header: "Amount", cell: ({ row }) => row.amount, sort: { value: row => row.amount } },
 ];
 
+type FilterId = "amount" | "initial";
+const filters: readonly DataTableFilterDefinition<Row, FilterId>[] = [
+  {
+    id: "amount",
+    label: "Amount",
+    options: [
+      { value: "low", label: "Low" },
+      { value: "high", label: "High" },
+      { value: "missing", label: "Missing" },
+    ],
+    values: row => row.amount < 30 ? "low" : "high",
+  },
+  {
+    id: "initial",
+    label: "Initial",
+    options: [
+      { value: "a", label: "A" },
+      { value: "b", label: "B" },
+      { value: "unassigned", label: "Unassigned" },
+    ],
+    values: row => row.name === "Delta" ? ["unassigned"] : [row.name[0]!.toLowerCase()],
+  },
+];
+
+const search = { label: "Search rows", values: (row: Row) => [row.name, row.id] };
+
 function state(overrides: Partial<DataTableState> = {}): DataTableState {
   return { query: "", filters: {}, pageIndex: 0, pageSize: 10, ...overrides };
 }
@@ -24,6 +50,74 @@ describe("createDataTableRowModel", () => {
   it("sorts ascending stably", () => {
     const model = createDataTableRowModel({ rows, columns, state: state({ sort: { columnId: "name", direction: "ascending" } }) });
     expect(model.sortedRows.map(row => row.id)).toEqual(["b", "c", "a", "d"]);
+  });
+
+  it("normalizes search text and matches any searchable value", () => {
+    const unicodeRows = [{ id: "fullwidth", name: "Ａｌｐｈａ   Team", amount: 1 }, ...rows];
+    const byName = createDataTableRowModel({
+      rows: unicodeRows,
+      columns,
+      search,
+      state: state({ query: "  alpha team  " }),
+    });
+    const byId = createDataTableRowModel({ rows, columns, search, state: state({ query: " C " }) });
+    expect(byName.filteredRows.map(row => row.id)).toEqual(["fullwidth"]);
+    expect(byId.filteredRows.map(row => row.id)).toEqual(["c"]);
+    expect(createDataTableRowModel({ rows, columns, search, state: state({ query: "   " }) }).filteredRows).toEqual(rows);
+  });
+
+  it("ignores nullish and empty searchable values", () => {
+    const missingSearch = { label: "Search", values: (row: Row) => [null, undefined, "", row.name] };
+    expect(createDataTableRowModel({ rows, columns, search: missingSearch, state: state({ query: "beta" }) }).filteredRows.map(row => row.id)).toEqual(["a"]);
+  });
+
+  it("uses OR within a filter and AND between filters", () => {
+    const orModel = createDataTableRowModel<Row, FilterId>({
+      rows, columns, filters, state: state({ filters: { initial: ["a", "b"] } }),
+    });
+    const andModel = createDataTableRowModel<Row, FilterId>({
+      rows, columns, filters, state: state({ filters: { initial: ["a", "b"], amount: ["low"] } }),
+    });
+    expect(orModel.filteredRows.map(row => row.id)).toEqual(["a", "b", "c"]);
+    expect(andModel.filteredRows.map(row => row.id)).toEqual(["a", "b"]);
+  });
+
+  it("combines search and filters with AND semantics", () => {
+    const model = createDataTableRowModel<Row, FilterId>({
+      rows, columns, search, filters,
+      state: state({ query: "alpha", filters: { amount: ["high"] } }),
+    });
+    expect(model.filteredRows.map(row => row.id)).toEqual(["c"]);
+  });
+
+  it("supports multiple row values and consumer-defined absence values", () => {
+    const multiValueFilters: readonly DataTableFilterDefinition<Row, "classification">[] = [{
+      id: "classification",
+      label: "Classification",
+      options: [{ value: "alpha", label: "Alpha" }, { value: "unassigned", label: "Unassigned" }],
+      values: row => row.name === "Delta" ? ["unassigned"] : [row.name.toLowerCase(), row.name[0]!.toLowerCase()],
+    }];
+    const alpha = createDataTableRowModel({ rows, columns, filters: multiValueFilters, state: state({ filters: { classification: ["alpha"] } }) });
+    const unassigned = createDataTableRowModel({ rows, columns, filters: multiValueFilters, state: state({ filters: { classification: ["unassigned"] } }) });
+    expect(alpha.filteredRows.map(row => row.id)).toEqual(["b", "c"]);
+    expect(unassigned.filteredRows.map(row => row.id)).toEqual(["d"]);
+  });
+
+  it("normalizes unknown and duplicate filter selections without mutating input state", () => {
+    const input = state({ filters: { amount: ["low", "low", "unknown"], unknown: ["value"] } });
+    const snapshot = structuredClone(input);
+    const model = createDataTableRowModel({ rows, columns, filters, state: input });
+    expect(model.state.filters).toEqual({ amount: ["low"] });
+    expect(input).toEqual(snapshot);
+  });
+
+  it("treats empty selections as inactive and nullish row values as unmatched", () => {
+    const nullableFilter: readonly DataTableFilterDefinition<Row, "optional">[] = [{
+      id: "optional", label: "Optional", options: [{ value: "present", label: "Present" }],
+      values: row => row.id === "a" ? "present" : null,
+    }];
+    expect(createDataTableRowModel({ rows, columns, filters: nullableFilter, state: state({ filters: { optional: [] } }) }).filteredRows).toEqual(rows);
+    expect(createDataTableRowModel({ rows, columns, filters: nullableFilter, state: state({ filters: { optional: ["present"] } }) }).filteredRows.map(row => row.id)).toEqual(["a"]);
   });
 
   it("sorts descending and keeps equal values in source order", () => {
@@ -62,9 +156,20 @@ describe("createDataTableRowModel", () => {
     expect(model.visibleRows.map(row => row.id)).toEqual(["c", "d"]);
   });
 
+  it("filters before stable sorting and pagination and reports authoritative counts", () => {
+    const model = createDataTableRowModel<Row, FilterId>({
+      rows, columns, filters, pageSizeOptions: [1, 2, 4],
+      state: state({ filters: { initial: ["a"] }, sort: { columnId: "amount", direction: "descending" }, pageSize: 1, pageIndex: 1 }),
+    });
+    expect(model.filteredRows.map(row => row.id)).toEqual(["b", "c"]);
+    expect(model.sortedRows.map(row => row.id)).toEqual(["c", "b"]);
+    expect(model.visibleRows.map(row => row.id)).toEqual(["b"]);
+    expect(model).toMatchObject({ totalRowCount: 4, resultRowCount: 2, pageCount: 2 });
+  });
+
   it("returns no pages for an empty dataset", () => {
     const model = createDataTableRowModel({ rows: [], columns, state: state() });
-    expect(model).toMatchObject({ totalRowCount: 0, resultRowCount: 0, pageCount: 0, visibleRows: [] });
+    expect(model).toMatchObject({ totalRowCount: 0, resultRowCount: 0, pageCount: 0, filteredRows: [], visibleRows: [] });
   });
 
   it("keeps nullish values last in both directions", () => {

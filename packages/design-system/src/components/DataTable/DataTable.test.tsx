@@ -1,12 +1,18 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { DataTable } from "./DataTable";
-import type { DataTableColumn } from "./DataTable.types";
+import type { DataTableColumn, DataTableFilterDefinition } from "./DataTable.types";
 
 type Row = { id: string; name: string };
 const columns: readonly DataTableColumn<Row>[] = [
   { id: "name", label: "Name", header: "Name", cell: ({ row }) => row.name, sort: { value: row => row.name } },
 ];
+const filters: readonly DataTableFilterDefinition<Row, "name">[] = [{
+  id: "name",
+  label: "Name",
+  options: [{ value: "ada", label: "Ada" }, { value: "grace", label: "Grace" }],
+  values: row => row.name.toLowerCase(),
+}];
 
 describe("DataTable", () => {
   it("composes a semantic table with a caption and sortable header", () => {
@@ -82,6 +88,63 @@ describe("DataTable", () => {
     expect(html).not.toContain("<td");
   });
 
+  it("renders an accessible configured toolbar for ready and empty datasets", () => {
+    const ready = renderToStaticMarkup(
+      <DataTable caption="People" rows={[{ id: "1", name: "Ada" }]} columns={columns} getRowId={row => row.id} search={{ label: "Search people", placeholder: "Name or email", values: row => [row.name] }} filters={filters} />,
+    );
+    const empty = renderToStaticMarkup(
+      <DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} search={{ label: "Search people", values: row => [row.name] }} filters={filters} />,
+    );
+    for (const html of [ready, empty]) {
+      expect(html).toContain('type="search"');
+      expect(html).toContain("Search people");
+      expect(html).toContain("Name");
+    }
+    expect(empty).toContain("No data to display");
+  });
+
+  it("infers no-results and presents matching and total counts", () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        caption="People"
+        rows={[{ id: "1", name: "Ada" }, { id: "2", name: "Grace" }]}
+        columns={columns}
+        getRowId={row => row.id}
+        search={{ label: "Search people", values: row => [row.name] }}
+        itemLabel={{ singular: "person", plural: "people" }}
+        defaultState={{ query: "missing" }}
+      />,
+    );
+    expect(html).toContain("No matching results");
+    expect(html).toContain("0 matching people from 2 total");
+    expect(html).toContain("Clear all");
+    expect(html).not.toContain("<td");
+  });
+
+  it("preserves explicit loading and error precedence over derived results", () => {
+    const props = {
+      caption: "People",
+      rows: [{ id: "1", name: "Ada" }],
+      columns,
+      getRowId: (row: Row) => row.id,
+      search: { label: "Search people", values: (row: Row) => [row.name] },
+      defaultState: { query: "missing" },
+    } as const;
+    const loading = renderToStaticMarkup(<DataTable {...props} status="loading" loadingLabel="Loading people" />);
+    const error = renderToStaticMarkup(<DataTable {...props} status="error" errorState={{ title: "People unavailable" }} />);
+    expect(loading).toContain("Loading people");
+    expect(loading).not.toContain("No matching results");
+    expect(error).toContain("People unavailable");
+    expect(error).not.toContain("No matching results");
+  });
+
+  it("uses unique field identities for multiple tables", () => {
+    const html = renderToStaticMarkup(<><DataTable caption="First people" rows={[]} columns={columns} getRowId={row => row.id} search={{ label: "Search people", values: row => [row.name] }} /><DataTable caption="Second people" rows={[]} columns={columns} getRowId={row => row.id} search={{ label: "Search people", values: row => [row.name] }} /></>);
+    const ids = [...html.matchAll(/id="([^"]+-search)"/g)].map(([, id]) => id);
+    expect(ids).toHaveLength(2);
+    expect(new Set(ids).size).toBe(2);
+  });
+
   it("gives errors alert semantics", () => {
     const html = renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} status="error" errorState={{ title: "People unavailable" }} />);
     expect(html).toContain('role="alert"');
@@ -94,5 +157,10 @@ describe("DataTable", () => {
 
   it("rejects invalid page-size options", () => {
     expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} pageSizeOptions={[20, 10]} />)).toThrow(/ascending/);
+  });
+
+  it("rejects duplicate filter identities and option values", () => {
+    expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} filters={[...filters, ...filters]} />)).toThrow(/filter IDs/);
+    expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} filters={[{ ...filters[0]!, options: [...filters[0]!.options, filters[0]!.options[0]!] }]} />)).toThrow(/option values/);
   });
 });

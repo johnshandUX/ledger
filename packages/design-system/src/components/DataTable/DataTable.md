@@ -1,8 +1,8 @@
 # DataTable
 
-> Status: the foundation slice is implemented. Search/filtering, selection/bulk actions and column
-> management are the approved priority order for later slices. Future sections describe direction,
-> not current props, exports or supported behaviour.
+> Status: the foundation and client-side search/filter slices are implemented. Selection/bulk
+> actions and column management remain future work. Archived sections describe direction, not
+> current props, exports or supported behaviour.
 
 ## Purpose
 
@@ -40,6 +40,9 @@ semantic elements or base visual rules where practical.
 - rendering configured columns and rows through Table
 - sortable-header controls for explicitly sortable columns
 - client-side stable sorting for explicitly sortable columns
+- optional client-side text search over consumer-supplied row values
+- optional multi-select option filters over consumer-supplied stable values
+- a generic search/filter toolbar and clear-all behaviour
 - page navigation, page size and result summaries
 - comfortable and compact density
 - optional zebra row treatment, independently of density
@@ -73,7 +76,9 @@ import {
   DataTable,
   createDataTableRowModel,
   type DataTableColumn,
+  type DataTableFilterDefinition,
   type DataTableProps,
+  type DataTableSearchDefinition,
   type DataTableState,
 } from "@johnshandux/ledger-design-system/data-table";
 ```
@@ -86,8 +91,9 @@ The dedicated entry currently exports `DataTable`, `createDataTableRowModel` and
 in `DataTable.types.ts`. The implemented component accepts:
 
 - `rows`, `columns`, `getRowId` and `caption`
+- optional row-level `search` and option-based `filters` definitions
 - visible or visually hidden caption presentation
-- controlled or uncontrolled sort and page state
+- controlled or uncontrolled query, filter, sort and page state
 - `comfortable` or `compact` density
 - `plain` or `zebra` row treatment
 - ascending, duplicate-free page-size options
@@ -95,10 +101,129 @@ in `DataTable.types.ts`. The implemented component accepts:
 - `ready`, `loading`, `no-results` and `error` presentation
 - consumer-supplied loading, empty, no-results and error content
 
-The current state type retains `query` and `filters` as reserved serialisable fields. Consumers must
-pass an empty string and empty object; no search or filtering behaviour is implemented. Current
-columns support rendering, alignment, numeric/nowrap presentation and optional sorting. They do
+Current columns support rendering, alignment, numeric/nowrap presentation and optional sorting.
+Search and filters use separate row accessors and never inspect rendered cell content. Columns do
 not support copy, selection, visibility, ordering, pinning or resizing.
+
+## Implemented search contract
+
+Search is optional and configured once for the complete row rather than per visible column:
+
+```ts
+export type DataTableSearchValue = string | null | undefined;
+
+export interface DataTableSearchDefinition<TData> {
+  label: string;
+  placeholder?: string;
+  values: (row: TData) => readonly DataTableSearchValue[];
+}
+```
+
+The consumer supplies the user-facing label and the raw textual values that define search for its
+domain. DataTable does not serialize row objects or inspect rendered cells. A row matches when any
+non-nullish, non-empty supplied value contains the normalized query.
+
+Matching is case-insensitive substring matching. Query and values are Unicode NFKC-normalized,
+trimmed, have repeated whitespace collapsed, and are lowercased with the `en-GB` locale. The
+original query remains unchanged in `DataTableState`; normalization applies only while matching.
+An empty normalized query matches every row. Search does not provide fuzzy matching, token
+reordering, accent folding or alternate search modes.
+
+## Implemented option-filter contract
+
+```ts
+export interface DataTableFilterOption {
+  value: string;
+  label: string;
+}
+
+export interface DataTableFilterDefinition<
+  TData,
+  TFilterId extends string = string,
+> {
+  id: TFilterId;
+  label: string;
+  options: readonly DataTableFilterOption[];
+  values: (row: TData) => string | readonly string[] | null | undefined;
+}
+```
+
+Filter IDs and option values are stable state identifiers; labels are presentation only. Multiple
+selected options within one filter use OR semantics. Different filters use AND semantics, and
+filters combine with search using AND semantics. Missing keys and empty selections are inactive.
+Nullish row values match no active option. Multi-valued rows match when any row value exactly
+equals any selected stable option value.
+
+Meaningful absence is a consumer responsibility. A product that offers an `Unassigned` or `None`
+option supplies its own stable value in both the option definition and row accessor. DataTable does
+not define domain absence values.
+
+Stale controlled state is normalized without mutating it: unknown filter IDs and option values are
+removed, repeated selections are deduplicated, and empty selections are omitted. Duplicate filter
+IDs and duplicate option values within one filter are configuration errors during development.
+
+## Implemented toolbar and state transitions
+
+When `search` or `filters` is configured, DataTable renders a fixed generic toolbar using Ledger
+Input, Popover, Checkbox and Button components. Search has a persistent accessible label. Each
+filter trigger displays its selected count and opens immediate-apply native checkbox controls.
+Clear all is shown whenever a normalized query or filter selection is active.
+
+The toolbar remains available in ready, empty and no-results states. Existing loading and error
+presentation suppresses it. The toolbar wraps at narrow widths and introduces no custom keyboard
+model: native input, button and checkbox behaviour applies, while Popover restores focus to its
+trigger when dismissed.
+
+State changes always report the complete next state:
+
+- query changes reset `pageIndex` to `0` and report `reason: "query"`
+- filter changes reset `pageIndex` to `0` and report `reason: "filter"`
+- clear all resets query, filters and page index while preserving sort and page size, and reports
+  `reason: "clear-filters"`
+- sort and page-size changes retain their existing first-page behaviour
+- normalized stale state or an out-of-range page reports `reason: "data-change"` only when the
+  effective state differs structurally
+
+## Implemented processing and counts
+
+Client processing is deterministic:
+
+```text
+source rows -> search -> configured filters -> stable sort -> pagination -> visible rows
+```
+
+`createDataTableRowModel` is the same pure typed processor used by DataTable and available to
+products for responsive alternatives. It returns:
+
+- `filteredRows`: matching records in source order
+- `sortedRows`: matching records after stable sorting and before pagination
+- `visibleRows`: the current page
+- `totalRowCount`: every supplied source record
+- `resultRowCount`: matching records before pagination
+- `pageCount`: pages of matching records
+- `state`: the normalized effective state
+
+Existing page-size fallback and out-of-range page clamping remain in force. Query and filter
+matching never mutates source rows or caller-owned state.
+
+Result summaries distinguish total and matching records while using the consumer's `itemLabel`:
+
+- `24 users`
+- `1–10 of 24 users`
+- `8 matching users from 24 total`
+- `1–8 of 8 matching users from 24 total`
+- `0 matching users from 24 total`
+
+The existing live status region announces the same result meaning without adding a second toolbar
+announcement. A ready, non-empty source with zero processed matches automatically uses no-results
+presentation. Explicit `status="no-results"` remains supported. Explicit loading and error states
+retain precedence; a genuinely empty source continues to use the empty state even when the toolbar
+is configured.
+
+Controlled state is appropriate when the same processing drives a product-owned responsive view.
+Pass the same rows, definitions and state to `createDataTableRowModel`; use `visibleRows` to mirror
+the current page or `sortedRows` when an approved responsive experience intentionally presents all
+matching records. DataTable does not render responsive cards.
 
 ## Archived full-family proposal and future direction — not API reference
 
@@ -361,7 +486,7 @@ For a sortable column:
 Formatted currency, dates and identifiers must sort by appropriate raw values rather than their
 display strings.
 
-## Search and filters
+## Archived search and filter rationale
 
 Search is optional and configured through `search`. DataTable searches only the strings returned by
 the consumer's `values` function. It must not serialize complete row objects or inspect rendered
@@ -385,10 +510,11 @@ Filter behavior is:
   when that filter is inactive
 - changing search or filters resets `pageIndex` to `0`
 
-DataTable owns the consistent control layout, active-filter count, removable active-filter
-presentation and clear-all action. The consumer owns filter labels, option labels and row values.
-The first version uses option-based filters; free-form ranges and date intervals require a future
-filter-definition extension rather than overloading option values.
+The archived proposal considered a consistent control layout, active-filter count, removable
+active-filter presentation and clear-all action. The implemented slice provides selected counts on
+filter triggers and clear all; removable chips remain future-only. The consumer owns filter labels,
+option labels and row values. The first version uses option-based filters; free-form ranges and date
+intervals require a future filter-definition extension rather than overloading option values.
 
 An active-filter summary must include search when a non-empty query is applied. Clearing all resets
 query and filter selections but does not reset density, page size or the current sort.

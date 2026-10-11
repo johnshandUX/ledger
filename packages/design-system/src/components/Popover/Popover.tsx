@@ -18,12 +18,15 @@ export function PopoverClose(props: ComponentProps<typeof PopoverPrimitive.Close
   return <PopoverPrimitive.Close data-slot="popover-close" {...props} />;
 }
 
-export type PopoverContentProps = Pick<ComponentProps<typeof PopoverPrimitive.Content>, "align" | "children" | "className" | "side">;
-export function PopoverContent({ className, ...props }: PopoverContentProps) {
+export type PopoverContentProps = Pick<ComponentProps<typeof PopoverPrimitive.Content>, "align" | "children" | "className" | "side"> & {
+  accessibleLabel?: string;
+};
+export function PopoverContent({ accessibleLabel, className, ...props }: PopoverContentProps) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
         data-slot="popover-content"
+        aria-label={accessibleLabel}
         className={cn("ledger-popover__content", className)}
         sideOffset={8}
         {...props}

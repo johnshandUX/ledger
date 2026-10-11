@@ -6,6 +6,7 @@ export type DataTableSortDirection = "ascending" | "descending";
 export type DataTableStatus = "ready" | "loading" | "no-results" | "error";
 
 export type DataTableSortableValue = string | number | boolean | Date | null | undefined;
+export type DataTableSearchValue = string | null | undefined;
 
 export interface DataTableSortState {
   columnId: string;
@@ -14,15 +15,20 @@ export interface DataTableSortState {
 
 export interface DataTableState<TFilterId extends string = string> {
   sort?: DataTableSortState;
-  /** Reserved for the later search slice. V1 consumers must pass an empty string. */
   query: string;
-  /** Reserved for the later filter slice. V1 consumers must pass an empty object. */
   filters: Readonly<Partial<Record<TFilterId, readonly string[]>>>;
   pageIndex: number;
   pageSize: number;
 }
 
-export type DataTableStateChangeReason = "sort" | "page" | "page-size" | "data-change";
+export type DataTableStateChangeReason =
+  | "sort"
+  | "query"
+  | "filter"
+  | "clear-filters"
+  | "page"
+  | "page-size"
+  | "data-change";
 
 export interface DataTableStateChangeMeta {
   reason: DataTableStateChangeReason;
@@ -47,6 +53,24 @@ export interface DataTableColumn<TData> {
     compare?: (left: TData, right: TData) => number;
     initialDirection?: DataTableSortDirection;
   };
+}
+
+export interface DataTableSearchDefinition<TData> {
+  label: string;
+  placeholder?: string;
+  values: (row: TData) => readonly DataTableSearchValue[];
+}
+
+export interface DataTableFilterOption {
+  value: string;
+  label: string;
+}
+
+export interface DataTableFilterDefinition<TData, TFilterId extends string = string> {
+  id: TFilterId;
+  label: string;
+  options: readonly DataTableFilterOption[];
+  values: (row: TData) => string | readonly string[] | null | undefined;
 }
 
 export interface DataTableStateContent {
@@ -82,12 +106,14 @@ export type DataTableStateControl<TFilterId extends string = string> =
   | DataTableUncontrolledStateProps<TFilterId>
   | DataTableControlledStateProps<TFilterId>;
 
-export interface DataTableCommonProps<TData> {
+export interface DataTableCommonProps<TData, TFilterId extends string = string> {
   rows: readonly TData[];
   columns: readonly DataTableColumn<TData>[];
   getRowId: (row: TData) => string;
   caption: string;
   captionVisibility?: "visible" | "visually-hidden";
+  search?: DataTableSearchDefinition<TData>;
+  filters?: readonly DataTableFilterDefinition<TData, TFilterId>[];
   density?: DataTableDensity;
   rowTreatment?: DataTableRowTreatment;
   pageSizeOptions?: readonly number[];
@@ -101,10 +127,11 @@ export interface DataTableCommonProps<TData> {
 }
 
 export type DataTableProps<TData, TFilterId extends string = string> =
-  DataTableCommonProps<TData> & DataTableStateControl<TFilterId>;
+  DataTableCommonProps<TData, TFilterId> & DataTableStateControl<TFilterId>;
 
 export interface DataTableRowModel<TData, TFilterId extends string = string> {
   state: DataTableState<TFilterId>;
+  filteredRows: readonly TData[];
   sortedRows: readonly TData[];
   visibleRows: readonly TData[];
   totalRowCount: number;
@@ -116,5 +143,7 @@ export interface DataTableRowModelOptions<TData, TFilterId extends string = stri
   rows: readonly TData[];
   columns: readonly DataTableColumn<TData>[];
   state: DataTableState<TFilterId>;
+  search?: DataTableSearchDefinition<TData>;
+  filters?: readonly DataTableFilterDefinition<TData, TFilterId>[];
   pageSizeOptions?: readonly number[];
 }

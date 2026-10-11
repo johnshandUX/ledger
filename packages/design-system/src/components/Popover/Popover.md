@@ -6,7 +6,7 @@ Popover presents small contextual supporting content anchored to a required trig
 
 ## Behaviour and accessibility
 
-Radix manages focus, Escape and outside-click dismissal, positioning, and focus return. The trigger must have an accessible name. Interactive controls retain their normal keyboard behaviour.
+Radix manages focus, Escape and outside-click dismissal, positioning, and focus return. The trigger must have an accessible name. Set `accessibleLabel` on `PopoverContent` when its dialog content does not otherwise receive an accessible name. Interactive controls retain their normal keyboard behaviour.
 
 ## Usage guidance
 
