@@ -25,6 +25,10 @@ export default defineConfig({
         replacement: resolve(__dirname, "../../packages/design-system/src/dialog.ts"),
       },
       {
+        find: "@johnshandux/ledger-design-system/dropdown-menu",
+        replacement: resolve(__dirname, "../../packages/design-system/src/dropdown-menu.ts"),
+      },
+      {
         find: "@johnshandux/ledger-design-system/icons",
         replacement: resolve(__dirname, "../../packages/design-system/src/icons.ts"),
       },
