@@ -26,7 +26,7 @@ export type UsersFilterId = "status" | "bankingRole" | "additionalAccess";
 
 export const usersSearch: DataTableSearchDefinition<BankUserPresentation> = {
   label: "Search users",
-  placeholder: "Search by name or email",
+  placeholder: "Search by name, email or role",
   values: (row) => row.searchValues,
 };
 
@@ -40,10 +40,10 @@ export const usersColumns: readonly DataTableColumn<BankUserPresentation>[] = [
   },
   {
     id: "bankingRole",
-    label: "Banking role",
-    header: "Banking role",
-    cell: ({ row }) => row.bankingRoleLabel,
-    sort: { value: (row) => row.bankingRoleSortValue },
+    label: "Role",
+    header: "Role",
+    cell: ({ row }) => row.displayRole.label,
+    sort: { value: (row) => row.displayRole.label },
   },
   {
     id: "additionalAccess",
@@ -151,7 +151,7 @@ export function UsersExperience() {
                     <div><Link className="ledger-link people-access-user-name" href={user.detailRoute}>{user.fullName}</Link><div className="people-access-secondary">{user.email}</div></div>
                     <Badge variant={user.status === "active" ? "success" : "warning"}>{user.statusLabel}</Badge>
                   </div>
-                  <dl><div><dt>Banking role</dt><dd>{user.bankingRoleLabel}</dd></div><div><dt>Additional access</dt><dd>{user.additionalAccessLabel}</dd></div></dl>
+                  <dl><div><dt>Role</dt><dd>{user.displayRole.label}</dd></div><div><dt>Additional access</dt><dd>{user.additionalAccessLabel}</dd></div></dl>
                 </li>
               ))}
             </ol>

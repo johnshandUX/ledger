@@ -42,6 +42,22 @@ describe("caldermereDataset", () => {
       .toMatchObject({ roleIds: [], additionalAccessIds: ["developer"] });
   });
 
+  it("provides optional business job titles without changing access relationships", () => {
+    expect(caldermereDataset.users.find(({ id }) => id === "user-amelia-hart"))
+      .toMatchObject({
+        jobTitle: "Finance Director",
+        roleIds: ["role-administrator"],
+        additionalAccessIds: ["developer"],
+      });
+    expect(caldermereDataset.users.find(({ id }) => id === "user-noah-wilson"))
+      .toMatchObject({
+        jobTitle: "Software Developer",
+        roleIds: [],
+        additionalAccessIds: ["developer"],
+      });
+    expect(caldermereDataset.users.some(({ jobTitle }) => jobTitle === undefined)).toBe(true);
+  });
+
   it("has a varied 30-account commercial estate", () => {
     const countBy = (key: "currency" | "status" | "accountType") =>
       caldermereDataset.accounts.reduce<Record<string, number>>((counts, account) => {

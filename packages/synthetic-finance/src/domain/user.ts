@@ -9,6 +9,8 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  /** Optional business position. It does not confer banking permissions or access. */
+  jobTitle?: string;
   /** Zero or one banking role. Dataset validation enforces this cardinality. */
   roleIds: RoleId[];
   additionalAccessIds: AdditionalAccessId[];

@@ -42,11 +42,13 @@ describe("Users experience", () => {
     ]);
   });
 
-  it("searches names and email addresses with shared normalization", () => {
+  it("searches names, email addresses and displayed roles with shared normalization", () => {
     expect(createUsersPresentationRowModel(rows, state({ query: "amelia hart" })).filteredRows.map(({ id }) => id))
       .toEqual(["user-amelia-hart"]);
     expect(createUsersPresentationRowModel(rows, state({ query: "OKAFOR@CALDERMERE" })).filteredRows.map(({ id }) => id))
       .toEqual(["user-daniel-okafor"]);
+    expect(createUsersPresentationRowModel(rows, state({ query: "developer" })).filteredRows.map(({ id }) => id))
+      .toEqual(["user-noah-wilson"]);
   });
 
   it("uses OR within filters and AND across search and filters", () => {
@@ -87,14 +89,16 @@ describe("Users experience", () => {
     expect(access.resultRowCount).toBe(rows.length);
   });
 
-  it("defaults to name order and keeps unassigned roles last in both directions", () => {
+  it("defaults to name order and sorts the Role column by its displayed label", () => {
     const byName = createUsersPresentationRowModel(rows, state());
     expect(byName.sortedRows[0]?.fullName).toBe("Aisha Khan");
 
-    for (const direction of ["ascending", "descending"] as const) {
-      const byRole = createUsersPresentationRowModel(rows, state({ sort: { columnId: "bankingRole", direction } }));
-      expect(byRole.sortedRows.at(-1)?.bankingRoleLabel).toBe("Unassigned");
-    }
+    const byRoleAscending = createUsersPresentationRowModel(rows, state({ sort: { columnId: "bankingRole", direction: "ascending" } }));
+    const byRoleDescending = createUsersPresentationRowModel(rows, state({ sort: { columnId: "bankingRole", direction: "descending" } }));
+    expect(byRoleAscending.sortedRows.map(({ displayRole }) => displayRole.label)).toEqual(
+      [...byRoleAscending.sortedRows.map(({ displayRole }) => displayRole.label)].sort((left, right) => left.localeCompare(right)),
+    );
+    expect(byRoleDescending.sortedRows[0]?.displayRole.label).toBe("Viewer");
     const byStatus = createUsersPresentationRowModel(rows, state({ sort: { columnId: "status", direction: "descending" } }));
     expect(byStatus.sortedRows[0]?.statusLabel).toBe("Suspended");
   });
@@ -125,7 +129,7 @@ describe("Users experience", () => {
 
   it("renders labelled controls, status text, details links and CSS-exclusive presentations", () => {
     const html = renderToStaticMarkup(<BankStateProvider><UsersExperience /></BankStateProvider>);
-    expect(html).toContain("Search by name or email");
+    expect(html).toContain("Search by name, email or role");
     expect(html).toMatch(/<label[^>]*for="[^"]+-search"[^>]*>Search users<\/label>/);
     expect(html).toContain("Banking role");
     expect(html).toContain("Additional access");

@@ -72,6 +72,19 @@ describe("Users experience interactions", () => {
     expect(desktop().textContent).toContain("Amelia Hart");
   });
 
+  it("finds a developer-only user through the derived Role value", async () => {
+    const search = desktop().querySelector<HTMLInputElement>('input[type="search"]')!;
+    await setInputValue(search, "developer");
+
+    expect(desktop().textContent).toContain("Noah Wilson");
+    expect(desktop().textContent).toContain("Developer");
+    expect(desktop().textContent).not.toContain("Amelia Hart");
+    expect(desktop().textContent).toContain("Showing 1 matching user from 18 total");
+    const mobile = container.querySelector<HTMLElement>(".people-access-mobile")!;
+    expect(mobile.textContent).toContain("Noah Wilson");
+    expect(mobile.textContent).toContain("RoleDeveloper");
+  });
+
   it("applies a native-checkbox status filter and combines it with search", async () => {
     await click(button(desktop(), "Status"));
     const suspended = [...document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')]

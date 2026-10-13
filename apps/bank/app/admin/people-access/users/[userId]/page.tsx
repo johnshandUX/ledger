@@ -1,5 +1,13 @@
-import { PlannedFeaturePage, plannedFeatures } from "../../../../PlannedFeaturePage";
+import { ProductShell } from "../../../../ProductShell";
+import { UserDetailsExperience } from "./UserDetailsExperience";
+import "../../people-access.css";
 
-export default function UserDetailPage() {
-  return <PlannedFeaturePage feature={plannedFeatures.peopleAccess} />;
+export default async function UserDetailPage({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params;
+
+  return (
+    <ProductShell activeRoute="admin">
+      <UserDetailsExperience userId={userId} />
+    </ProductShell>
+  );
 }
