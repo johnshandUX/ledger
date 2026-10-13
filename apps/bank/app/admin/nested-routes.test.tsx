@@ -4,11 +4,10 @@ import AccountAdministrationPage from "./account-administration/page";
 import AuditActivityPage from "./audit-activity/page";
 import BillingPage from "./billing/page";
 import BusinessDetailsPage from "./business-details/page";
-import PeopleAccessPage from "./people-access/page";
 import SecurityControlsPage from "./security-controls/page";
 
 const nestedPages = [
-  ["People & access", PeopleAccessPage], ["Business details", BusinessDetailsPage], ["Billing", BillingPage],
+  ["Business details", BusinessDetailsPage], ["Billing", BillingPage],
   ["Account administration", AccountAdministrationPage], ["Security & controls", SecurityControlsPage], ["Audit & activity", AuditActivityPage],
 ] as const;
 
