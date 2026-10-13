@@ -2,6 +2,7 @@
 
 import { Button, Select } from "@johnshandux/ledger-design-system";
 import type { DataTableSortDirection, DataTableState } from "@johnshandux/ledger-design-system/data-table";
+import { Icon } from "@johnshandux/ledger-design-system/icons";
 
 type MobileSortOption = {
   columnId: string;
@@ -14,13 +15,18 @@ type MobileTableSortControlsProps = {
   options: readonly MobileSortOption[];
   state: DataTableState;
   onStateChange: (state: DataTableState) => void;
+  iconOnlyDirection?: boolean;
+  compact?: boolean;
 };
 
-export function MobileTableSortControls({ label, options, state, onStateChange }: MobileTableSortControlsProps) {
+export function MobileTableSortControls({ label, options, state, onStateChange, iconOnlyDirection = false, compact = false }: MobileTableSortControlsProps) {
   const activeOption = options.find(option => option.columnId === state.sort?.columnId);
+  const direction = state.sort?.direction;
+  const oppositeDirection = direction === "ascending" ? "descending" : "ascending";
 
   return (
-    <div className="mobile-table-controls">
+    <div className={`mobile-table-controls${compact ? " mobile-table-controls--compact" : ""}`}>
+      {compact && <Icon name="sort" size="medium" className="mobile-table-sort-icon" aria-hidden="true" />}
       <Select
         label={label}
         value={activeOption?.columnId ?? "source"}
@@ -41,15 +47,23 @@ export function MobileTableSortControls({ label, options, state, onStateChange }
         <Button
           type="button"
           variant="secondary"
-          className="mobile-table-direction"
-          aria-label={`Sort direction: ${state.sort.direction}; change to ${state.sort.direction === "ascending" ? "descending" : "ascending"}`}
+          size={iconOnlyDirection ? "small" : "default"}
+          className={`mobile-table-direction${iconOnlyDirection ? " mobile-table-direction--icon" : ""}`}
+          aria-label={`Sort ${direction}; change to ${oppositeDirection}`}
           onClick={() => onStateChange({
             ...state,
-            sort: { ...state.sort!, direction: state.sort!.direction === "ascending" ? "descending" : "ascending" },
+            sort: { ...state.sort!, direction: oppositeDirection },
             pageIndex: 0,
           })}
         >
-          {state.sort.direction === "ascending" ? "Ascending" : "Descending"}
+          {iconOnlyDirection ? (
+            <Icon
+              name={direction === "ascending" ? "arrow-up" : "arrow-down"}
+              size="medium"
+              className={`mobile-table-direction-icon mobile-table-direction-icon--${direction}`}
+              aria-hidden="true"
+            />
+          ) : direction === "ascending" ? "Ascending" : "Descending"}
         </Button>
       )}
     </div>
