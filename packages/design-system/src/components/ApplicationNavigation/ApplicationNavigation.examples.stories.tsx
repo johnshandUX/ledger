@@ -29,21 +29,20 @@ type ProductExample = Readonly<{
 
 const bank: ProductExample = {
   productName: "Ledger Bank",
-  pageTitle: "Accounts",
-  activeDestinationId: "accounts",
+  pageTitle: "Cash flow",
+  activeDestinationId: "cash-flow",
   groups: [
-    { id: "primary", destinations: [{ id: "accounts", label: "Accounts", href: "#bank-accounts" }, { id: "payments", label: "Payments", href: "#bank-payments" }, { id: "expenses", label: "Expenses", href: "#bank-expenses" }] },
+    { id: "primary", destinations: [{ id: "accounts", label: "Accounts", href: "#bank-accounts" }, { id: "payments", label: "Payments", href: "#bank-payments" }, { id: "expenses", label: "Expenses", href: "#bank-expenses" }, { id: "reports", label: "Reports", href: "#bank-reports" }] },
     { id: "treasury", label: "Treasury", destinations: [{ id: "cash-flow", label: "Cash flow", href: "#bank-cash-flow" }, { id: "fx", label: "FX", href: "#bank-fx" }, { id: "liquidity", label: "Liquidity", href: "#bank-liquidity" }, { id: "forecasting", label: "Forecasting", href: "#bank-forecasting" }] },
     { id: "operations", label: "Operations", destinations: [{ id: "receivables", label: "Receivables", href: "#bank-receivables" }, { id: "payables", label: "Payables", href: "#bank-payables" }] },
-    { id: "analysis", label: "Analysis", destinations: [{ id: "reports", label: "Reports", href: "#bank-reports" }, { id: "insights", label: "Insights", href: "#bank-insights" }] },
   ],
   utility: [{ id: "integrations", label: "Integrations", href: "#bank-integrations" }, { id: "admin", label: "Admin", href: "#bank-admin" }],
 };
 
 const accounting: ProductExample = {
   productName: "Ledger Accounting",
-  pageTitle: "Dashboard",
-  activeDestinationId: "dashboard",
+  pageTitle: "Reconciliation",
+  activeDestinationId: "reconciliation",
   groups: [
     { id: "primary", destinations: [{ id: "dashboard", label: "Dashboard", href: "#accounting-dashboard" }, { id: "sales", label: "Sales", href: "#accounting-sales" }, { id: "purchases", label: "Purchases", href: "#accounting-purchases" }] },
     { id: "accounting", label: "Accounting", destinations: [{ id: "chart", label: "Chart of accounts", href: "#accounting-chart" }, { id: "journals", label: "Journals", href: "#accounting-journals" }, { id: "vat", label: "VAT", href: "#accounting-vat" }, { id: "reconciliation", label: "Reconciliation", href: "#accounting-reconciliation" }] },

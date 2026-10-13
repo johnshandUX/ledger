@@ -205,7 +205,7 @@ export function SideNavGroup({ children, className, label, ...props }: SideNavGr
     return <div {...props} className={cn("ledger-side-nav-group", className)}><div className="ledger-side-nav-group__items">{children}</div></div>;
   }
   return (
-    <section {...props} aria-labelledby={headingId} className={cn("ledger-side-nav-group", className)}>
+    <section {...props} aria-labelledby={headingId} className={cn("ledger-side-nav-group", "ledger-side-nav-group--labelled", className)}>
       <h2 id={headingId} className="ledger-side-nav-group__heading">{label}</h2>
       <div className="ledger-side-nav-group__items">{children}</div>
     </section>

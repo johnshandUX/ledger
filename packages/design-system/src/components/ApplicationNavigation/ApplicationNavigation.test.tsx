@@ -65,14 +65,21 @@ describe("ApplicationNavigation", () => {
   it("uses a labelled section for grouped destinations", () => {
     const html = renderToStaticMarkup(<AppShell navigation={<SideNav><SideNavNavigation><SideNavGroup label="Planning"><SideNavItem href="/forecast">Forecast</SideNavItem></SideNavGroup></SideNavNavigation></SideNav>}><WorkspaceHeader>Forecast</WorkspaceHeader></AppShell>);
     expect(html).toMatch(/<section aria-labelledby="[^"]+"/);
+    expect(html).toContain("ledger-side-nav-group--labelled");
     expect(html).toContain("<h2");
   });
 
   it("renders an unlabelled primary group without an empty heading or labelled-section gap", () => {
     const html = renderToStaticMarkup(<AppShell navigation={<SideNav><SideNavNavigation><SideNavGroup><SideNavItem href="/accounts">Accounts</SideNavItem></SideNavGroup></SideNavNavigation></SideNav>}><WorkspaceHeader>Accounts</WorkspaceHeader></AppShell>);
     expect(html).toContain("Accounts");
+    expect(html).not.toContain("ledger-side-nav-group--labelled");
     expect(html).not.toContain("<h2");
     expect(html).not.toContain("aria-labelledby");
+  });
+
+  it("indents the complete destination surface only within labelled groups", () => {
+    const css = readFileSync(new URL("./ApplicationNavigation.css", import.meta.url), "utf8");
+    expect(css).toMatch(/\.ledger-side-nav-group--labelled > \.ledger-side-nav-group__items \{[^}]*margin-inline-start: var\(--ledger-space-4\)/);
   });
 
   it("composes distinct product configurations without product-specific components", () => {

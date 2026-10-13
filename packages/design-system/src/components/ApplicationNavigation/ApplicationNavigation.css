@@ -20,6 +20,7 @@
 .ledger-side-nav-group + .ledger-side-nav-group { margin-top: var(--ledger-space-5); }
 .ledger-side-nav-group__heading { margin: 0 0 var(--ledger-space-2); padding: 0 var(--ledger-space-3); color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-small); font-weight: var(--ledger-font-weight-semibold); line-height: var(--ledger-line-height-small); letter-spacing: 0.04em; text-transform: uppercase; }
 .ledger-side-nav-group__items { display: grid; gap: var(--ledger-space-1); }
+.ledger-side-nav-group--labelled > .ledger-side-nav-group__items { min-width: 0; margin-inline-start: var(--ledger-space-4); }
 .ledger-navigation-control { display: inline-grid; flex: 0 0 auto; width: var(--ledger-space-7); height: var(--ledger-space-7); padding: 0; place-items: center; color: var(--ledger-color-text); background: transparent; border: var(--ledger-border-width-thin) solid transparent; border-radius: var(--ledger-radius-medium); cursor: pointer; }
 .ledger-navigation-control:hover { background: var(--ledger-color-surface-hover); }
 .ledger-navigation-control:active { background: var(--ledger-color-surface-selected); }
