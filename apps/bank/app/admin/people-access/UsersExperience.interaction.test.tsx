@@ -44,6 +44,13 @@ async function setInputValue(input: HTMLInputElement, value: string) {
   });
 }
 
+async function setSelectValue(select: HTMLSelectElement, value: string) {
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, "value")?.set?.call(select, value);
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
+
 function desktop() {
   const element = container.querySelector<HTMLElement>(".people-access-desktop");
   if (!element) throw new Error("Missing desktop users presentation");
@@ -58,6 +65,28 @@ function button(scope: ParentNode, name: string) {
 }
 
 describe("Users experience interactions", () => {
+  it("uses an accessible icon direction toggle and preserves mobile sort-field selection", async () => {
+    const mobile = container.querySelector<HTMLElement>(".people-access-mobile")!;
+    const select = mobile.querySelector<HTMLSelectElement>(".mobile-table-controls select")!;
+    const firstVisibleUser = () => mobile.querySelector<HTMLElement>(".people-access-user-name")?.textContent;
+
+    expect(select.value).toBe("user");
+    expect(firstVisibleUser()).toBe("Aisha Khan");
+
+    const ascending = button(mobile, "Sort ascending; change to descending");
+    expect(ascending.textContent).toBe("");
+    expect(ascending.querySelector(".mobile-table-direction-icon--ascending")).not.toBeNull();
+
+    await click(ascending);
+    const descending = button(mobile, "Sort descending; change to ascending");
+    expect(descending.querySelector(".mobile-table-direction-icon--descending")).not.toBeNull();
+    expect(firstVisibleUser()).toBe("Thomas Reed");
+
+    await setSelectValue(select, "additionalAccess");
+    expect(select.value).toBe("additionalAccess");
+    expect(button(mobile, "Sort ascending; change to descending")).not.toBeNull();
+  });
+
   it("searches by email, reports matching versus total users and clears all criteria", async () => {
     const search = desktop().querySelector<HTMLInputElement>('input[type="search"]')!;
     await setInputValue(search, "noah.wilson");
