@@ -31,7 +31,7 @@ function OrganisationExample({ long = false, one = false }: { long?: boolean; on
 
 function Navigation({ overflow = false, restricted = false, longOrganisation = false, longUser = false }: { overflow?: boolean; restricted?: boolean; longOrganisation?: boolean; longUser?: boolean }) {
   return (
-    <SideNav>
+    <SideNav onClick={(event) => event.preventDefault()}>
       <SideNavHeader><strong>Product workspace</strong></SideNavHeader>
       <SideNavContext><OrganisationExample long={longOrganisation} /></SideNavContext>
       <SideNavNavigation>
@@ -87,11 +87,12 @@ export const ResponsiveNavigationOverlay: Story = {
     await waitFor(() => expect(body.getByRole("dialog", { name: "Application navigation" })).toBeVisible());
     await userEvent.click(body.getByRole("link", { name: "Activity" }));
     await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
-    await userEvent.click(trigger);
+    const restoredTrigger = body.getByRole("button", { name: "Show navigation" });
+    await userEvent.click(restoredTrigger);
     await waitFor(() => expect(body.getByRole("dialog", { name: "Application navigation" })).toBeVisible());
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
-    await waitFor(() => expect(trigger).toHaveFocus());
+    await waitFor(() => expect(body.getByRole("button", { name: "Show navigation" })).toHaveFocus());
   },
 };
 export const OverflowingNavigation: Story = { render: () => <ShellExample navigation={<Navigation overflow />} /> };

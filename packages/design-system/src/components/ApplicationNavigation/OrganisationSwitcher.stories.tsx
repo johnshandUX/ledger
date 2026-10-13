@@ -9,5 +9,23 @@ const meta = { title: "Patterns/Application Navigation/OrganisationSwitcher", co
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const OneOrganisation: Story = { render: () => <Example options={standard.slice(0, 1)} /> };
-export const MultipleOrganisations: Story = { render: () => <Example options={standard} />, play: async ({ canvasElement }) => { const body = within(canvasElement.ownerDocument.body); const trigger = body.getByRole("button", { name: /Switch organisation/ }); await userEvent.click(trigger); await waitFor(() => expect(body.getByRole("menu")).toBeVisible()); await userEvent.keyboard("{ArrowDown}{Enter}"); await waitFor(() => expect(trigger).toHaveTextContent("Cedar & Field Services")); } };
+export const MultipleOrganisations: Story = {
+  render: () => <Example options={standard} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole("button", { name: /Switch organisation/ });
+    await userEvent.click(trigger);
+    const menu = await body.findByRole("menu");
+    const selectedItem = within(menu).getByRole("menuitemradio", { checked: true });
+    const nextItem = within(menu).getByRole("menuitemradio", { name: "Cedar & Field Services" });
+    await waitFor(() => expect(menu).toHaveFocus());
+    await userEvent.keyboard("{ArrowDown}");
+    await waitFor(() => expect(selectedItem).toHaveFocus());
+    await userEvent.keyboard("{ArrowDown}");
+    await waitFor(() => expect(nextItem).toHaveFocus());
+    await userEvent.keyboard("{Enter}");
+    await waitFor(() => expect(trigger).toHaveTextContent("Cedar & Field Services"));
+  },
+};
 export const LongOrganisationNames: Story = { render: () => <Example options={[{ id: "long", name: "The International Organisation for Complex Enterprise Operations" }, ...standard]} /> };

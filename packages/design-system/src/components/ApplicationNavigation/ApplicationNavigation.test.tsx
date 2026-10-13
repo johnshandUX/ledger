@@ -53,7 +53,7 @@ describe("ApplicationNavigation", () => {
     expect(css).toMatch(/ledger-side-nav__header \{[^}]*box-sizing: border-box;[^}]*height: calc\(var\(--ledger-space-8\) \+ var\(--ledger-space-2\)\)/);
     expect(css).toMatch(/ledger-side-nav-item \{[^}]*box-sizing: border-box;[^}]*min-height: calc\(var\(--ledger-space-7\) - var\(--ledger-space-1\)\)/);
     expect(css).toMatch(/ledger-side-nav-item:hover \{[^}]*background: var\(--ledger-color-surface-elevated\)/);
-    expect(css).toMatch(/ledger-side-nav-group__heading \{[^}]*color: var\(--ledger-color-text-tertiary\);[^}]*font-size: var\(--ledger-font-size-small\);[^}]*line-height: var\(--ledger-line-height-small\)/);
+    expect(css).toMatch(/ledger-side-nav-group__heading \{[^}]*color: var\(--ledger-color-text-secondary\);[^}]*font-size: var\(--ledger-font-size-small\);[^}]*line-height: var\(--ledger-line-height-small\)/);
   });
 
   it("can pass navigation semantics to a routing-library link", () => {
