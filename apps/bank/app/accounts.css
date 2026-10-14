@@ -11,8 +11,8 @@
 .summary-values{display:grid;gap:var(--ledger-space-1)}
 .summary-value{font-size:var(--ledger-font-size-heading-small);font-weight:var(--ledger-font-weight-semibold);margin-top:var(--ledger-space-1)}
 
-.accounts-table{/* presentation owned by design-system DataTable */}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,'Roboto Mono',monospace;color:var(--ledger-color-text)}
+.accounts-table .ledger-table__cell:first-child{width:30%;max-width:280px}
+.accounts-table .acc-name{overflow-wrap:anywhere}
 .acc-name{font-weight:var(--ledger-font-weight-semibold)}
 .acc-sub{color:var(--ledger-color-text-secondary);font-size:13px}
 

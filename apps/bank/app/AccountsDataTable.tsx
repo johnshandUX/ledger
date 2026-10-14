@@ -25,11 +25,18 @@ export const accountColumns: readonly DataTableColumn<BankAccount>[] = [
     sort: { value: row => row.name },
   },
   {
+    id: "sortCode",
+    label: "Sort code",
+    header: "Sort code",
+    nowrap: true,
+    cell: ({ row }) => <span className="identifier">{row.sortCode ?? "—"}</span>,
+  },
+  {
     id: "accountNumber",
     label: "Account number",
-    header: "Number / Sort",
+    header: "Account number",
     nowrap: true,
-    cell: ({ row }) => <div><div className="mono">{row.accountNumber ?? "—"}</div><div className="mono">{row.sortCode ?? "—"}</div></div>,
+    cell: ({ row }) => <span className="identifier">{row.accountNumber ?? "—"}</span>,
   },
   {
     id: "type",

@@ -36,16 +36,37 @@ describe("accounts overview", () => {
     expect(html).toContain("Accounts and balances");
     expect(html).toContain("Sort by Account");
     expect(html).toContain("Sort by Available balance");
+    expect(html).toContain(">Sort code<");
+    expect(html).toContain(">Account number<");
+    expect(html).not.toContain("Number / Sort");
     expect(html).toContain("Sort accounts by");
     expect(html).toContain('class="accounts-table"');
     expect(html).toContain("accounts");
     expect(accountColumns.map(({ id }) => id)).toEqual([
       "account",
+      "sortCode",
       "accountNumber",
       "type",
       "currentBalance",
       "availableBalance",
     ]);
+  });
+
+  it("renders separate UK identifiers without losing formatting or leading zeroes", () => {
+    const account = {
+      ...getBankAccounts()[0]!,
+      sortCode: "01-02-03",
+      accountNumber: "00123456",
+    };
+    const sortCode = accountColumns.find(({ id }) => id === "sortCode")!;
+    const accountNumber = accountColumns.find(({ id }) => id === "accountNumber")!;
+    const sortCodeHtml = renderToStaticMarkup(<>{sortCode.cell({ row: account, rowId: account.id })}</>);
+    const accountNumberHtml = renderToStaticMarkup(<>{accountNumber.cell({ row: account, rowId: account.id })}</>);
+
+    expect(sortCodeHtml).toContain('class="identifier">01-02-03<');
+    expect(accountNumberHtml).toContain('class="identifier">00123456<');
+    expect(sortCode.sort).toBeUndefined();
+    expect(accountNumber.sort).toBeUndefined();
   });
 
   it("uses the requested mobile card hierarchy and status treatment", () => {
