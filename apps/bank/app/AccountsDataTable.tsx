@@ -121,7 +121,7 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
       </div>
 
       <div className="accounts-mobile">
-        <MobileTableSortControls compact iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={state} onStateChange={setState} />
+        <MobileTableSortControls iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={state} onStateChange={setState} />
         {rowModel.sortedRows.map(account => (
           <article key={account.id} className="acc-card-shell">
             <Link className="acc-card" href={`/accounts/${account.id}`}>

@@ -143,7 +143,7 @@ export function UsersExperience() {
         <UsersTable rows={rows} state={state} onStateChange={setState} />
         {rowModel.resultRowCount > 0 && (
           <>
-            <MobileTableSortControls label="Sort users by" options={sortOptions} state={state} onStateChange={setState} iconOnlyDirection />
+            <MobileTableSortControls iconOnlyDirection label="Sort users by" options={sortOptions} state={state} onStateChange={setState} />
             <ol className="people-access-user-cards">
               {rowModel.visibleRows.map((user) => (
                 <li key={user.id} className="people-access-user-card">

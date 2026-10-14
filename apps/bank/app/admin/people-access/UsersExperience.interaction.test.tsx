@@ -71,6 +71,7 @@ describe("Users experience interactions", () => {
     const firstVisibleUser = () => mobile.querySelector<HTMLElement>(".people-access-user-name")?.textContent;
 
     expect(select.value).toBe("user");
+    expect(mobile.querySelector(`label[for="${select.id}"]`)?.textContent).toBe("Sort users by");
     expect(firstVisibleUser()).toBe("Aisha Khan");
 
     const ascending = button(mobile, "Sort ascending; change to descending");
@@ -135,6 +136,10 @@ describe("Users experience interactions", () => {
     await click(button(desktop(), "Next page"));
     expect(desktop().textContent).toContain("Showing 11–18 of 18 users");
     expect(button(desktop(), "Page 2").getAttribute("aria-current")).toBe("page");
+    const desktopPage = [...desktop().querySelectorAll<HTMLElement>("tbody .people-access-user-name")].map(user => user.textContent);
+    const mobilePage = [...container.querySelectorAll<HTMLElement>(".people-access-user-cards .people-access-user-name")].map(user => user.textContent);
+    expect(desktopPage).toHaveLength(8);
+    expect(mobilePage).toEqual(desktopPage);
   });
 
   it("changes page size and renders the no-user state without an add action", async () => {

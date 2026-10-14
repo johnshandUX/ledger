@@ -1,0 +1,28 @@
+.mobile-table-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ledger-space-3);
+  min-width: 0;
+}
+
+.mobile-table-sort-field {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.mobile-table-sort-field .ledger-select-field {
+  min-width: 0;
+}
+
+.mobile-table-direction {
+  flex: 0 0 auto;
+  margin-bottom: var(--ledger-space-1);
+}
+
+.mobile-table-direction--icon {
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: var(--ledger-space-2);
+  aspect-ratio: 1;
+}

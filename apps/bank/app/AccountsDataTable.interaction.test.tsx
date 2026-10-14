@@ -51,6 +51,7 @@ describe("mobile accounts interactions", () => {
     const select = mobile().querySelector<HTMLSelectElement>("select")!;
     expect(select.getAttribute("aria-label")).toBeNull();
     expect(mobile().querySelector(`label[for="${select.id}"]`)?.textContent).toBe("Sort accounts by");
+    expect(select.value).toBe("source");
     expect([...select.options].map(option => [option.value, option.textContent])).toEqual([
       ["source", "Default order"],
       ["account", "Account"],
@@ -66,8 +67,10 @@ describe("mobile accounts interactions", () => {
     const direction = mobile().querySelector<HTMLButtonElement>('[aria-label="Sort ascending; change to descending"]')!;
     expect(direction).not.toBeNull();
     expect(direction.textContent).toBe("");
+    expect(direction.querySelector(".mobile-table-direction-icon--ascending")).not.toBeNull();
     await click(direction);
     expect(firstCardName()).toBe("Strategic Liquidity Deposit");
+    expect(mobile().querySelector('[aria-label="Sort descending; change to ascending"] .mobile-table-direction-icon--descending')).not.toBeNull();
 
     await setSelectValue(select, "source");
     expect(firstCardName()).toBe("Main Operating Account");

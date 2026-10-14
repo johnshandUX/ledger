@@ -44,9 +44,7 @@
   .people-access-desktop{display:none}
   .people-access-mobile{display:block}
   .people-access-mobile .ledger-data-table__viewport{display:none}
-  .people-access-mobile .mobile-table-controls{display:flex;align-items:flex-end;gap:var(--ledger-space-3);margin-top:var(--ledger-space-4)}
-  .people-access-mobile .mobile-table-controls .ledger-select-field{min-width:0;flex:1 1 auto}
-  .people-access-mobile .mobile-table-direction--icon{flex:0 0 auto;min-width:44px;min-height:44px;margin:0;padding:var(--ledger-space-2);aspect-ratio:1}
+  .people-access-mobile .mobile-table-controls{margin-top:var(--ledger-space-4)}
 }
 @media(max-width:520px){
   .people-access-mobile .ledger-data-table__filters{justify-content:flex-start}

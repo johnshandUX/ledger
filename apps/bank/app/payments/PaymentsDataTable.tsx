@@ -55,7 +55,7 @@ export function PaymentsDataTable({ payments }: { payments: readonly BankPayment
   return <>
     <div className="payments-table"><DataTable caption="Caldermere payments" rows={payments} columns={paymentColumns} getRowId={payment => payment.id} itemLabel={{ singular: "payment", plural: "payments" }} pageSizeOptions={pageSizes} state={state} onStateChange={setState} /></div>
     <div className="payments-mobile">
-      <MobileTableSortControls label="Sort payments by" options={sortOptions} state={state} onStateChange={setState} />
+      <MobileTableSortControls iconOnlyDirection label="Sort payments by" options={sortOptions} state={state} onStateChange={setState} />
       <ol className="payment-card-list" aria-label="Caldermere payments">
         {rowModel.sortedRows.map(payment => <li className="payment-card" key={payment.id}>
           <div className="payment-card-header"><div className="payment-copy"><Link className="ledger-link payment-reference" href={`/payments/${payment.id}`}>{payment.reference}</Link><span>{payment.beneficiary.name}</span></div><strong className="financial-value">{formatMinorCurrencyAmount(payment.amountMinor, payment.currency)}</strong></div>
