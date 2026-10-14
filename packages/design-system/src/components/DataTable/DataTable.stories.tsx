@@ -1,6 +1,9 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { Button } from "../Button/Button";
+import { Icon } from "../Icon/Icon";
+import { Select } from "../Select/Select";
 import { DataTable } from "./DataTable";
 import type { DataTableColumn, DataTableFilterDefinition, DataTableState, DataTableStateChangeReason } from "./DataTable.types";
 
@@ -58,9 +61,103 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+type MobileSortField = "name" | "type" | "available";
+type MobileSortDirection = "ascending" | "descending";
+
+const mobileSortAccounts = [
+  { id: "atlas", name: "Atlas account", type: "Current", available: 430000 },
+  { id: "bramble", name: "Bramble reserve", type: "Reserve", available: 620000 },
+  { id: "cedar", name: "Cedar account", type: "Current", available: 275000 },
+  { id: "delta", name: "Delta reserve", type: "Reserve", available: 185000 },
+] as const;
+
+const mobileSortOptions = [
+  { value: "name", label: "Account name" },
+  { value: "type", label: "Account type" },
+  { value: "available", label: "Available balance" },
+];
+
+function MobileTableSortingExample() {
+  const [field, setField] = useState<MobileSortField>("name");
+  const [direction, setDirection] = useState<MobileSortDirection>("ascending");
+  const nextDirection = direction === "ascending" ? "descending" : "ascending";
+  const rows = [...mobileSortAccounts].sort((left, right) => {
+    const result = field === "available"
+      ? left.available - right.available
+      : left[field].localeCompare(right[field], "en-GB", { sensitivity: "base" });
+
+    return direction === "ascending" ? result : -result;
+  });
+
+  return (
+    <section aria-label="Mobile account sorting example" style={{ maxWidth: "390px" }}>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: "var(--ledger-space-3)" }}>
+        <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+          <Select
+            label="Sort by"
+            options={mobileSortOptions}
+            value={field}
+            onChange={event => setField(event.currentTarget.value as MobileSortField)}
+          />
+        </div>
+        <Button
+          type="button"
+          variant="secondary"
+          size="small"
+          aria-label={`Sort ${direction}; change to ${nextDirection}`}
+          onClick={() => setDirection(nextDirection)}
+          style={{ flex: "0 0 auto", minWidth: "44px", minHeight: "44px", padding: "var(--ledger-space-2)" }}
+        >
+          <Icon name={direction === "ascending" ? "arrow-up" : "arrow-down"} size="small" />
+        </Button>
+      </div>
+
+      <ol aria-label="Sorted accounts" style={{ display: "grid", gap: "var(--ledger-space-2)", margin: "var(--ledger-space-4) 0 0", padding: 0, listStyle: "none" }}>
+        {rows.map(account => (
+          <li key={account.id} style={{ display: "grid", gap: "var(--ledger-space-1)", padding: "var(--ledger-space-3)", border: "var(--ledger-border-width-thin) solid var(--ledger-color-border-subtle)", borderRadius: "var(--ledger-radius-medium)", background: "var(--ledger-color-surface)" }}>
+            <strong>{account.name}</strong>
+            <span style={{ color: "var(--ledger-color-text-secondary)" }}>{account.type}</span>
+            <span>£{account.available.toLocaleString("en-GB")}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 export const Foundation: Story = {
   args: { caption: "Accounts", rows: accounts, columns, getRowId: row => row.id, itemLabel: { singular: "account", plural: "accounts" } },
   render: args => <DataTable {...args} pageSizeOptions={[10, 20, 50]} />,
+};
+
+export const MobileTableSorting: Story = {
+  name: "Mobile table sorting",
+  args: { caption: "Accounts", rows: accounts, columns, getRowId: row => row.id },
+  parameters: {
+    docs: {
+      description: {
+        story: "Use this composition when sortable desktop headers are replaced by a mobile card or list view. The product supplies its fields and defaults, while the labelled Select and compact direction Button preserve the collection's existing sorting semantics. Keep the Button at least 44 × 44 CSS pixels and name both its current direction and available action.",
+      },
+    },
+  },
+  render: () => <MobileTableSortingExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const list = canvas.getByRole("list", { name: "Sorted accounts" });
+    const items = () => within(list).getAllByRole("listitem");
+    const ascending = canvas.getByRole("button", { name: "Sort ascending; change to descending" });
+
+    expect(items()[0]).toHaveTextContent("Atlas account");
+    expect(ascending.querySelector(".lucide-arrow-up")).toBeInTheDocument();
+
+    await userEvent.click(ascending);
+    const descending = canvas.getByRole("button", { name: "Sort descending; change to ascending" });
+    expect(descending.querySelector(".lucide-arrow-down")).toBeInTheDocument();
+    expect(items()[0]).toHaveTextContent("Delta reserve");
+
+    await userEvent.selectOptions(canvas.getByRole("combobox", { name: "Sort by" }), "available");
+    expect(items()[0]).toHaveTextContent("Bramble reserve");
+  },
 };
 
 export const PaginationInteraction: Story = {

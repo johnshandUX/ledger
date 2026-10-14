@@ -225,6 +225,76 @@ Pass the same rows, definitions and state to `createDataTableRowModel`; use `vis
 the current page or `sortedRows` when an approved responsive experience intentionally presents all
 matching records. DataTable does not render responsive cards.
 
+## Mobile table sorting pattern
+
+Mobile table sorting is a reusable composition pattern, not a DataTable feature or a new public
+component. Use it when a desktop DataTable becomes a product-owned mobile card or list view,
+sortable column headers are no longer available, and users still have a meaningful need to control
+the order. Do not add the controls to collections that do not benefit from sorting.
+
+The preferred composition places a persistently labelled Ledger `Select` beside a compact,
+icon-only Ledger `Button`:
+
+```text
+Sort by
+┌──────────────────────────┐ ┌──────┐
+│ User                   ▾ │ │  ↑   │
+└──────────────────────────┘ └──────┘
+```
+
+- The Select chooses the active sort field and occupies the available horizontal space.
+- The Button toggles direction and uses the existing `arrow-up` and `arrow-down` Ledger icons.
+- The controls use Ledger spacing and sizing tokens and align along their bottom edges.
+- The product owns the available fields, labels, default field and default direction.
+
+Selecting a field changes the active criterion; activating the direction Button toggles ascending
+and descending order. The icon reflects the current direction, but is not the only communication of
+state or action. Both controls use standard keyboard interaction. Desktop and mobile representations
+of the same collection should share sorting state and the same underlying row-processing semantics,
+rather than implementing separate sorting logic. A viewport change must not silently change the
+meaning of the active sort. Products may deliberately use either `visibleRows` or `sortedRows` for
+their responsive representation, but that pagination choice must be explicit and must operate on
+the same supplied dataset.
+
+### Responsive composition
+
+- Let the Select wrapper grow with `flex: 1` and use `min-width: 0` where a flex item would otherwise
+  prevent shrinking.
+- Keep the direction Button from stretching. It should have a consistent compact footprint with a
+  minimum 44 × 44 CSS-pixel touch target.
+- Align the bottom edge of the labelled Select with the Button. Do not vertically centre the Button
+  against the combined label-and-control block.
+- Allow enough flexible space for longer values such as “Additional access”; the composition must
+  not create horizontal page overflow at narrow widths.
+- Use established Ledger breakpoints and spacing tokens. Do not introduce an arbitrary viewport
+  threshold solely for these controls.
+
+### Accessibility
+
+- Keep a visible Select label and preserve its programmatic association with the control.
+- Give the direction Button an accessible name that states both the current direction and the action
+  available, for example, “Sort ascending; change to descending”. Avoid ambiguous labels that could
+  describe either the current state or the result of activation.
+- Treat the arrow icon as decorative when the Button provides the accessible name. Do not rely on
+  the icon alone to communicate state or action.
+- Preserve native Select and Button keyboard behaviour, visible Ledger focus indicators, and
+  adequate contrast in every supported theme.
+
+This pattern changes presentation order only. It is not a substitute for filtering, pagination,
+search, record mutation, or permission changes.
+
+### Guidance for implementers and coding agents
+
+1. Compose the public Ledger Select, Button and Icon primitives; do not create another design-system
+   component without a demonstrated reuse requirement.
+2. Preserve the collection's existing sort definitions and row-processing semantics, including
+   stable ordering and any product-owned default.
+3. Share sorting state between desktop and mobile representations where they show the same
+   collection; avoid parallel implementations.
+4. Keep the direction control compact, keyboard operable and unambiguous to assistive technology.
+5. Treat Ledger Bank's `MobileTableSortControls` usages as implementation examples, not as a
+   design-system dependency.
+
 ## Archived full-family proposal and future direction — not API reference
 
 The remainder of this document preserves the original reviewed full-family proposal so later
