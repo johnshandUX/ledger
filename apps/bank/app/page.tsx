@@ -25,9 +25,7 @@ export default function Home() {
               placeholder="Search accounts"
               type="search"
             />
-            {process.env.NODE_ENV !== "production" && (
-              <Link className="ledger-button ledger-button--primary primary-action" href="/payments/new">Make a payment</Link>
-            )}
+            <Link className="ledger-button ledger-button--primary primary-action" href="/payments/new">Make a payment</Link>
           </div>
         </div>
 
