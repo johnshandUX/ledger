@@ -30,15 +30,27 @@ export function PaymentsV2Prototype({
   recipients = [],
   recipientGroups = [],
   referenceDate,
+  initialSourceAccountId,
+  requireSourceAccountSelection = false,
+  sourceAccountSelectionError,
 }: Readonly<{
   accounts: readonly PrototypeAccount[];
   recipients?: readonly PrototypeRecipient[];
   recipientGroups?: readonly PrototypeRecipientGroup[];
   referenceDate?: string;
+  initialSourceAccountId?: string;
+  requireSourceAccountSelection?: boolean;
+  sourceAccountSelectionError?: string;
 }>) {
   const [mode, setMode] = useState<PaymentMode>("single");
   const [view, setView] = useState<PrototypeView>("entry");
-  const [accountId, setAccountId] = useState(accounts[0]?.id ?? "");
+  const [accountId, setAccountId] = useState(() => {
+    if (initialSourceAccountId && accounts.some(({ id }) => id === initialSourceAccountId)) {
+      return initialSourceAccountId;
+    }
+    return requireSourceAccountSelection ? "" : accounts[0]?.id ?? "";
+  });
+  const [accountSelectionError, setAccountSelectionError] = useState(sourceAccountSelectionError);
   const [amount, setAmount] = useState("");
   const [amountTouched, setAmountTouched] = useState(false);
   const [showRecipientPlaceholder, setShowRecipientPlaceholder] = useState(false);
@@ -51,7 +63,7 @@ export function PaymentsV2Prototype({
   const temporaryRecipientCounter = useRef(0);
   const subviewHeadingRef = useRef<HTMLHeadingElement>(null);
   const restoreFocusTarget = useRef<"add-recipient" | "continue-recipients" | undefined>(undefined);
-  const account = accounts.find(({ id }) => id === accountId) ?? accounts[0];
+  const account = accounts.find(({ id }) => id === accountId);
   const effectiveReferenceDate = useMemo(
     () => referenceDate ?? getPrototypeBusinessDate(),
     [referenceDate],
@@ -109,7 +121,7 @@ export function PaymentsV2Prototype({
     returnToRecipientDirectory();
   }
 
-  if (!account) {
+  if (accounts.length === 0) {
     return <div className="page payments-v2-prototype-page"><Alert variant="error"><AlertDescription>No eligible GBP source accounts are available for this prototype.</AlertDescription></Alert></div>;
   }
 
@@ -148,16 +160,18 @@ export function PaymentsV2Prototype({
         <PaymentModeControl value={mode} onChange={selectMode} />
         <div className="payments-v2-field-group">
           <p className="payments-v2-section-label">From account</p>
+          {accountSelectionError && <Alert variant="warning" role="status"><AlertDescription>{accountSelectionError}</AlertDescription></Alert>}
           <AccountSelector
             accounts={accounts}
             selected={account}
             onSelect={(id) => {
               setAccountId(id);
+              setAccountSelectionError(undefined);
               if (amount) setAmountTouched(true);
             }}
           />
         </div>
-        {mode === "single" ? (
+        {!account ? null : mode === "single" ? (
           <SinglePaymentSection
             value={amount}
             receivingAmount={formattedAmount}
@@ -466,7 +480,7 @@ function formatBritishDate(value: string) {
 
 function AccountSelector({ accounts, selected, onSelect }: Readonly<{
   accounts: readonly PrototypeAccount[];
-  selected: PrototypeAccount;
+  selected?: PrototypeAccount;
   onSelect: (id: string) => void;
 }>) {
   const [open, setOpen] = useState(false);
@@ -475,13 +489,15 @@ function AccountSelector({ accounts, selected, onSelect }: Readonly<{
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="payments-v2-account-trigger" type="button" aria-label={`Change account. Current account ${selected.name}, ${selected.maskedIdentifier}, available balance ${formatMinorCurrencyAmount(selected.availableBalanceMinor, "GBP")}`}>
-          <span className="payments-v2-account-heading"><span className="payments-v2-account-name"><Icon name="card" /><strong>{selected.name}</strong></span><Icon name="chevron-right" /></span>
-          <span className="identifier payments-v2-muted">{selected.maskedIdentifier}</span>
-          <span className="payments-v2-account-divider" aria-hidden="true" />
-          <span className="payments-v2-muted">Available balance</span>
-          <strong className="payments-v2-account-balance financial-value">{formatMinorCurrencyAmount(selected.availableBalanceMinor, "GBP")}</strong>
-          <span className="payments-v2-change-affordance">Change account</span>
+        <button className="payments-v2-account-trigger" type="button" aria-label={selected ? `Change account. Current account ${selected.name}, ${selected.maskedIdentifier}, available balance ${formatMinorCurrencyAmount(selected.availableBalanceMinor, "GBP")}` : "Choose a source account"}>
+          <span className="payments-v2-account-heading"><span className="payments-v2-account-name"><Icon name="card" /><strong>{selected?.name ?? "Choose an account"}</strong></span><Icon name="chevron-right" /></span>
+          {selected && <>
+            <span className="identifier payments-v2-muted">{selected.maskedIdentifier}</span>
+            <span className="payments-v2-account-divider" aria-hidden="true" />
+            <span className="payments-v2-muted">Available balance</span>
+            <strong className="payments-v2-account-balance financial-value">{formatMinorCurrencyAmount(selected.availableBalanceMinor, "GBP")}</strong>
+          </>}
+          <span className="payments-v2-change-affordance">{selected ? "Change account" : "Select account"}</span>
         </button>
       </DialogTrigger>
       <DialogContent className="payments-v2-account-picker" title="Choose account" description="Select an eligible GBP account for this payment.">
@@ -490,7 +506,7 @@ function AccountSelector({ accounts, selected, onSelect }: Readonly<{
           <ul className="payments-v2-option-list" aria-label="Eligible GBP accounts">
             {filtered.map((option) => (
               <li key={option.id}>
-                <button className="payments-v2-option" type="button" aria-pressed={option.id === selected.id} onClick={() => { onSelect(option.id); setOpen(false); setQuery(""); }}>
+                <button className="payments-v2-option" type="button" aria-pressed={option.id === selected?.id} onClick={() => { onSelect(option.id); setOpen(false); setQuery(""); }}>
                   <span><strong>{option.name}</strong><small>{option.maskedIdentifier}</small></span>
                   <span className="financial-value">{formatMinorCurrencyAmount(option.availableBalanceMinor, "GBP")}</span>
                 </button>

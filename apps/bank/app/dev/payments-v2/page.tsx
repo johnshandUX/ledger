@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getBeneficiaries } from "@johnshandux/ledger-synthetic-finance";
 import { getBankAccounts } from "../../../src/finance/accounts";
 import { BANK_BUSINESS_ID, bankFinanceEnvironment } from "../../../src/finance/environment";
+import { isEligiblePaymentSourceAccount } from "../../../src/finance/payment-sources";
 import { maskAccountNumber } from "../../../src/presentation/payments";
 import { ProductShell } from "../../ProductShell";
 import { PaymentsV2Prototype } from "./PaymentsV2Prototype";
@@ -24,13 +25,7 @@ export default function PaymentsV2PrototypePage() {
 
   const bankAccounts = getBankAccounts();
   const accounts: PrototypeAccount[] = bankAccounts
-    .filter(
-      (account) =>
-        account.currency === "GBP" &&
-        account.status === "active" &&
-        account.accountType === "current" &&
-        account.accountNumber,
-    )
+    .filter(isEligiblePaymentSourceAccount)
     .slice(0, 8)
     .map((account) => ({
       id: account.id,

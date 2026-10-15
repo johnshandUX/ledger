@@ -107,6 +107,51 @@ describe("Payments V2 adaptive entry", () => {
     expect(button("Continue to recipient").disabled).toBe(true);
   });
 
+  it("uses an explicitly supplied eligible source account", async () => {
+    await act(async () => root.render(
+      <PaymentsV2Prototype
+        key="preselected-source"
+        accounts={accounts}
+        recipients={recipients}
+        recipientGroups={recipientGroups}
+        referenceDate="2026-10-09"
+        initialSourceAccountId="account-2"
+      />,
+    ));
+
+    expect(container.textContent).toContain("Supplier Payments");
+    expect(container.querySelector(".payments-v2-account-trigger")?.getAttribute("aria-label"))
+      .toContain("Current account Supplier Payments");
+  });
+
+  it("requires recovery from an invalid requested source instead of silently defaulting", async () => {
+    await act(async () => root.render(
+      <PaymentsV2Prototype
+        key="invalid-source"
+        accounts={accounts}
+        recipients={recipients}
+        recipientGroups={recipientGroups}
+        referenceDate="2026-10-09"
+        requireSourceAccountSelection
+        sourceAccountSelectionError="The selected source account is unavailable. Choose an eligible account to continue."
+      />,
+    ));
+
+    expect(container.textContent).toContain("The selected source account is unavailable.");
+    expect(container.textContent).toContain("Choose an account");
+    expect(container.querySelector("#payments-v2-amount")).toBeNull();
+
+    await click(container.querySelector<HTMLButtonElement>(".payments-v2-account-trigger")!);
+    const option = [...document.querySelectorAll<HTMLButtonElement>(".payments-v2-option")]
+      .find((candidate) => candidate.textContent?.includes("Supplier Payments"));
+    if (!option) throw new Error("Missing recovery account option");
+    await click(option);
+
+    expect(container.textContent).not.toContain("The selected source account is unavailable.");
+    expect(container.textContent).toContain("Supplier Payments");
+    expect(container.querySelector("#payments-v2-amount")).toBeTruthy();
+  });
+
   it("switches to Multiple and immediately shows recipient selection without the introductory card", async () => {
     await click(radio("multiple"));
     expect(radio("multiple").checked).toBe(true);

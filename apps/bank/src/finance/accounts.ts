@@ -4,6 +4,7 @@ import {
   getLiquidityPosition,
   type Account,
   type BalanceSnapshot,
+  type DeepReadonly,
   type LiquidityPosition,
 } from "@johnshandux/ledger-synthetic-finance";
 
@@ -54,12 +55,19 @@ function withCurrentBalance(account: Account): BankAccount {
 }
 
 function currentBalanceFor(accountId: string): BalanceSnapshot {
-  const balances = bankFinanceEnvironment.balances
-    .filter((balance) => balance.accountId === accountId)
-    .sort((left, right) => right.asOf.localeCompare(left.asOf));
-  const balance = balances[0];
+  const balance = getLatestBalanceForAccount(bankFinanceEnvironment.balances, accountId);
   if (!balance) {
     throw new Error(`Account ${accountId} has no balance snapshot at ${BANK_FINANCE_AS_OF}.`);
   }
   return balance;
+}
+
+export function getLatestBalanceForAccount(
+  balances: readonly DeepReadonly<BalanceSnapshot>[],
+  accountId: string,
+): DeepReadonly<BalanceSnapshot> | undefined {
+  return balances
+    .filter((balance) => balance.accountId === accountId)
+    .reduce<DeepReadonly<BalanceSnapshot> | undefined>((latest, balance) =>
+      !latest || balance.asOf > latest.asOf ? balance : latest, undefined);
 }
