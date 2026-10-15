@@ -6,7 +6,7 @@ import { BankStateProvider } from "./BankStateProvider";
 import { PrototypeNotice } from "./PrototypeNotice";
 
 const inter = Inter({
-  variable: "--ledger-font-family-sans",
+  variable: "--ledger-font-family-product",
   subsets: ["latin"],
 });
 

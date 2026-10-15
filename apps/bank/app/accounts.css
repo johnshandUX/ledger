@@ -34,6 +34,7 @@
 .account-details dl div{padding:var(--ledger-space-4) var(--ledger-space-3)}
 .account-details dt,.transaction-card dt{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small)}
 .account-details dd,.transaction-card dd{margin:var(--ledger-space-1) 0 0}
+.account-identifier{font-family:var(--ledger-font-family-product);font-variant-numeric:tabular-nums}
 .identifier,.financial-value{font-variant-numeric:tabular-nums}
 .section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:var(--ledger-space-4)}
 .section-heading p{margin:var(--ledger-space-1) 0 0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small)}

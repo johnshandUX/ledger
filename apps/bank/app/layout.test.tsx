@@ -8,4 +8,11 @@ describe("Ledger Bank application state boundary", () => {
     expect(source.match(/<BankStateProvider>/g)).toHaveLength(1);
     expect(source).toContain("<BankStateProvider>{children}</BankStateProvider>");
   });
+
+  it("loads Inter through the authoritative product typography token", () => {
+    const source = readFileSync(new URL("./layout.tsx", import.meta.url), "utf8");
+
+    expect(source).toContain('variable: "--ledger-font-family-product"');
+    expect(source).not.toContain('variable: "--ledger-font-family-sans"');
+  });
 });

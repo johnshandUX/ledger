@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import Home from "./page";
@@ -63,10 +64,19 @@ describe("accounts overview", () => {
     const sortCodeHtml = renderToStaticMarkup(<>{sortCode.cell({ row: account, rowId: account.id })}</>);
     const accountNumberHtml = renderToStaticMarkup(<>{accountNumber.cell({ row: account, rowId: account.id })}</>);
 
-    expect(sortCodeHtml).toContain('class="identifier">01-02-03<');
-    expect(accountNumberHtml).toContain('class="identifier">00123456<');
+    expect(sortCodeHtml).toContain('class="account-identifier">01-02-03<');
+    expect(accountNumberHtml).toContain('class="account-identifier">00123456<');
     expect(sortCode.sort).toBeUndefined();
     expect(accountNumber.sort).toBeUndefined();
+  });
+
+  it("keeps desktop account identifiers in Ledger product typography", () => {
+    const css = readFileSync(new URL("./accounts.css", import.meta.url), "utf8");
+
+    expect(css).toMatch(
+      /\.account-identifier\s*\{[^}]*font-family:var\(--ledger-font-family-product\)/,
+    );
+    expect(css).not.toMatch(/\.account-identifier\s*\{[^}]*brand-mono/);
   });
 
   it("uses the requested mobile card hierarchy and status treatment", () => {

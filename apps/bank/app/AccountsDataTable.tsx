@@ -29,14 +29,14 @@ export const accountColumns: readonly DataTableColumn<BankAccount>[] = [
     label: "Sort code",
     header: "Sort code",
     nowrap: true,
-    cell: ({ row }) => <span className="identifier">{row.sortCode ?? "—"}</span>,
+    cell: ({ row }) => <span className="account-identifier">{row.sortCode ?? "—"}</span>,
   },
   {
     id: "accountNumber",
     label: "Account number",
     header: "Account number",
     nowrap: true,
-    cell: ({ row }) => <span className="identifier">{row.accountNumber ?? "—"}</span>,
+    cell: ({ row }) => <span className="account-identifier">{row.accountNumber ?? "—"}</span>,
   },
   {
     id: "type",
