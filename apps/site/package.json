@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@johnshandux/ledger-design-system": "^1.2.0",
+    "@johnshandux/ledger-synthetic-finance": "1.0.0",
     "gray-matter": "^4.0.3",
+    "motion": "^12.43.0",
     "next": "16.3.4",
     "next-auth": "^5.0.0-beta.32",
     "react": "19.2.8",
