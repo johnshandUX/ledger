@@ -14,8 +14,8 @@ export function SiteHeader() {
             <li><Link href="/journal">Journal</Link></li>
           </ul>
         </nav>
-        <ThemeControl />
         <Link className="button-link button-link--small" href="/playground">Explore Playground</Link>
+        <ThemeControl />
       </div>
     </header>
   );
