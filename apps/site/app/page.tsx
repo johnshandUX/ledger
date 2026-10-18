@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { AccountPreview } from "./_components/AccountPreview";
+import { HomeHero } from "./_components/HomeHero";
+import { prepareGenerativeFinanceData } from "./experiments/generative-hero/_components/finance";
 import { ledgerBankDemoUrl } from "../lib/deployments";
+import "./experiments/generative-hero/generative-hero.css";
 
 const workflow = [
   { number: "01", title: "Describe it", copy: "Start with a commercial banking product idea and the customer outcome it needs to support." },
@@ -28,10 +31,7 @@ function DesignSystemPreview() {
 export default function Home() {
   return (
     <main id="main-content">
-      <section className="hero hero--product page-shell">
-        <div className="hero__content"><h1>Build commercial finance experiences</h1><p className="hero__copy">LedgerOS brings together design systems, an interactive generative playground and a demo banking experience, to move from idea to a working finance interface.</p><div className="actions"><Link className="button-link" href="/playground">Explore Playground</Link><Link className="button-link button-link--secondary" href="/design-system">Explore the system</Link></div></div>
-        <div className="hero__preview"><div className="hero-prompt"><span className="example-label">Playground · Example mode</span><p>Create an account overview for a commercial banking customer with six accounts across GBP, EUR and USD.</p><ul><li>Interpreting the request</li><li>Selecting Ledger components</li><li>Applying financial guidance</li></ul><Link className="text-link" href="/playground">Try it out</Link></div><AccountPreview compact /></div>
-      </section>
+      <HomeHero data={prepareGenerativeFinanceData()} />
 
       <section className="workflow-section page-shell" aria-labelledby="workflow-heading"><div className="section-heading"><div><p className="eyebrow">From intent to interface</p><h2 id="workflow-heading">A clearer path through the system.</h2></div><p>The Playground uses curated prompts and predefined previews today. Live, grounded generation remains planned.</p></div><div className="workflow-grid">{workflow.map((step) => <article key={step.number}><span>{step.number}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}</div></section>
 

@@ -70,18 +70,25 @@ function buildCashFlow(
   transactions: ReturnType<typeof getTransactions>,
 ): GenerativeFinanceData["cashFlow"] {
   const days = ["03", "04", "05", "06", "07"];
+  const presentationValues: Record<string, { incomingMinor: number; outgoingMinor: number }> = {
+    "03": { incomingMinor: 16_400_000, outgoingMinor: 6_800_000 },
+    "04": { incomingMinor: 10_200_000, outgoingMinor: 13_400_000 },
+  };
   return days.map((day) => {
     const daily = transactions.filter(({ valueDate, currency }) =>
       valueDate.endsWith(`-${day}`) && currency === "GBP",
     );
+    const incomingMinor = daily
+      .filter(({ direction }) => direction === "credit")
+      .reduce((sum, { amountMinor }) => sum + amountMinor, 0);
+    const outgoingMinor = daily
+      .filter(({ direction }) => direction === "debit")
+      .reduce((sum, { amountMinor }) => sum + amountMinor, 0);
+    const fallback = presentationValues[day];
     return {
       label: `${day} Oct`,
-      incomingMinor: daily
-        .filter(({ direction }) => direction === "credit")
-        .reduce((sum, { amountMinor }) => sum + amountMinor, 0),
-      outgoingMinor: daily
-        .filter(({ direction }) => direction === "debit")
-        .reduce((sum, { amountMinor }) => sum + amountMinor, 0),
+      incomingMinor: incomingMinor || fallback?.incomingMinor || 0,
+      outgoingMinor: outgoingMinor || fallback?.outgoingMinor || 0,
     };
   });
 }
