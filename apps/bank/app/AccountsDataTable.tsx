@@ -149,7 +149,7 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
             onChange={event => setMobileState({ ...mobileState, query: event.currentTarget.value, pageIndex: 0 })}
           />
         </div>
-        <MobileTableSortControls iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={mobileState} onStateChange={setMobileState} />
+        <MobileTableSortControls invertDirectionIcon iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={mobileState} onStateChange={setMobileState} />
         <div className="accounts-mobile-count">
           {rowModel.filteredRows.length} {rowModel.filteredRows.length === 1 ? "account" : "accounts"}
         </div>

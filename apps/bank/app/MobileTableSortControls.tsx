@@ -17,9 +17,10 @@ type MobileTableSortControlsProps = {
   state: DataTableState;
   onStateChange: (state: DataTableState) => void;
   iconOnlyDirection?: boolean;
+  invertDirectionIcon?: boolean;
 };
 
-export function MobileTableSortControls({ label, options, state, onStateChange, iconOnlyDirection = false }: MobileTableSortControlsProps) {
+export function MobileTableSortControls({ label, options, state, onStateChange, iconOnlyDirection = false, invertDirectionIcon = false }: MobileTableSortControlsProps) {
   const activeOption = options.find(option => option.columnId === state.sort?.columnId);
   const direction = state.sort?.direction;
   const oppositeDirection = direction === "ascending" ? "descending" : "ascending";
@@ -59,7 +60,9 @@ export function MobileTableSortControls({ label, options, state, onStateChange, 
         >
           {iconOnlyDirection ? (
             <Icon
-              name={direction === "ascending" ? "arrow-up" : "arrow-down"}
+              name={direction === "ascending"
+                ? (invertDirectionIcon ? "arrow-down" : "arrow-up")
+                : (invertDirectionIcon ? "arrow-up" : "arrow-down")}
               size="small"
               className={`mobile-table-direction-icon mobile-table-direction-icon--${direction}`}
               aria-hidden="true"
