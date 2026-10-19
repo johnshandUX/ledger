@@ -1,11 +1,11 @@
 import type { ExperienceId } from "./types";
 
 export const loopTiming = {
-  thinking: 2_500,
+  thinking: 2_000,
   assembling: 4_000,
   complete: 2_000,
-  total: 8_500,
-  assembly: { heading: 0, primary: 600, secondary: 1_350, tertiary: 2_150, content: 2_850 },
+  total: 8_000,
+  assembly: { heading: 0, primary: 450, secondary: 1_100, tertiary: 1_800, content: 2_450 },
 } as const;
 
 export const initialPlayback = { elapsed: loopTiming.thinking, loop: 0 } as const;
@@ -13,6 +13,19 @@ export const initialPlayback = { elapsed: loopTiming.thinking, loop: 0 } as cons
 export type GenerationPhase = "thinking" | "assembling" | "complete";
 export type AssemblyStep = 0 | 1 | 2 | 3 | 4 | 5;
 export type LoopSnapshot = { phase: GenerationPhase; assemblyStep: AssemblyStep; phaseElapsed: number };
+export type PanelGenerationStage = "skeleton" | "resolving" | "generated";
+
+export const panelTiming = {
+  skeleton: 480,
+  resolving: 420,
+} as const;
+
+export function getPanelGenerationStage(assemblyElapsed: number, startsAt: number): PanelGenerationStage {
+  const panelElapsed = assemblyElapsed - startsAt;
+  if (panelElapsed < panelTiming.skeleton) return "skeleton";
+  if (panelElapsed < panelTiming.skeleton + panelTiming.resolving) return "resolving";
+  return "generated";
+}
 
 export const assemblySpring = { type: "spring" as const, stiffness: 210, damping: 24 };
 export const componentEntry = {

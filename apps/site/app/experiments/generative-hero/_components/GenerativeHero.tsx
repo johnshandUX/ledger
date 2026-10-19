@@ -80,7 +80,7 @@ export function GenerativeHero({
               </motion.div>
             ) : (
               <motion.div key={`experience-${playback.loop}`} className="generated-experience" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: .985 }} transition={{ duration: .35 }}>
-                <BankingExperience data={data} experience={experience} assemblyStep={snapshot.assemblyStep} />
+                <BankingExperience data={data} experience={experience} assemblyStep={snapshot.assemblyStep} assemblyElapsed={snapshot.phase === "complete" ? loopTiming.assembling : snapshot.phaseElapsed} />
               </motion.div>
             )}
           </AnimatePresence>

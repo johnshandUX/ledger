@@ -14,6 +14,6 @@ describe("generative hero playback coordination", () => {
   });
 
   it("opens with the first banking interface assembly before the generating screen", () => {
-    expect(initialPlayback).toEqual({ elapsed: 2_500, loop: 0 });
+    expect(initialPlayback).toEqual({ elapsed: 2_000, loop: 0 });
   });
 });
