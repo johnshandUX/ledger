@@ -17,10 +17,11 @@ describe("accounts overview", () => {
     expect(html).toContain('id="search-accounts"');
   });
 
-  it("links the Make a payment action to the payment journey", () => {
+  it("links the New payment action to the payment journey", () => {
     const html = renderPage();
     expect(html).toContain('href="/payments/new"');
-    expect(html).toContain("Make a payment");
+    expect(html).toContain("New payment");
+    expect(html).not.toContain("Overview of company accounts and balances.");
   });
 
   it("makes each mobile account card one semantic navigation target", () => {

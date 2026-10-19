@@ -6,3 +6,4 @@ storybook-static
 *.tgz
 
 .vercel
+.env*

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Badge } from "@johnshandux/ledger-design-system";
+import { Badge, Input } from "@johnshandux/ledger-design-system";
 import { createDataTableRowModel, DataTable, type DataTableColumn, type DataTableState } from "@johnshandux/ledger-design-system/data-table";
 import { Icon } from "@johnshandux/ledger-design-system/icons";
 import type { BankAccount } from "../src/finance/accounts";
@@ -109,10 +109,21 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
     });
   }, [accounts, effectiveAccountRecords, effectiveBalances]);
   const [state, setState] = useState<DataTableState>({ query: "", filters: {}, pageIndex: 0, pageSize: 20 });
-  const rowModel = createAccountsPresentationRowModel(effectiveAccounts, state);
+  const [mobileState, setMobileState] = useState<DataTableState>({
+    query: "",
+    filters: {},
+    pageIndex: 0,
+    pageSize: Math.max(effectiveAccounts.length, 1),
+    sort: { columnId: "account", direction: "ascending" },
+  });
+  const rowModel = createAccountsPresentationRowModel(effectiveAccounts, mobileState);
 
   return (
     <>
+      <div className="accounts-heading">
+        <h2>Accounts</h2>
+        <span>{effectiveAccounts.length} {effectiveAccounts.length === 1 ? "account" : "accounts"}</span>
+      </div>
       <div className="accounts-table">
         <DataTable
           caption="Accounts and balances"
@@ -128,7 +139,20 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
       </div>
 
       <div className="accounts-mobile">
-        <MobileTableSortControls iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={state} onStateChange={setState} />
+        <div className="accounts-search">
+          <Input
+            label="Search accounts"
+            visuallyHiddenLabel
+            placeholder="Search accounts"
+            type="search"
+            value={mobileState.query}
+            onChange={event => setMobileState({ ...mobileState, query: event.currentTarget.value, pageIndex: 0 })}
+          />
+        </div>
+        <MobileTableSortControls iconOnlyDirection label="Sort accounts by" options={accountSortOptions} state={mobileState} onStateChange={setMobileState} />
+        <div className="accounts-mobile-count">
+          {rowModel.filteredRows.length} {rowModel.filteredRows.length === 1 ? "account" : "accounts"}
+        </div>
         {rowModel.sortedRows.map(account => (
           <article key={account.id} className="acc-card-shell">
             <Link className="acc-card" href={`/accounts/${account.id}`}>

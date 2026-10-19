@@ -64,7 +64,7 @@ describe("mobile accounts interactions", () => {
     const select = mobile().querySelector<HTMLSelectElement>("select")!;
     expect(select.getAttribute("aria-label")).toBeNull();
     expect(mobile().querySelector(`label[for="${select.id}"]`)?.textContent).toBe("Sort accounts by");
-    expect(select.value).toBe("source");
+    expect(select.value).toBe("account");
     expect([...select.options].map(option => [option.value, option.textContent])).toEqual([
       ["source", "Default order"],
       ["account", "Account"],
@@ -72,8 +72,9 @@ describe("mobile accounts interactions", () => {
       ["currentBalance", "Current balance"],
       ["availableBalance", "Available balance"],
     ]);
+    expect(mobile().querySelector('[aria-label="Sort ascending; change to descending"] .mobile-table-direction-icon--ascending')).not.toBeNull();
 
-    expect(firstCardName()).toBe("Main Operating Account");
+    expect(firstCardName()).toBe("Birmingham Operations Account");
     await setSelectValue(select, "availableBalance");
     expect(firstCardName()).toBe("Restricted Project Account — Regional Innovation Grant");
 
@@ -93,10 +94,11 @@ describe("mobile accounts interactions", () => {
   it("renders one correct details route per account card", () => {
     const accounts = getBankAccounts();
     const links = [...mobile().querySelectorAll<HTMLAnchorElement>(".acc-card")];
+    const accountsByName = [...accounts].sort((left, right) => left.name.localeCompare(right.name));
 
     expect(links).toHaveLength(accounts.length);
     expect(links.map(link => link.getAttribute("href"))).toEqual(
-      accounts.map(account => `/accounts/${account.id}`),
+      accountsByName.map(account => `/accounts/${account.id}`),
     );
   });
 

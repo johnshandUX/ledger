@@ -8,7 +8,10 @@ import type {
   PaymentApprovalId,
   PaymentId,
   UserId,
+  FinanceDataset,
 } from "@johnshandux/ledger-synthetic-finance";
+import { getLiquidityPosition } from "@johnshandux/ledger-synthetic-finance";
+import { BANK_BUSINESS_ID } from "../src/finance/environment";
 import {
   selectEffectiveAccountById,
   selectEffectiveAccounts,
@@ -49,6 +52,26 @@ export function useEffectiveBalances() {
   return useMemo(
     () => selectEffectiveBalances({ baseline: baseline.balances, overlay: overlay.balances }),
     [baseline.balances, overlay.balances],
+  );
+}
+
+export function useEffectiveLiquidityPosition() {
+  const { baseline } = useBankState();
+  const accounts = useEffectiveAccounts();
+  const balances = useEffectiveBalances();
+
+  return useMemo(
+    () => {
+      // The calculation is read-only, while its public dataset type is mutable.
+      const effectiveDataset = {
+        ...baseline,
+        accounts,
+        balances,
+      } as unknown as FinanceDataset;
+
+      return getLiquidityPosition(effectiveDataset, { businessId: BANK_BUSINESS_ID });
+    },
+    [accounts, balances, baseline],
   );
 }
 

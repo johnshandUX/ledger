@@ -20,10 +20,7 @@ import {
   getBankPaymentById,
   getBankPaymentOverviewFromEnvironment,
 } from "./payments";
-import {
-  BANK_RECENT_TRANSACTION_LIMIT,
-  getBankTransactionsForAccount,
-} from "./transactions";
+import { getBankTransactionsForAccount } from "./transactions";
 import {
   BANK_DEMO_USER_ID,
   getBankDemoUser,
@@ -47,10 +44,12 @@ describe("Ledger Bank finance adapter", () => {
     expect(Number.isSafeInteger(restricted.availableBalanceMinor)).toBe(true);
   });
 
-  it("returns recent Caldermere transactions in selector order", () => {
+  it("returns all account-scoped Caldermere transactions in selector order", () => {
     const transactions = getBankTransactionsForAccount("account-main-operating");
     expect(transactions.length).toBeGreaterThan(0);
-    expect(transactions.length).toBeLessThanOrEqual(BANK_RECENT_TRANSACTION_LIMIT);
+    expect(transactions).toHaveLength(
+      bankFinanceEnvironment.transactions.filter(({ accountId }) => accountId === "account-main-operating").length,
+    );
     expect(transactions.every(({ accountId }) => accountId === "account-main-operating")).toBe(true);
     expect(
       transactions.every((transaction, index) =>

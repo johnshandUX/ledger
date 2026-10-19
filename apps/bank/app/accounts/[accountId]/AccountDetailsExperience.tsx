@@ -14,11 +14,13 @@ import { TransactionHistory } from "./TransactionHistory";
 type AccountDetailsExperienceProps = Readonly<{
   accountId: string;
   transactions: readonly BankTransaction[];
+  initialSearchParams?: Record<string, string | string[] | undefined>;
 }>;
 
 export function AccountDetailsExperience({
   accountId,
   transactions,
+  initialSearchParams = {},
 }: AccountDetailsExperienceProps) {
   const account = useEffectiveAccountById(accountId);
   const balances = useEffectiveBalances();
@@ -82,8 +84,8 @@ export function AccountDetailsExperience({
       </section>
 
       <section className="transactions" aria-labelledby="transactions-heading">
-        <div className="section-heading"><div><h2 id="transactions-heading">Transactions</h2><p>{transactions.length} recent transaction{transactions.length === 1 ? "" : "s"}</p></div></div>
-        <TransactionHistory transactions={[...transactions]} />
+        <div className="section-heading"><h2 id="transactions-heading">Transaction history</h2></div>
+        <TransactionHistory key={account.id} transactions={[...transactions]} initialSearchParams={initialSearchParams} />
       </section>
     </>
   );
