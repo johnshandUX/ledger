@@ -32,13 +32,19 @@ async function renderSummary(baseline: FinanceDataset = bankFinanceEnvironment) 
   ));
 }
 
-async function selectCurrency(currency: "GBP" | "USD" | "EUR") {
-  const input = container.querySelector<HTMLInputElement>(`input[value="${currency}"]`)!;
-  await act(async () => input.click());
-}
-
 function summaryText() {
   return container.querySelector(".financial-summary")?.textContent ?? "";
+}
+
+async function openBalanceMenu() {
+  const trigger = container.querySelector<HTMLButtonElement>('button[aria-label="Choose balance view"]')!;
+  await act(async () => {
+    trigger.dispatchEvent(new PointerEvent("pointerdown", {
+      bubbles: true,
+      button: 0,
+      pointerType: "mouse",
+    }));
+  });
 }
 
 function DispatchProbe({ onDispatch }: { onDispatch: (dispatch: Dispatch<BankEphemeralAction>) => void }) {
@@ -48,43 +54,82 @@ function DispatchProbe({ onDispatch }: { onDispatch: (dispatch: Dispatch<BankEph
 }
 
 describe("financial summary", () => {
-  it("selects GBP initially and derives available, current, and difference from finance data", async () => {
+  it("renders one consolidated card with currencies in stable GBP, USD, EUR order", async () => {
     await renderSummary();
 
-    expect(container.querySelector<HTMLInputElement>('input[value="GBP"]')?.checked).toBe(true);
-    expect(summaryText()).toContain("£8,255,319.75");
-    expect(summaryText()).toContain("£8,825,121.57");
-    expect(summaryText()).toContain("£569,801.82");
+    expect(container.querySelectorAll(".financial-summary-card")).toHaveLength(1);
+    const currencies = [...container.querySelectorAll<HTMLElement>(".financial-summary-card__currency")];
+    expect(currencies).toHaveLength(3);
+    expect(currencies.map(section => section.querySelector(".financial-summary-card__identity")?.textContent)).toEqual([
+      "£GBP",
+      "$USD",
+      "€EUR",
+    ]);
+    for (const section of currencies) {
+      expect(section.querySelectorAll(".financial-summary-card__value")).toHaveLength(1);
+    }
+    expect(container.querySelectorAll(".financial-summary-card__mobile-separator")).toHaveLength(2);
+    expect(container.querySelector(".ledger-separator--vertical")).toBeNull();
   });
 
-  it("updates both visible balances for USD and EUR without a reload", async () => {
+  it("shows available balances by default without symbols in the numeric values", async () => {
     await renderSummary();
 
-    await selectCurrency("USD");
-    expect(summaryText()).toContain("US$518,329.65");
-    expect(summaryText()).toContain("US$528,235.10");
-
-    await selectCurrency("EUR");
-    expect(summaryText()).toContain("€447,307.96");
-    expect(summaryText()).toContain("€456,755.11");
+    expect(container.querySelector('.financial-summary-card__view-label')?.textContent).toBe("Available balance");
+    expect(summaryText()).toContain("8,255,319.75");
+    expect(summaryText()).toContain("518,329.65");
+    expect(summaryText()).toContain("447,307.96");
+    const values = [...container.querySelectorAll(".financial-summary-card__value")].map(value => value.textContent);
+    expect(values).toEqual(["8,255,319.75", "518,329.65", "447,307.96"]);
+    expect(values.join("")).not.toMatch(/[£$€]|(?:GBP|USD|EUR)/);
   });
 
-  it("uses native grouped-radio and disclosure semantics", async () => {
+  it("opens the global balance menu with supported and disabled views", async () => {
     await renderSummary();
+    await openBalanceMenu();
 
-    const fieldset = container.querySelector("fieldset")!;
-    const details = container.querySelector<HTMLDetailsElement>("details")!;
-    expect(fieldset.querySelector("legend")?.textContent).toBe("Summary currency");
-    expect(fieldset.querySelectorAll('input[type="radio"]')).toHaveLength(3);
-    expect(details.open).toBe(false);
+    const options = [...document.body.querySelectorAll<HTMLElement>('[role="menuitemradio"]')];
+    expect(options.map(option => option.textContent?.replace("✓", ""))).toEqual([
+      "Available balance",
+      "Total balance",
+      "Including pending",
+      "Excluding pending",
+    ]);
+    expect(options[0]?.getAttribute("aria-checked")).toBe("true");
+    expect(options[1]?.getAttribute("aria-checked")).toBe("false");
+    expect(options[2]?.getAttribute("aria-disabled")).toBe("true");
+    expect(options[3]?.getAttribute("aria-disabled")).toBe("true");
+    expect(options[2]?.getAttribute("aria-describedby")).toBe("pending-balance-view-description");
+    expect(document.body.textContent).toContain("Pending movement data is unavailable.");
 
-    await act(async () => container.querySelector<HTMLElement>("summary")!.click());
-    expect(details.open).toBe(true);
-    await act(async () => container.querySelector<HTMLElement>("summary")!.click());
-    expect(details.open).toBe(false);
+    await act(async () => options[2]?.click());
+    expect(container.querySelector('.financial-summary-card__view-label')?.textContent).toBe("Available balance");
+    expect(container.querySelector('input[name="summary-currency"]')).toBeNull();
+    expect(container.querySelector("details")).toBeNull();
   });
 
-  it("formats empty currencies as zero and preserves a negative difference", async () => {
+  it("selects total balance once for all three currencies", async () => {
+    await renderSummary();
+    await openBalanceMenu();
+
+    const totalOption = [...document.body.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      .find(option => option.textContent?.includes("Total balance"))!;
+    await act(async () => totalOption.click());
+
+    expect(container.querySelector('.financial-summary-card__view-label')?.textContent).toBe("Total balance");
+    expect([...container.querySelectorAll(".financial-summary-card__value")].map(value => value.textContent)).toEqual([
+      "8,825,121.57",
+      "528,235.10",
+      "456,755.11",
+    ]);
+
+    await openBalanceMenu();
+    const selected = [...document.body.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      .find(option => option.textContent?.includes("Total balance"));
+    expect(selected?.getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("formats empty currencies as zero without converting the populated currency", async () => {
     const sourceAccount = bankFinanceEnvironment.accounts.find(account => account.currency === "GBP")!;
     const baseline: FinanceDataset = {
       ...bankFinanceEnvironment,
@@ -100,15 +145,50 @@ describe("financial summary", () => {
     };
     await renderSummary(baseline);
 
-    expect(summaryText()).toContain("£0.50");
-    expect(summaryText()).toContain("-£1.50");
-    expect(summaryText()).toContain("-£2.00");
+    expect([...container.querySelectorAll(".financial-summary-card__value")].map(value => value.textContent)).toEqual([
+      "0.50",
+      "0.00",
+      "0.00",
+    ]);
 
-    await selectCurrency("EUR");
-    expect(summaryText()).toContain("€0.00");
+    await openBalanceMenu();
+    const totalOption = [...document.body.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      .find(option => option.textContent?.includes("Total balance"))!;
+    await act(async () => totalOption.click());
+    expect([...container.querySelectorAll(".financial-summary-card__value")].map(value => value.textContent)).toEqual([
+      "-1.50",
+      "0.00",
+      "0.00",
+    ]);
   });
 
-  it("does not change the accounts collection when summary currency changes", async () => {
+  it("preserves complete formatting for large safe-integer balances", async () => {
+    const sourceAccount = bankFinanceEnvironment.accounts.find(account => account.currency === "GBP")!;
+    const baseline: FinanceDataset = {
+      ...bankFinanceEnvironment,
+      accounts: [{ ...sourceAccount, status: "active" }],
+      balances: [{
+        id: "balance-large-values",
+        accountId: sourceAccount.id,
+        asOf: "2026-10-15T00:00:00Z",
+        currency: "GBP",
+        ledgerBalanceMinor: 987_654_321_098_765,
+        availableBalanceMinor: 123_456_789_012_345,
+      }],
+    };
+    await renderSummary(baseline);
+
+    expect(summaryText()).toContain("1,234,567,890,123.45");
+    expect(summaryText()).not.toContain("9,876,543,210,987.65");
+
+    await openBalanceMenu();
+    const totalOption = [...document.body.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      .find(option => option.textContent?.includes("Total balance"))!;
+    await act(async () => totalOption.click());
+    expect(summaryText()).toContain("9,876,543,210,987.65");
+  });
+
+  it("does not change accounts table behaviour", async () => {
     await act(async () => root.render(
       <BankStateProvider>
         <FinancialSummary />
@@ -118,13 +198,6 @@ describe("financial summary", () => {
     const availableSort = [...container.querySelectorAll<HTMLButtonElement>(".accounts-table button")]
       .find(button => button.getAttribute("aria-label") === "Sort by Available balance")!;
     await act(async () => availableSort.click());
-    const routesBefore = [...container.querySelectorAll<HTMLAnchorElement>(".acc-card")].map(link => link.href);
-    const firstAccountBefore = container.querySelector<HTMLElement>(".accounts-table tbody .acc-name")?.textContent;
-
-    await selectCurrency("USD");
-
-    expect([...container.querySelectorAll<HTMLAnchorElement>(".acc-card")].map(link => link.href)).toEqual(routesBefore);
-    expect(container.querySelector<HTMLElement>(".accounts-table tbody .acc-name")?.textContent).toBe(firstAccountBefore);
     expect(container.querySelector('.accounts-table th[aria-sort="ascending"]')?.textContent).toContain("Available");
     expect(container.querySelector(".accounts-heading")?.textContent).toContain("30 accounts");
   });
@@ -162,7 +235,7 @@ describe("financial summary", () => {
       ],
     }));
 
-    expect(summaryText()).toContain("£8,165,566.73");
+    expect(summaryText()).toContain("8,165,566.73");
     expect(container.querySelector(".accounts-heading")?.textContent).toContain("29 accounts");
     expect(baselineBalance.availableBalanceMinor).toBe(originalAvailable);
   });
