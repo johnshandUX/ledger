@@ -150,7 +150,7 @@ export function ProductShell({ activeRoute, children }: ProductShellProps) {
 
   return (
     <AppShell className="product-shell" navigation={navigation}>
-      <WorkspaceHeader>
+      <WorkspaceHeader className="bank-workspace-header">
         <span className="bank-workspace-title">{workspaceTitles[activeRoute]}</span>
       </WorkspaceHeader>
       <AppWorkspace className="bank-workspace">{children}</AppWorkspace>

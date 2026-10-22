@@ -7,6 +7,11 @@
   font-family: var(--ledger-font-family-sans);
 }
 
+.product-shell .ledger-app-shell__main {
+  position: relative;
+  grid-template-rows: minmax(0, 1fr);
+}
+
 .bank-product-name {
   color: var(--ledger-color-text);
   font-weight: var(--ledger-font-weight-semibold);
@@ -40,6 +45,37 @@
   line-height: var(--ledger-line-height-heading-small);
 }
 
+.bank-workspace-header {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  padding: var(--ledger-space-3);
+  border: 0;
+  background: transparent;
+}
+
+.bank-workspace-header .ledger-workspace-header__content {
+  display: none;
+}
+
 .bank-workspace {
   padding: 0;
+}
+
+@media (max-width: 740px) {
+  .product-shell .ledger-app-shell__main {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .bank-workspace-header {
+    position: static;
+    height: calc(var(--ledger-space-8) + var(--ledger-space-2));
+    padding: 0 var(--ledger-space-4);
+    border-bottom: var(--ledger-border-width-thin) solid var(--ledger-color-border);
+    background: var(--ledger-color-surface);
+  }
+
+  .bank-workspace-header .ledger-workspace-header__content {
+    display: block;
+  }
 }

@@ -28,8 +28,7 @@
 .balance-difference summary{width:max-content;color:var(--ledger-color-action);font-weight:var(--ledger-font-weight-semibold);cursor:pointer}
 .balance-difference summary:focus-visible{outline:var(--ledger-border-width-thick) solid var(--ledger-color-focus);outline-offset:var(--ledger-space-1)}
 .balance-difference div{display:grid;gap:var(--ledger-space-1);margin-top:var(--ledger-space-2)}
-.accounts-heading{display:flex;align-items:baseline;justify-content:space-between;gap:var(--ledger-space-4);margin-bottom:var(--ledger-space-4)}
-.accounts-heading h2{margin:0;font-size:var(--ledger-font-size-heading-medium);line-height:var(--ledger-line-height-heading-medium)}
+.accounts-heading{display:flex;align-items:baseline;justify-content:flex-end;gap:var(--ledger-space-4);margin-bottom:var(--ledger-space-4)}
 .accounts-heading span{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small);white-space:nowrap}
 
 .accounts-table .ledger-table__cell:first-child{width:30%;max-width:280px}

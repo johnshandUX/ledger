@@ -9,6 +9,14 @@ import { BankStateProvider } from "./BankStateProvider";
 const renderPage = () => renderToStaticMarkup(<BankStateProvider><Home /></BankStateProvider>);
 
 describe("accounts overview", () => {
+  it("uses the page heading as the only visible Accounts title on desktop", () => {
+    const html = renderPage();
+
+    expect(html.match(/<h1>Accounts<\/h1>/g)).toHaveLength(1);
+    expect(html).not.toContain("<h2>Accounts</h2>");
+    expect(html).toContain('class="ledger-workspace-header bank-workspace-header"');
+  });
+
   it("keeps the search input labelled without displaying its label", () => {
     const html = renderPage();
 

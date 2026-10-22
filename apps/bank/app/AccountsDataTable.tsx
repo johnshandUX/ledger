@@ -121,7 +121,6 @@ export function AccountsDataTable({ accounts }: { accounts: readonly BankAccount
   return (
     <>
       <div className="accounts-heading">
-        <h2>Accounts</h2>
         <span>{effectiveAccounts.length} {effectiveAccounts.length === 1 ? "account" : "accounts"}</span>
       </div>
       <div className="accounts-table">
