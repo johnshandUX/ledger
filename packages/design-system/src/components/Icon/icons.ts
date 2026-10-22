@@ -1,6 +1,6 @@
 import type { ComponentType, SVGProps } from "react";
 import {
-  ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar,
+  ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar, Check,
   ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleUserRound,
   CreditCard, Download, Eye, FileText, Filter, House, Menu, Moon, Pencil,
   Plus, Search, Send, Settings, Sun, Trash2, Upload, UserRound, X,
@@ -36,6 +36,7 @@ export const iconRegistry = {
   "arrow-up": defineIcon(ArrowUp, "ArrowUp", "Navigation"),
   "arrow-down": defineIcon(ArrowDown, "ArrowDown", "Navigation"),
   information: defineIcon(InformationStatusIcon, "Ledger filled information", "Status"),
+  check: defineIcon(Check, "Check", "Status"),
   warning: defineIcon(WarningStatusIcon, "Ledger filled warning", "Status"),
   success: defineIcon(SuccessStatusIcon, "Ledger filled success", "Status"),
   error: defineIcon(ErrorStatusIcon, "Ledger filled error octagon", "Status"),

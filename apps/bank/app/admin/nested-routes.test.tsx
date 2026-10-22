@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { BankStateProvider } from "../BankStateProvider";
 import AccountAdministrationPage from "./account-administration/page";
 import AuditActivityPage from "./audit-activity/page";
 import BillingPage from "./billing/page";
@@ -13,7 +14,11 @@ const nestedPages = [
 
 describe("Administration planned destinations", () => {
   it.each(nestedPages)("renders %s with Administration active", (name, Page) => {
-    const html = renderToStaticMarkup(<Page />);
+    const html = renderToStaticMarkup(
+      <BankStateProvider>
+        <Page />
+      </BankStateProvider>,
+    );
     expect(html).toContain(name.replace("&", "&amp;"));
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/admin"|<a[^>]*href="\/admin"[^>]*aria-current="page"/);
     expect(html).toContain("Planned feature");

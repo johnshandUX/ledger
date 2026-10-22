@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useRef,
   useState,
   type AnchorHTMLAttributes,
   type HTMLAttributes,
@@ -18,12 +19,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuTrigger,
   type DropdownMenuItemProps,
 } from "../DropdownMenu/DropdownMenu";
 import { Icon } from "../Icon/Icon";
+import { Popover, PopoverContent, PopoverTrigger } from "../Popover/Popover";
 import "./ApplicationNavigation.css";
 
 const NAVIGATION_MEDIA_QUERY = "(max-width: 740px)";
@@ -31,6 +31,7 @@ const NAVIGATION_MEDIA_QUERY = "(max-width: 740px)";
 type NavigationContextValue = {
   isNarrow: boolean;
   navigationOpen: boolean;
+  setNavigationOpenedFromKeyboard: (openedFromKeyboard: boolean) => void;
   setNavigationOpen: (open: boolean) => void;
 };
 
@@ -74,13 +75,22 @@ export function AppShell({
   ...props
 }: AppShellProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState<boolean>();
+  const navigationDialogRef = useRef<HTMLDivElement>(null);
+  const navigationOpenedFromKeyboardRef = useRef(false);
   const isNarrow = useMediaQuery(NAVIGATION_MEDIA_QUERY);
   const open = navigationOpen ?? uncontrolledOpen ?? (isNarrow ? false : defaultNavigationOpen);
   const setOpen = (nextOpen: boolean) => {
     if (navigationOpen === undefined) setUncontrolledOpen(nextOpen);
     onNavigationOpenChange?.(nextOpen);
   };
-  const context = { isNarrow, navigationOpen: open, setNavigationOpen: setOpen };
+  const context = {
+    isNarrow,
+    navigationOpen: open,
+    setNavigationOpenedFromKeyboard: (openedFromKeyboard: boolean) => {
+      navigationOpenedFromKeyboardRef.current = openedFromKeyboard;
+    },
+    setNavigationOpen: setOpen,
+  };
 
   return (
     <NavigationContext.Provider value={context}>
@@ -97,7 +107,19 @@ export function AppShell({
         {isNarrow ? (
           <DialogPrimitive.Portal>
             <DialogPrimitive.Overlay className="ledger-app-shell__overlay" />
-            <DialogPrimitive.Content className="ledger-app-shell__dialog" aria-describedby={undefined}>
+            <DialogPrimitive.Content
+              ref={navigationDialogRef}
+              className="ledger-app-shell__dialog"
+              aria-describedby={undefined}
+              tabIndex={-1}
+              onOpenAutoFocus={(event) => {
+                event.preventDefault();
+                const focusTarget = navigationOpenedFromKeyboardRef.current
+                  ? navigationDialogRef.current?.querySelector<HTMLButtonElement>(".ledger-organisation-switcher")
+                  : navigationDialogRef.current;
+                focusTarget?.focus({ preventScroll: true });
+              }}
+            >
               <DialogPrimitive.Title className="ledger-app-shell__dialog-title">
                 {navigationLabel}
               </DialogPrimitive.Title>
@@ -116,12 +138,16 @@ export type WorkspaceHeaderProps = HTMLAttributes<HTMLElement> & {
 };
 
 export function WorkspaceHeader({ children, className, showNavigationLabel = "Show navigation", ...props }: WorkspaceHeaderProps) {
-  const { isNarrow, navigationOpen, setNavigationOpen } = useNavigationContext("WorkspaceHeader");
+  const { isNarrow, navigationOpen, setNavigationOpenedFromKeyboard, setNavigationOpen } = useNavigationContext("WorkspaceHeader");
   const showNavigationButton = (
     <button
       className="ledger-navigation-control ledger-navigation-control--show"
       type="button"
       aria-label={showNavigationLabel}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") setNavigationOpenedFromKeyboard(true);
+      }}
+      onPointerDown={() => setNavigationOpenedFromKeyboard(false)}
       onClick={isNarrow ? undefined : () => setNavigationOpen(true)}
     >
       <Icon name="menu" size="medium" />
@@ -143,16 +169,18 @@ export function SideNav({ className, ...props }: HTMLAttributes<HTMLElement>) {
   return <aside {...props} className={cn("ledger-side-nav", className)} />;
 }
 
-export type SideNavHeaderProps = HTMLAttributes<HTMLDivElement> & { hideNavigationLabel?: string };
+export type SideNavHeaderProps = HTMLAttributes<HTMLDivElement> & { closeNavigationLabel?: string };
 
-export function SideNavHeader({ children, className, hideNavigationLabel = "Hide navigation", ...props }: SideNavHeaderProps) {
-  const { setNavigationOpen } = useNavigationContext("SideNavHeader");
+export function SideNavHeader({ children, className, closeNavigationLabel = "Close navigation", ...props }: SideNavHeaderProps) {
+  const { isNarrow, setNavigationOpen } = useNavigationContext("SideNavHeader");
   return (
     <div {...props} className={cn("ledger-side-nav__header", className)}>
       <div className="ledger-side-nav__header-content">{children}</div>
-      <button className="ledger-navigation-control ledger-navigation-control--hide" type="button" aria-label={hideNavigationLabel} onClick={() => setNavigationOpen(false)}>
-        <Icon name="chevron-left" size="medium" />
-      </button>
+      {!isNarrow ? (
+        <button className="ledger-navigation-control ledger-navigation-control--hide" type="button" aria-label={closeNavigationLabel} onClick={() => setNavigationOpen(false)}>
+          <Icon name="chevron-left" size="medium" />
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -212,38 +240,169 @@ export function SideNavGroup({ children, className, label, ...props }: SideNavGr
   );
 }
 
-export type OrganisationOption = Readonly<{ id: string; name: string; disabled?: boolean }>;
+export type OrganisationOption = Readonly<{
+  id: string;
+  name: string;
+  secondaryLabel?: string;
+  disabled?: boolean;
+}>;
 export type OrganisationSwitcherProps = {
   organisations: readonly OrganisationOption[];
   selectedId: string;
   onSelectedIdChange?: (id: string) => void;
   label?: string;
+  currentOrganisationLabel?: string;
+  showSelectedSecondaryLabel?: boolean;
+  defaultOpen?: boolean;
+  settingsAction?: ReactNode;
+  addOrganisationAction?: Readonly<{
+    label?: string;
+    disabled?: boolean;
+    onClick?: () => void;
+  }>;
 };
 
-export function OrganisationSwitcher({ organisations, selectedId, onSelectedIdChange, label = "Switch organisation" }: OrganisationSwitcherProps) {
+type OrganisationSwitcherTriggerProps = {
+  label: string;
+  open: boolean;
+  selected: OrganisationOption;
+  showSecondaryLabel: boolean;
+};
+
+export function getOrganisationMonogram(organisationName: string) {
+  return (Array.from(organisationName.trim())[0] ?? "").toLocaleUpperCase();
+}
+
+function OrganisationSwitcherTrigger({
+  label,
+  open,
+  selected,
+  showSecondaryLabel,
+}: OrganisationSwitcherTriggerProps) {
+  const monogram = getOrganisationMonogram(selected.name);
+  return (
+    <PopoverTrigger
+      className="ledger-organisation-switcher"
+      type="button"
+      aria-label={`${label}: ${selected.name}`}
+      title={selected.name}
+    >
+      <Avatar className="ledger-organisation-switcher__monogram" src="" alt="" fallback={monogram} size="medium" />
+      <span className="ledger-organisation-switcher__identity">
+        <span className="ledger-organisation-switcher__primary">
+          <span className="ledger-organisation-switcher__name">{selected.name}</span>
+          <Icon name="chevron-down" size="small" className="ledger-organisation-switcher__chevron" data-open={open ? "true" : undefined} />
+        </span>
+        {showSecondaryLabel && selected.secondaryLabel ? <span className="ledger-organisation-switcher__secondary">{selected.secondaryLabel}</span> : null}
+      </span>
+    </PopoverTrigger>
+  );
+}
+
+function OrganisationSwitcherOptions({ addOrganisationAction, currentOrganisationLabel, groupName, onSelect, organisations, selectedId, settingsAction }: Pick<OrganisationSwitcherProps, "addOrganisationAction" | "currentOrganisationLabel" | "organisations" | "selectedId" | "settingsAction"> & { groupName: string; onSelect: (id: string) => void }) {
+  return (
+    <div className="ledger-organisation-switcher__content">
+      <div className="ledger-organisation-switcher__options" role="radiogroup" aria-label="Available organisations">
+        {organisations.map((organisation) => {
+          const selected = organisation.id === selectedId;
+          return (
+            <label
+              key={organisation.id}
+              className="ledger-organisation-option"
+              data-selected={selected ? "true" : undefined}
+              data-disabled={organisation.disabled ? "true" : undefined}
+              title={organisation.name}
+              onClick={() => {
+                if (selected && !organisation.disabled) onSelect(organisation.id);
+              }}
+            >
+              <input
+                className="ledger-organisation-option__input"
+                type="radio"
+                name={groupName}
+                value={organisation.id}
+                checked={selected}
+                disabled={organisation.disabled}
+                onChange={() => {
+                  if (!selected) onSelect(organisation.id);
+                }}
+              />
+              <Avatar
+                className="ledger-organisation-option__monogram"
+                src=""
+                alt=""
+                fallback={getOrganisationMonogram(organisation.name)}
+                size="medium"
+              />
+              <span className="ledger-organisation-option__identity">
+                <span className="ledger-organisation-option__name">{organisation.name}</span>
+                {organisation.secondaryLabel ? <span className="ledger-organisation-option__secondary">{organisation.secondaryLabel}</span> : null}
+                {selected ? <span className="ledger-organisation-option__selected-label">{currentOrganisationLabel}</span> : null}
+              </span>
+              {selected ? <Icon name="check" size="small" className="ledger-organisation-option__check" /> : null}
+            </label>
+          );
+        })}
+      </div>
+      {settingsAction ? <div className="ledger-organisation-switcher__settings">{settingsAction}</div> : null}
+      {addOrganisationAction ? (
+        <div className="ledger-organisation-switcher__footer">
+          <button
+            className="ledger-organisation-switcher__add"
+            type="button"
+            disabled={addOrganisationAction.disabled}
+            onClick={addOrganisationAction.onClick}
+          >
+            <Icon name="add" size="small" />
+            <span>{addOrganisationAction.label ?? "Add organisation"}</span>
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function OrganisationSwitcher({
+  organisations,
+  selectedId,
+  onSelectedIdChange,
+  label = "Switch organisation",
+  currentOrganisationLabel = "Current organisation",
+  showSelectedSecondaryLabel = true,
+  defaultOpen = false,
+  settingsAction,
+  addOrganisationAction,
+}: OrganisationSwitcherProps) {
+  const navigationContext = useContext(NavigationContext);
+  const viewportIsNarrow = useMediaQuery(NAVIGATION_MEDIA_QUERY);
+  const isNarrow = navigationContext?.isNarrow ?? viewportIsNarrow;
+  const groupName = useId();
+  const [open, setOpen] = useState(defaultOpen);
   const selected = organisations.find((organisation) => organisation.id === selectedId);
   if (!selected) throw new Error("OrganisationSwitcher selectedId must match an organisation.");
-  if (organisations.length === 1) {
-    return <div className="ledger-organisation-switcher ledger-organisation-switcher--static" title={selected.name}>{selected.name}</div>;
-  }
+  const handleSelect = (id: string) => {
+    const changed = id !== selectedId;
+    if (changed) onSelectedIdChange?.(id);
+    setOpen(false);
+    if (changed && isNarrow) navigationContext?.setNavigationOpen(false);
+  };
+  const options = <OrganisationSwitcherOptions addOrganisationAction={addOrganisationAction} currentOrganisationLabel={currentOrganisationLabel} groupName={groupName} onSelect={handleSelect} organisations={organisations} selectedId={selectedId} settingsAction={settingsAction} />;
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="ledger-organisation-switcher" aria-label={`${label}: ${selected.name}`} title={selected.name}>
-        <span>{selected.name}</span><Icon name="chevron-down" size="small" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="ledger-navigation-menu" align="start">
-          <DropdownMenuRadioGroup value={selectedId} onValueChange={onSelectedIdChange}>
-            {organisations.map((organisation) => (
-              <DropdownMenuRadioItem key={organisation.id} value={organisation.id} disabled={organisation.disabled} title={organisation.name}>{organisation.name}</DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Popover open={open} onOpenChange={setOpen}>
+      <OrganisationSwitcherTrigger label={label} open={open} selected={selected} showSecondaryLabel={showSelectedSecondaryLabel} />
+      <PopoverContent accessibleLabel={label} align="start" side="bottom" className="ledger-organisation-switcher__popover">
+        <h2 className="ledger-organisation-switcher__heading">{label}</h2>
+        {options}
+      </PopoverContent>
+    </Popover>
   );
 }
 
 export function getInitials(displayName: string) {
-  return displayName.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => Array.from(part)[0]?.toLocaleUpperCase()).join("");
+  const nameParts = displayName.trim().split(/\s+/).filter(Boolean);
+  const initialParts = nameParts.length > 1 ? [nameParts[0], nameParts.at(-1)] : nameParts;
+  return initialParts.map((part) => Array.from(part ?? "")[0]?.toLocaleUpperCase()).join("");
 }
 
 export type UserMenuProps = {

@@ -5,7 +5,6 @@ import {
   AppWorkspace,
   OrganisationSwitcher,
   SideNav,
-  SideNavContext,
   SideNavGroup,
   SideNavHeader,
   SideNavItem,
@@ -54,8 +53,7 @@ const accounting: ProductExample = {
 function ConfiguredNavigation({ config }: { config: ProductExample }) {
   return (
     <SideNav>
-      <SideNavHeader><strong>{config.productName}</strong></SideNavHeader>
-      <SideNavContext><OrganisationSwitcher organisations={[{ id: "caldermere", name: "Caldermere Ltd" }]} selectedId="caldermere" /></SideNavContext>
+      <SideNavHeader><OrganisationSwitcher organisations={[{ id: "caldermere", name: "Caldermere Ltd", secondaryLabel: config.productName }]} selectedId="caldermere" /></SideNavHeader>
       <SideNavNavigation>
         {config.groups.map((group) => (
           <SideNavGroup key={group.id} label={group.label}>

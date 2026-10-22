@@ -4,10 +4,12 @@ import { describe, expect, it } from "vitest";
 import {
   AppShell,
   AppWorkspace,
+  getOrganisationMonogram,
   getInitials,
   OrganisationSwitcher,
   SideNav,
   SideNavGroup,
+  SideNavHeader,
   SideNavItem,
   SideNavNavigation,
   UserMenu,
@@ -44,6 +46,7 @@ describe("ApplicationNavigation", () => {
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain("@media (max-width: 740px)");
     expect(css).toMatch(/ledger-app-shell__navigation \{ display: none; \}/);
+    expect(css).toMatch(/ledger-side-nav__header \{ height: var\(--ledger-space-9\); padding-block: var\(--ledger-space-2\); \}/);
     expect(css).toMatch(/ledger-side-nav-item \{ min-height: var\(--ledger-space-7\);/);
   });
 
@@ -54,6 +57,16 @@ describe("ApplicationNavigation", () => {
     expect(css).toMatch(/ledger-side-nav-item \{[^}]*box-sizing: border-box;[^}]*min-height: calc\(var\(--ledger-space-7\) - var\(--ledger-space-1\)\)/);
     expect(css).toMatch(/ledger-side-nav-item:hover \{[^}]*background: var\(--ledger-color-surface-elevated\)/);
     expect(css).toMatch(/ledger-side-nav-group__heading \{[^}]*color: var\(--ledger-color-text-secondary\);[^}]*font-size: var\(--ledger-font-size-small\);[^}]*line-height: var\(--ledger-line-height-small\)/);
+  });
+
+  it("keeps the desktop collapse control and uses the simplified mobile drawer", () => {
+    const html = renderToStaticMarkup(<AppShell navigation={<SideNav><SideNavHeader>Organisation</SideNavHeader><SideNavNavigation /></SideNav>}><WorkspaceHeader>Workspace</WorkspaceHeader></AppShell>);
+    const css = readFileSync(new URL("./ApplicationNavigation.css", import.meta.url), "utf8");
+    expect(html).toContain('aria-label="Close navigation"');
+    expect(css).toMatch(/ledger-app-shell__dialog \{ width: min\(320px, 82vw\); \}/);
+    expect(css).toMatch(/ledger-app-shell__dialog \.ledger-side-nav \{ height: 100dvh; \}/);
+    expect(css).toMatch(/ledger-app-shell__overlay\[data-state="closed"\] \{ animation: ledger-navigation-overlay-out/);
+    expect(css).toMatch(/ledger-app-shell__dialog\[data-state="closed"\] \{ animation: ledger-navigation-out/);
   });
 
   it("can pass navigation semantics to a routing-library link", () => {
@@ -92,23 +105,43 @@ describe("ApplicationNavigation", () => {
     expect(accounting).toContain("Chart of accounts");
   });
 
-  it("renders a single organisation without an unnecessary menu", () => {
+  it("renders a single organisation as an accessible switcher trigger", () => {
     const html = renderToStaticMarkup(<OrganisationSwitcher organisations={[{ id: "one", name: "One organisation" }]} selectedId="one" />);
     expect(html).toContain("One organisation");
-    expect(html).not.toContain('aria-haspopup="menu"');
+    expect(html).toContain('class="ledger-avatar ledger-avatar--medium ledger-organisation-switcher__monogram"');
+    expect(getOrganisationMonogram("One organisation")).toBe("O");
+    expect(html).not.toContain("Business account");
+    expect(html).toContain('aria-haspopup="dialog"');
+    expect(html).toContain('aria-label="Switch organisation: One organisation"');
+  });
+
+  it("uses medium circular avatars and anchors the popover below the trigger", () => {
+    const source = readFileSync(new URL("./ApplicationNavigation.tsx", import.meta.url), "utf8");
+    const css = readFileSync(new URL("./ApplicationNavigation.css", import.meta.url), "utf8");
+    expect(source).toMatch(/className="ledger-organisation-option__monogram"[\s\S]*?size="medium"/);
+    expect(source).toMatch(/<PopoverContent accessibleLabel=\{label\} align="start" side="bottom"/);
+    expect(css).toMatch(/\.ledger-organisation-option > \.ledger-organisation-option__monogram \{[^}]*width: var\(--ledger-space-6\);[^}]*height: var\(--ledger-space-6\)/);
+    expect(css).toMatch(/ledger-side-nav__header \{ height: var\(--ledger-space-9\); padding-block: var\(--ledger-space-2\); \}/);
+    expect(css).toMatch(/ledger-organisation-switcher__popover \{[\s\S]*?width: calc\(min\(calc\(var\(--ledger-space-9\) \* 5\), 82vw\) - var\(--ledger-space-6\)\);/);
+    expect(css).not.toMatch(/ledger-organisation-switcher__popover \{[^}]*margin-inline/);
+  });
+
+  it("derives a complete monogram from a supplementary Unicode character", () => {
+    expect(getOrganisationMonogram("🚀 Ventures")).toBe("🚀");
   });
 
   it("exposes organisation and user menu triggers", () => {
     const organisation = renderToStaticMarkup(<OrganisationSwitcher organisations={[{ id: "one", name: "One" }, { id: "two", name: "Two" }]} selectedId="one" />);
     const user = renderToStaticMarkup(<UserMenu displayName="Ada Lovelace" secondaryText="Administrator"><UserMenuItem>Preferences</UserMenuItem></UserMenu>);
-    expect(organisation).toContain('aria-haspopup="menu"');
+    expect(organisation).toContain('aria-haspopup="dialog"');
     expect(user).toContain('aria-haspopup="menu"');
   });
 
-  it("derives initials from the first two name parts", () => {
-    expect(getInitials("  Ada   Lovelace Byron ")).toBe("AL");
+  it("derives initials from the first and last name parts", () => {
+    expect(getInitials("  Ada   Lovelace Byron ")).toBe("AB");
     expect(getInitials("Plato")).toBe("P");
     expect(getInitials("李 雷")).toBe("李雷");
+    expect(getInitials("𐐀 Name 𐐨")).toBe("𐐀𐐀");
     expect(getInitials("   ")).toBe("");
   });
 

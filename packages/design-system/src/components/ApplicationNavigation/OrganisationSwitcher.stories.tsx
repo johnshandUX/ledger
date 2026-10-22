@@ -1,31 +1,97 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, waitFor, within } from "storybook/test";
-import { OrganisationSwitcher, type OrganisationOption } from "./ApplicationNavigation";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import {
+  AppShell,
+  AppWorkspace,
+  OrganisationSwitcher,
+  type OrganisationOption,
+  SideNav,
+  SideNavHeader,
+  SideNavItem,
+  SideNavNavigation,
+  WorkspaceHeader,
+} from "./ApplicationNavigation";
 
-function Example({ options }: { options: readonly OrganisationOption[] }) { const [selectedId, setSelectedId] = useState(options[0].id); return <div style={{ width: 248 }}><OrganisationSwitcher organisations={options} selectedId={selectedId} onSelectedIdChange={setSelectedId} /></div>; }
-const standard = [{ id: "one", name: "Northstar Ltd" }, { id: "two", name: "Cedar & Field Services" }];
-const meta = { title: "Patterns/Application Navigation/OrganisationSwitcher", component: OrganisationSwitcher, args: { organisations: standard, selectedId: "one" }, parameters: { layout: "centered" }, tags: ["autodocs"] } satisfies Meta<typeof OrganisationSwitcher>;
+const caldermere = [
+  { id: "caldermere", name: "Caldermere Ltd", secondaryLabel: "Administrator" },
+] as const;
+const multiple = [
+  ...caldermere,
+  { id: "northstar", name: "Northstar Industries", secondaryLabel: "Viewer" },
+  { id: "cedar", name: "Cedar & Field Services", secondaryLabel: "Payment approver" },
+] as const;
+
+function Example({ defaultOpen = false, options = caldermere }: { defaultOpen?: boolean; options?: readonly OrganisationOption[] }) {
+  const [selectedId, setSelectedId] = useState(options[0].id);
+  return <div style={{ width: 248 }}><OrganisationSwitcher organisations={options} selectedId={selectedId} onSelectedIdChange={setSelectedId} defaultOpen={defaultOpen} addOrganisationAction={{ disabled: true }} /></div>;
+}
+
+function MobileExample() {
+  return (
+    <AppShell navigation={<SideNav><SideNavHeader><OrganisationSwitcher organisations={caldermere} selectedId="caldermere" /></SideNavHeader><SideNavNavigation><SideNavItem href="#accounts">Accounts</SideNavItem></SideNavNavigation></SideNav>}>
+      <WorkspaceHeader>Accounts</WorkspaceHeader>
+      <AppWorkspace>Mobile workspace</AppWorkspace>
+    </AppShell>
+  );
+}
+
+const meta = { title: "Patterns/Application Navigation/OrganisationSwitcher", component: OrganisationSwitcher, args: { organisations: caldermere, selectedId: "caldermere" }, parameters: { layout: "centered" }, tags: ["autodocs"] } satisfies Meta<typeof OrganisationSwitcher>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const OneOrganisation: Story = { render: () => <Example options={standard.slice(0, 1)} /> };
-export const MultipleOrganisations: Story = {
-  render: () => <Example options={standard} />,
+
+export const SingleOrganisationSelected: Story = {
+  render: () => <Example />,
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
-    const trigger = canvas.getByRole("button", { name: /Switch organisation/ });
+    const trigger = body.getByRole("button", { name: "Switch organisation: Caldermere Ltd" });
     await userEvent.click(trigger);
-    const menu = await body.findByRole("menu");
-    const selectedItem = within(menu).getByRole("menuitemradio", { checked: true });
-    const nextItem = within(menu).getByRole("menuitemradio", { name: "Cedar & Field Services" });
-    await waitFor(() => expect(menu).toHaveFocus());
-    await userEvent.keyboard("{ArrowDown}");
-    await waitFor(() => expect(selectedItem).toHaveFocus());
-    await userEvent.keyboard("{ArrowDown}");
-    await waitFor(() => expect(nextItem).toHaveFocus());
-    await userEvent.keyboard("{Enter}");
-    await waitFor(() => expect(trigger).toHaveTextContent("Cedar & Field Services"));
+    const surface = await body.findByRole("dialog", { name: "Switch organisation" });
+    expect(within(surface).getByRole("radio", { name: /Caldermere Ltd/ })).toBeChecked();
+    expect(within(surface).getByText("Current organisation")).toBeInTheDocument();
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(body.queryByRole("dialog", { name: "Switch organisation" })).not.toBeInTheDocument());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
-export const LongOrganisationNames: Story = { render: () => <Example options={[{ id: "long", name: "The International Organisation for Complex Enterprise Operations" }, ...standard]} /> };
+export const CurrentSelectionIsNoOp: Story = {
+  args: { onSelectedIdChange: fn() },
+  render: (args) => <div style={{ width: 248 }}><OrganisationSwitcher {...args} /></div>,
+  play: async ({ args, canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(body.getByRole("button", { name: "Switch organisation: Caldermere Ltd" }));
+    await userEvent.click(await body.findByRole("radio", { name: /Caldermere Ltd/ }));
+    expect(args.onSelectedIdChange).not.toHaveBeenCalled();
+  },
+};
+export const Expanded: Story = { render: () => <Example defaultOpen /> };
+export const MultipleOrganisations: Story = {
+  render: () => <Example options={multiple} />,
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body);
+    const trigger = body.getByRole("button", { name: "Switch organisation: Caldermere Ltd" });
+    await userEvent.click(trigger);
+    await userEvent.click(await body.findByRole("radio", { name: /Northstar Industries/ }));
+    await waitFor(() => expect(trigger).toHaveAccessibleName("Switch organisation: Northstar Industries"));
+  },
+};
+export const LongOrganisationName: Story = { render: () => <Example options={[{ id: "long", name: "The International Organisation for Complex Enterprise Operations" }]} /> };
+export const MobilePopover: Story = {
+  render: () => <MobileExample />,
+  parameters: { layout: "fullscreen", viewport: { defaultViewport: "mobile1" } },
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(body.getByRole("button", { name: "Show navigation" }));
+    const drawer = await body.findByRole("dialog", { name: "Application navigation" });
+    const trigger = within(drawer).getByRole("button", { name: "Switch organisation: Caldermere Ltd" });
+    await userEvent.click(trigger);
+    expect(await body.findByRole("dialog", { name: "Switch organisation" })).toHaveAttribute("data-side", "bottom");
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(body.queryByRole("dialog", { name: "Switch organisation" })).not.toBeInTheDocument());
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await userEvent.click(within(drawer).getByRole("link", { name: "Accounts" }));
+    await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
+  },
+};
+export const LightAppearance: Story = { render: () => <Example defaultOpen />, globals: { theme: "light" } };
+export const DarkAppearance: Story = { render: () => <Example defaultOpen />, globals: { theme: "dark" } };

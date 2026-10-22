@@ -12,17 +12,6 @@
   grid-template-rows: minmax(0, 1fr);
 }
 
-.bank-product-name {
-  color: var(--ledger-color-text);
-  font-weight: var(--ledger-font-weight-semibold);
-  text-decoration: none;
-}
-
-.bank-product-name:focus-visible {
-  outline: var(--ledger-border-width-thick) solid var(--ledger-color-focus);
-  outline-offset: var(--ledger-space-1);
-}
-
 .bank-navigation-utility-links {
   display: grid;
   gap: var(--ledger-space-1);

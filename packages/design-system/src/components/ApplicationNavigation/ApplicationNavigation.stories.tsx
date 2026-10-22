@@ -6,7 +6,6 @@ import {
   AppWorkspace,
   OrganisationSwitcher,
   SideNav,
-  SideNavContext,
   SideNavGroup,
   SideNavHeader,
   SideNavItem,
@@ -32,8 +31,7 @@ function OrganisationExample({ long = false, one = false }: { long?: boolean; on
 function Navigation({ overflow = false, restricted = false, longOrganisation = false, longUser = false }: { overflow?: boolean; restricted?: boolean; longOrganisation?: boolean; longUser?: boolean }) {
   return (
     <SideNav onClick={(event) => event.preventDefault()}>
-      <SideNavHeader><strong>Product workspace</strong></SideNavHeader>
-      <SideNavContext><OrganisationExample long={longOrganisation} /></SideNavContext>
+      <SideNavHeader><OrganisationExample long={longOrganisation} /></SideNavHeader>
       <SideNavNavigation>
         <SideNavGroup label="Workspace">
           <SideNavItem href="#overview" current>Overview</SideNavItem>
@@ -71,7 +69,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const NavigationOpen: Story = { render: () => <ShellExample />, play: async ({ canvasElement }) => { const canvas = within(canvasElement); await userEvent.click(canvas.getByRole("button", { name: "Hide navigation" })); await waitFor(() => expect(canvas.getByRole("button", { name: "Show navigation" })).toBeVisible()); } };
+export const NavigationOpen: Story = { render: () => <ShellExample />, play: async ({ canvasElement }) => { const canvas = within(canvasElement); await userEvent.click(canvas.getByRole("button", { name: "Close navigation" })); await waitFor(() => expect(canvas.getByRole("button", { name: "Show navigation" })).toBeVisible()); } };
 export const NavigationClosed: Story = {
   render: () => <ShellExample defaultOpen={false} />,
   play: async ({ canvasElement }) => { const canvas = within(canvasElement); const trigger = canvas.getByRole("button", { name: "Show navigation" }); await userEvent.click(trigger); await waitFor(() => expect(canvas.getByRole("navigation", { name: "Primary" })).toBeVisible()); },
@@ -84,15 +82,35 @@ export const ResponsiveNavigationOverlay: Story = {
     const body = within(canvasElement.ownerDocument.body);
     const trigger = body.getByRole("button", { name: "Show navigation" });
     await userEvent.click(trigger);
-    await waitFor(() => expect(body.getByRole("dialog", { name: "Application navigation" })).toBeVisible());
-    await userEvent.click(body.getByRole("link", { name: "Activity" }));
+    const firstDialog = await body.findByRole("dialog", { name: "Application navigation" });
+    const organisationSwitcher = within(firstDialog).getByRole("button", { name: /Switch organisation/ });
+    await waitFor(() => expect(firstDialog).toHaveFocus());
+    expect(firstDialog.matches(":focus-visible")).toBe(false);
+    expect(organisationSwitcher).not.toHaveFocus();
+    expect(within(firstDialog).queryByRole("button", { name: "Close navigation" })).not.toBeInTheDocument();
+    const overlay = canvasElement.ownerDocument.querySelector<HTMLElement>(".ledger-app-shell__overlay");
+    expect(overlay).not.toBeNull();
+    await userEvent.click(overlay!);
     await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
     const restoredTrigger = body.getByRole("button", { name: "Show navigation" });
     await userEvent.click(restoredTrigger);
+    const navigationDialog = await body.findByRole("dialog", { name: "Application navigation" });
+    await userEvent.click(within(navigationDialog).getByRole("link", { name: "Activity" }));
+    await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
+    await userEvent.click(body.getByRole("button", { name: "Show navigation" }));
     await waitFor(() => expect(body.getByRole("dialog", { name: "Application navigation" })).toBeVisible());
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
     await waitFor(() => expect(body.getByRole("button", { name: "Show navigation" })).toHaveFocus());
+    const keyboardTrigger = body.getByRole("button", { name: "Show navigation" });
+    keyboardTrigger.focus();
+    await userEvent.keyboard("{Enter}");
+    const reopenedDialog = await body.findByRole("dialog", { name: "Application navigation" });
+    const keyboardOrganisationSwitcher = within(reopenedDialog).getByRole("button", { name: /Switch organisation/ });
+    await waitFor(() => expect(keyboardOrganisationSwitcher).toHaveFocus());
+    expect(keyboardOrganisationSwitcher.matches(":focus-visible")).toBe(true);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(body.queryByRole("dialog", { name: "Application navigation" })).not.toBeInTheDocument());
   },
 };
 export const OverflowingNavigation: Story = { render: () => <ShellExample navigation={<Navigation overflow />} /> };

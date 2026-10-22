@@ -14,7 +14,7 @@ The individual public components own their specific UI contract: semantic markup
 
 ### Pattern
 
-Application Navigation is the reusable arrangement of those components: product identity and the hide control in `SideNavHeader`; organisation or workspace context in `SideNavContext`; configured destination groups in `SideNavNavigation`; secondary destinations in `SideNavUtility`; personal identity in `SideNavUser`; and product content in `WorkspaceHeader` and `AppWorkspace`.
+Application Navigation is the reusable arrangement of those components: the active organisation switcher and hide control in `SideNavHeader`; optional non-organisation workspace context in `SideNavContext`; configured destination groups in `SideNavNavigation`; secondary destinations in `SideNavUtility`; personal identity in `SideNavUser`; and product content in `WorkspaceHeader` and `AppWorkspace`.
 
 Navigation destinations and groups are well suited to application-owned typed configuration. Contextual regions remain composed React content because organisations, user actions, and header content vary by product. No additional public configuration renderer is required: applications map their resolved configuration to `SideNavGroup` and `SideNavItem` after applying routes, permissions, and feature availability.
 
@@ -30,8 +30,8 @@ A product supplies its identity, typed navigation configuration, group labels, a
 - `SideNav` contains `SideNavHeader`, optional `SideNavContext`, `SideNavNavigation`, optional `SideNavUtility`, and `SideNavUser`.
 - `SideNavItem` is a semantic anchor. `current` applies `aria-current="page"` and a non-colour active marker. `asChild` allows a framework link that ultimately renders an anchor to receive the same contract.
 - `SideNavGroup` creates a section with an optional non-interactive heading. Omit `label` only for the initial primary destination group; the component then renders no heading or heading gap.
-- `OrganisationSwitcher` accepts presentation-ready organisation options and a selected identifier.
-- `UserMenu` derives initials from `displayName`, uses an optional avatar image, and renders consumer-supplied `UserMenuItem` actions.
+- `OrganisationSwitcher` accepts presentation-ready organisation options, a selected identifier and an optional selection callback. Options may supply a supporting label. Products can compose a real settings destination or a labelled add-organisation action; disabled actions communicate deliberately forthcoming capability without implying navigation.
+- `UserMenu` derives at most two initials from the first and last name parts in `displayName`, uses an optional avatar image, and renders consumer-supplied `UserMenuItem` actions.
 
 `AppShell` accepts `navigationOpen`, `defaultNavigationOpen`, and `onNavigationOpenChange`. Products may control the state when another product concern must observe it; otherwise the shell owns it locally. It does not inspect routes or permissions.
 
@@ -43,7 +43,7 @@ The closed state deliberately has no icon-only rail, narrow sidebar, reserved gu
 
 When closed, `WorkspaceHeader` renders one compact, floating-style menu control at the top-left of the workspace. It is structurally owned by `AppShell` through the header rather than positioned independently by each page. Its accessible name is “Show navigation”; the header layout keeps it beside, rather than over, product-supplied title content. When navigation is open, this control is absent and the hide control remains in `SideNavHeader`.
 
-At 740px and below, navigation opens as a modal overlay. Radix Dialog provides Escape dismissal, focus trapping, outside-content inertness and focus return. Selecting a `SideNavItem` closes the overlay unless the link event is cancelled. Navigation destinations scroll independently while the header, organisation and user regions remain pinned. Motion is removed under `prefers-reduced-motion`.
+At 740px and below, navigation opens as a conventional left-anchored modal drawer with a width of `min(320px, 82vw)`, a straight semantic right border and no visible close control. Radix Dialog provides backdrop dismissal, Escape dismissal, focus trapping, outside-content inertness, scroll locking and focus return. Pointer or touch opening moves focus to the outlined-none dialog surface, keeping focus inside the modal without manufacturing a visible focus state. Keyboard opening moves focus to the visible organisation switcher and retains its `:focus-visible` treatment. Selecting a `SideNavItem` closes the overlay unless the link event is cancelled. The organisation switcher remains an anchored `Popover` inside the drawer and is collision-constrained to the viewport. Selecting a different organisation closes both surfaces; dismissing only the popover leaves the drawer available. Navigation destinations scroll independently while the header, organisation and user regions remain pinned. Motion is removed under `prefers-reduced-motion`.
 
 The 740px threshold follows the existing Ledger Bank shell convention. Ledger has no shared breakpoint-token foundation, so this remains a local pattern decision rather than a new global breakpoint token.
 
@@ -55,9 +55,15 @@ The initial primary destinations may be an unlabelled `SideNavGroup`, so they fo
 
 Destination hover uses the semantic elevated surface against the subtle navigation background. This remains subordinate to the selected surface while staying distinguishable in both light and dark appearances.
 
+## Organisation switcher
+
+The complete compact header row is the trigger. It combines a medium Ledger `Avatar` with a single-character fallback derived from the organisation name, a prominent organisation name with a down-chevron disclosure indicator immediately beside it, and an optional secondary label. The monogram is decorative because the trigger's accessible name already identifies the organisation. `showSelectedSecondaryLabel` can suppress row-only metadata such as a membership role from the compact trigger without removing it from the options. Both desktop and narrow viewports use the existing non-modal `Popover`, opened below and start-aligned to the trigger so the surface remains visually anchored to the current business profile while Radix handles viewport collisions. On narrow viewports the surface is inset equally within the navigation drawer. The surface renders organisations as native radio controls, with each option using the same medium circular `Avatar` treatment and one-character fallback as the trigger, exposes the selected organisation through checked state and screen-reader “Current organisation” text, and returns focus to the trigger when dismissed. Organisation rows may show a product-supplied supporting label such as the current user's role.
+
+Products may provide `settingsAction` only when a real destination or action exists. The design system styles the supplied action but does not infer routes. `addOrganisationAction` supplies an optional footer action and may be disabled while its product flow is deliberately forthcoming. Selecting the already-current radio closes the surface without invoking `onSelectedIdChange`. Long names truncate in the header and rows while their full value remains available to assistive technology and through the title attribute.
+
 ## Accessibility
 
-Use `SideNavNavigation` to provide a named `nav`. Use anchors with real `href` values for destinations. Supply `current` only for the resolved current page. Organisation and user menus use the recognised menu interaction pattern; the sidebar itself retains normal document-order keyboard navigation rather than application-style arrow keys. Long names are visually truncated and preserved through `title` and accessible trigger names. Focus outlines sit outside items, with navigation padding and stable scrollbar space preventing clipping.
+Use `SideNavNavigation` to provide a named `nav`. Use anchors with real `href` values for destinations. Supply `current` only for the resolved current page. The organisation switcher uses dialog disclosure plus native single-selection controls; the user menu uses the recognised menu interaction pattern. The sidebar itself retains normal document-order keyboard navigation rather than application-style arrow keys. Long names are visually truncated and preserved through `title` and accessible trigger names. Focus outlines sit outside items, with navigation padding and stable scrollbar space preventing clipping.
 
 ## Usage guidance
 
@@ -78,4 +84,4 @@ Do not pass raw domain users or businesses into these components, make the compo
 
 ## Related components
 
-Application Navigation reuses Ledger `Avatar` and `Icon` presentation and the installed Radix menu/dialog behaviour. It is distinct from `Sheet`, which remains supporting content rather than primary application navigation, and from product-owned page headers or routing adapters.
+Application Navigation reuses Ledger `Avatar`, `Icon` and `Popover` presentation and the installed Radix interaction behaviour. Product-owned organisation state, page headers and routing adapters remain outside the pattern.

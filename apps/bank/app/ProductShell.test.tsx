@@ -1,29 +1,37 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { bankNavigation, bankUtilityNavigation, ProductShell } from "./ProductShell";
+import { BankStateProvider } from "./BankStateProvider";
+import { bankNavigation, ProductShell } from "./ProductShell";
+
+function renderProductShell(activeRoute: Parameters<typeof ProductShell>[0]["activeRoute"]) {
+  return renderToStaticMarkup(
+    <BankStateProvider>
+      <ProductShell activeRoute={activeRoute}>
+        <div>Content</div>
+      </ProductShell>
+    </BankStateProvider>,
+  );
+}
 
 describe("ProductShell", () => {
   it("composes the application-navigation pattern with Bank-owned content", () => {
-    const html = renderToStaticMarkup(
-      <ProductShell activeRoute="accounts">
-        <div>Content</div>
-      </ProductShell>,
-    );
+    const html = renderProductShell("accounts");
 
     expect(html).toContain('aria-current="page"');
     expect(html).toContain('aria-label="Primary"');
-    expect(html).toContain("Ledger Bank");
+    expect(html).not.toContain("Ledger Bank");
     expect(html).toContain("Caldermere Ltd");
+    expect(html.match(/ledger-organisation-switcher__name/g)).toHaveLength(1);
+    expect(html).not.toContain("ledger-side-nav__context");
+    expect(html).not.toContain("Business account");
+    expect(html).toContain('aria-label="Switch organisation: Caldermere Ltd"');
     expect(html).toContain("Amelia Hart");
     expect(html).toContain("Administrator");
     expect(html).toContain('href="/payments"');
     expect(html).toContain('href="/reports"');
-    expect(html).toContain('href="/treasury/fx"');
-    expect(html).toContain('href="/operations/receivables"');
+    expect(html).toContain('href="/treasury/cash-flow"');
     expect(html).toContain('href="/integrations"');
-    expect(html).toContain('aria-label="Utility"');
-    expect(html).toContain('aria-label="Hide navigation"');
-    expect(html).not.toContain('aria-disabled="true"');
+    expect(html).toContain('aria-label="Close navigation"');
     expect(html).not.toContain("J. Finance");
   });
 
@@ -42,32 +50,24 @@ describe("ProductShell", () => {
         label: "Treasury",
         destinations: [
           { id: "cash-flow", label: "Cash flow", href: "/treasury/cash-flow" },
-          { id: "fx", label: "FX", href: "/treasury/fx" },
-          { id: "liquidity", label: "Liquidity", href: "/treasury/liquidity" },
-          { id: "forecasting", label: "Forecasting", href: "/treasury/forecasting" },
         ],
       },
       {
-        label: "Operations",
+        label: undefined,
         destinations: [
-          { id: "receivables", label: "Receivables", href: "/operations/receivables" },
-          { id: "payables", label: "Payables", href: "/operations/payables" },
+          { id: "integrations", label: "Integrations", href: "/integrations" },
+          { id: "admin", label: "Admin", href: "/admin" },
         ],
       },
-    ]);
-    expect(bankUtilityNavigation).toEqual([
-      { id: "integrations", label: "Integrations", href: "/integrations" },
-      { id: "admin", label: "Admin", href: "/admin" },
     ]);
   });
 
   it("keeps Reports primary and excludes rejected destinations", () => {
-    const html = renderToStaticMarkup(
-      <ProductShell activeRoute="reports"><div>Content</div></ProductShell>,
-    );
+    const html = renderProductShell("reports");
 
     expect(html.indexOf(">Expenses<")).toBeLessThan(html.indexOf(">Reports<"));
     expect(html.indexOf(">Reports<")).toBeLessThan(html.indexOf(">Treasury<"));
+    expect(html.indexOf(">Cash flow<")).toBeLessThan(html.indexOf(">Integrations<"));
     expect(html).not.toContain(">Analysis<");
     expect(html).not.toContain(">Insights<");
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/reports"|<a[^>]*href="\/reports"[^>]*aria-current="page"/);

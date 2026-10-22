@@ -6,7 +6,7 @@ Sheet presents supporting content or a contextual task from the viewport edge wh
 
 ## Behaviour and accessibility
 
-Ledger intentionally supports only left and right placement, defaulting to right. Radix supplies modal focus trapping, Escape/outside-click dismissal, accessible title/description relationships, and focus return. Body content scrolls independently so footer actions stay available.
+Ledger supports left, right and bottom placement, defaulting to right. Bottom placement is reserved for compact supporting choices on narrow viewports rather than full-height tasks. Radix supplies modal focus trapping, Escape/outside-click dismissal, accessible title/description relationships, and focus return. Body content scrolls independently so footer actions stay available.
 
 `SheetTrigger` supports `asChild`, allowing a Ledger Button or a semantic native button with a text-style presentation. Opening a Sheet is an action, not navigation.
 

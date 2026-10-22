@@ -15,6 +15,7 @@ import {
   type BankEphemeralAction,
   type BankEphemeralState,
 } from "../src/state/ephemeral-state";
+import { BankOrganisationProvider } from "./BankOrganisationProvider";
 
 const BankStateContext = createContext<BankEphemeralState | undefined>(undefined);
 const BankDispatchContext = createContext<Dispatch<BankEphemeralAction> | undefined>(
@@ -37,9 +38,11 @@ export function BankStateProvider({
   );
 
   return (
-    <BankStateContext value={state}>
-      <BankDispatchContext value={dispatch}>{children}</BankDispatchContext>
-    </BankStateContext>
+    <BankOrganisationProvider>
+      <BankStateContext value={state}>
+        <BankDispatchContext value={dispatch}>{children}</BankDispatchContext>
+      </BankStateContext>
+    </BankOrganisationProvider>
   );
 }
 
