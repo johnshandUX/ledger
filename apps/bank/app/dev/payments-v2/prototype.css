@@ -1,6 +1,5 @@
 .payments-v2-prototype-page { display: grid; width: 100%; max-width: 720px; gap: var(--ledger-space-5); margin-top: var(--ledger-space-6); margin-bottom: var(--ledger-space-9); }
 .payments-v2-prototype-page--wide { max-width: 960px; }
-body:has(.payments-v2-prototype-page) > .prototype-notice { display: none; }
 .payments-v2-entry, .payments-v2-mode-content { display: grid; gap: var(--ledger-space-6); }
 .payments-v2-entry-heading { display: grid; gap: var(--ledger-space-2); }
 .payments-v2-entry-heading p { margin: 0; color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-body-small); font-weight: var(--ledger-font-weight-semibold); text-transform: uppercase; }
