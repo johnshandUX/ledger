@@ -20,6 +20,8 @@
 .financial-summary-card__currency{display:grid;align-content:center;gap:var(--ledger-space-2);min-width:0}
 .financial-summary-card__identity{display:flex;align-items:center;gap:var(--ledger-space-2);margin:0;font-size:var(--ledger-font-size-body-small);line-height:var(--ledger-line-height-body-small);font-weight:var(--ledger-font-weight-semibold)}
 .financial-summary-card__symbol{display:grid;place-items:center;width:calc(var(--ledger-space-6) - var(--ledger-space-1));height:calc(var(--ledger-space-6) - var(--ledger-space-1));flex:none;border-radius:var(--ledger-radius-full);background:var(--ledger-color-surface-subtle);font-size:var(--ledger-font-size-body-small);line-height:1;font-weight:var(--ledger-font-weight-semibold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme]) .financial-summary-card__symbol{background:var(--ledger-color-background)}}
+:root[data-theme="dark"] .financial-summary-card__symbol{background:var(--ledger-color-background)}
 .financial-summary-card__value{min-width:0;font-size:var(--ledger-font-size-heading-small);line-height:var(--ledger-line-height-body);font-weight:var(--ledger-font-weight-semibold);overflow-wrap:anywhere}
 .financial-summary-card__mobile-separator{display:none}
 .accounts-heading{display:flex;align-items:baseline;justify-content:flex-end;gap:var(--ledger-space-4);margin-bottom:var(--ledger-space-4)}
