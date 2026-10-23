@@ -139,8 +139,9 @@
   .financial-summary-card__body.ledger-card__body{padding-inline:var(--ledger-space-3)}
   .financial-summary-card__currencies{grid-template-columns:minmax(0,1fr);gap:0}
   .financial-summary-card__mobile-separator.ledger-separator--horizontal{display:block}
-  .financial-summary-card__currency{padding:var(--ledger-space-3) 0}
+  .financial-summary-card__currency{grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:var(--ledger-space-3);padding:var(--ledger-space-3) 0}
   .financial-summary-card__currency:first-of-type{padding-top:var(--ledger-space-2)}
+  .financial-summary-card__value{justify-self:end;white-space:nowrap}
 }
 
 @media (max-width: 460px){.page-actions{grid-template-columns:1fr}.account-identity-details{display:grid;grid-template-columns:1fr 1fr;gap:var(--ledger-space-4)}.transaction-toolbar{grid-template-columns:1fr}.transaction-date-filter--mobile{width:100%}.transaction-date-filter--mobile .ledger-button{width:100%}.transaction-collection-heading{display:grid}.transaction-collection-heading .ledger-select-field{min-width:0}.transaction-date-fields{grid-template-columns:1fr}.transaction-card-header{display:grid}.transaction-card-meta{grid-template-columns:1fr 1fr}.profile{display:none}}
