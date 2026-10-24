@@ -18,7 +18,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "420px" }}>
+      <div style={{ width: "min(100%, 420px)" }}>
         <Story />
       </div>
     ),

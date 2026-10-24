@@ -1,5 +1,8 @@
 .ledger-select-field {
   display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   flex-direction: column;
   gap: var(--ledger-space-2);
 }
@@ -17,6 +20,8 @@
 .ledger-select {
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 44px;
   padding: var(--ledger-space-2) 40px var(--ledger-space-2) var(--ledger-space-3);
   border: var(--ledger-border-width-thin) solid var(--ledger-color-control-border-resting);

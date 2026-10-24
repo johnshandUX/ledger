@@ -13,7 +13,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: "420px" }}>
+      <div style={{ width: "min(100%, 420px)" }}>
         <Story />
       </div>
     ),
@@ -40,6 +40,13 @@ export const WithHint: Story = {
 export const Populated: Story = {
   args: {
     defaultValue: "Operating account",
+  },
+};
+
+export const Date: Story = {
+  args: {
+    label: "Payment date",
+    type: "date",
   },
 };
 

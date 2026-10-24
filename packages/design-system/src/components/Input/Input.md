@@ -11,6 +11,8 @@ Input supports controlled and uncontrolled native state and every appropriate in
 
 Input shares the 1px resting, hover, focus, error, disabled and background semantic tokens used by Select and Textarea. The boundary remains subtly visible in both themes without changing geometry between states.
 
+The field and control shrink to their parent container without creating horizontal overflow. Date inputs retain their native date semantics and platform picker while using Ledger's control appearance and responsive sizing.
+
 ## Accessibility
 The label is associated with the input. Hint, error and consumer-supplied description relationships are combined. Error content sets `aria-invalid`. Use a visually hidden label only where surrounding context makes a search control visually unambiguous.
 
