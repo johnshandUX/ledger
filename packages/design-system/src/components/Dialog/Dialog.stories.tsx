@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button/Button";
+import { Input } from "../Input/Input";
+import { Select } from "../Select/Select";
 import {
   Dialog,
   DialogBody,
@@ -22,7 +24,9 @@ Dialog presents a temporary, focused task or information while preserving the co
 
 **Anatomy:** Every Dialog requires a visible title. A description, body and footer actions are optional. When actions are present, place them in \`DialogFooter\`; secondary actions precede the primary action so the primary appears on the right. Use existing Ledger action components.
 
-**Long content:** Put content in \`DialogBody\`. It becomes the scroll region when space is constrained, keeping footer actions available.
+**Long content:** Put content in \`DialogBody\`. It becomes the scroll region when space is constrained, keeping footer actions available. Dialog body content is top-aligned so surplus height remains below short content rather than being distributed between fields.
+
+**Mobile full-screen forms:** Set \`mobileFullScreen\` to preserve the centred desktop treatment and use a safe-area-aware, full-viewport surface on mobile. Keep the natural-height header, independently scrolling body and bottom-anchored footer as distinct regions.
 
 **Accessibility:** Radix manages focus trapping, Escape dismissal, accessible title and description relationships, and focus return. The close control is shown by default and has visible keyboard focus. Motion respects reduced-motion preferences.
 
@@ -95,6 +99,46 @@ export const WithActions: Story = {
             <Button variant="secondary">Cancel</Button>
           </DialogClose>
           <Button>Submit transfer</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+export const MobileFullScreenForm: Story = {
+  parameters: {
+    layout: "fullscreen",
+    viewport: { defaultViewport: "mobile1" },
+  },
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogContent
+        mobileFullScreen
+        title="Schedule payment"
+        description="Choose a future date for this payment."
+      >
+        <DialogBody>
+          <Input
+            id="dialog-story-payment-date"
+            label="Payment date"
+            type="date"
+            error="Choose a future payment date."
+          />
+          <Select
+            id="dialog-story-repeats"
+            label="Repeats"
+            defaultValue="never"
+            options={[
+              { label: "Never", value: "never" },
+              { label: "Monthly", value: "monthly" },
+            ]}
+          />
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="secondary">Cancel</Button>
+          </DialogClose>
+          <Button>Set schedule</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

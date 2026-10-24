@@ -92,6 +92,7 @@
 .ledger-dialog__body {
   display: grid;
   min-height: 0;
+  align-content: start;
   gap: var(--ledger-space-3);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -166,6 +167,35 @@
 
   .ledger-dialog__footer > * {
     width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .ledger-dialog__content.ledger-dialog__content--mobile-full-screen[data-slot="dialog-content"] {
+    box-sizing: border-box;
+    inset: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    padding-top: max(var(--ledger-space-5), env(safe-area-inset-top));
+    padding-right: max(var(--ledger-space-5), env(safe-area-inset-right));
+    padding-bottom: max(var(--ledger-space-5), env(safe-area-inset-bottom));
+    padding-left: max(var(--ledger-space-5), env(safe-area-inset-left));
+    border: 0;
+    border-radius: 0;
+    transform: none;
+  }
+
+  .ledger-dialog__content.ledger-dialog__content--mobile-full-screen[data-slot="dialog-content"] .ledger-dialog__close {
+    top: max(var(--ledger-space-3), env(safe-area-inset-top));
+    right: max(var(--ledger-space-3), env(safe-area-inset-right));
+  }
+
+  .ledger-dialog__content.ledger-dialog__content--mobile-full-screen[data-slot="dialog-content"][data-state] {
+    animation: none;
   }
 }
 

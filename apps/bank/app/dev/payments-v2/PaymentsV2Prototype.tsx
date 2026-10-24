@@ -344,6 +344,7 @@ function PaymentTiming({ schedule, referenceDate, onSchedule, onUseImmediate }: 
       <DialogContent
         id="payments-v2-schedule-dialog"
         className="payments-v2-schedule-dialog"
+        mobileFullScreen
         title="Schedule payment"
         description="Choose a future date for this domestic GBP payment."
         closeLabel="Close scheduling"

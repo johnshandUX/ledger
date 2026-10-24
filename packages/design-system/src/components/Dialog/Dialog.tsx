@@ -47,6 +47,7 @@ export type DialogContentProps = Omit<
   title: ReactNode;
   description?: ReactNode;
   closeLabel?: string;
+  mobileFullScreen?: boolean;
   showCloseButton?: boolean;
 };
 
@@ -55,6 +56,7 @@ export function DialogContent({
   className,
   closeLabel = "Close dialog",
   description,
+  mobileFullScreen = false,
   showCloseButton = true,
   title,
   ...props
@@ -69,7 +71,11 @@ export function DialogContent({
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
-        className={cn("ledger-dialog__content", className)}
+        className={cn(
+          "ledger-dialog__content",
+          mobileFullScreen && "ledger-dialog__content--mobile-full-screen",
+          className,
+        )}
         {...optionalDescriptionProps}
         {...props}
       >
