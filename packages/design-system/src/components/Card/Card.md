@@ -18,6 +18,13 @@ Card adds no landmark or interactive semantics. Use native headings inside it an
 ## Usage guidance
 Use for one coherent group with a realistic content hierarchy. Ledger uses borders and spacing rather than default elevation.
 
+For compact mobile summaries, prefer horizontal label-and-value alignment where space permits.
+Keep supporting information directly beneath its metric and use the shared typography treatment for
+equivalent metric types across products. Let content determine card height, keep spacing consistent
+between metric groups, and avoid excessive vertical whitespace. Labels must be able to wrap without
+overlapping values. When multiple metrics share one card, use a subtle divider only where it helps
+separate the groups.
+
 ## Anti-patterns
 Do not make the entire Card clickable, use it for every content block, introduce decorative variants or migrate product-specific cards without an approved contract.
 

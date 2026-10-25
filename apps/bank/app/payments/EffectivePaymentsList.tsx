@@ -32,9 +32,26 @@ export function EffectivePaymentsOverview() {
   return <>
     <section className="payment-summary" aria-labelledby="payment-summary-heading">
       <h2 id="payment-summary-heading" className="visually-hidden">Payment summary</h2>
-      <div className="payment-summary-primary"><span>Payments in progress</span><strong>{inProgress.length}</strong><p>{inProgress.filter(({ status }) => status === "scheduled").length} scheduled · {inProgress.filter(({ status }) => status === "processing").length} processing</p></div>
-      <div className="payment-summary-approvals"><span>Outstanding approvals</span><strong>{outstandingApprovals.length}</strong><p>Across {paymentsAwaitingApproval} payments</p></div>
-      <div className="payment-summary-secondary"><div><span>Failed</span><strong>{payments.filter(({ status }) => status === "failed").length}</strong></div><div><span>Completed today</span><strong>{completedToday}</strong></div></div>
+      <div className="payment-summary-primary">
+        <span>Payments in progress</span>
+        <strong className="payment-summary-value financial-value">{inProgress.length}</strong>
+        <p>{inProgress.filter(({ status }) => status === "scheduled").length} scheduled · {inProgress.filter(({ status }) => status === "processing").length} processing</p>
+      </div>
+      <div className="payment-summary-approvals">
+        <span>Outstanding approvals</span>
+        <strong className="payment-summary-value financial-value">{outstandingApprovals.length}</strong>
+        <p>Across {paymentsAwaitingApproval} payments</p>
+      </div>
+      <div className="payment-summary-secondary">
+        <div>
+          <span>Failed</span>
+          <strong className="payment-summary-value financial-value">{payments.filter(({ status }) => status === "failed").length}</strong>
+        </div>
+        <div>
+          <span>Completed today</span>
+          <strong className="payment-summary-value financial-value">{completedToday}</strong>
+        </div>
+      </div>
     </section>
     <section className="payment-list" aria-labelledby="payment-list-heading"><div className="section-heading"><div><h2 id="payment-list-heading">Payment activity</h2><p>{rows.length} payments</p></div></div><PaymentsDataTable payments={rows} /></section>
   </>;
