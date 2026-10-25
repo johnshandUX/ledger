@@ -33,23 +33,23 @@ export function EffectivePaymentsOverview() {
     <section className="payment-summary" aria-labelledby="payment-summary-heading">
       <h2 id="payment-summary-heading" className="visually-hidden">Payment summary</h2>
       <div className="payment-summary-primary">
-        <span>Payments in progress</span>
         <strong className="payment-summary-value financial-value">{inProgress.length}</strong>
+        <span>Payments in progress</span>
         <p>{inProgress.filter(({ status }) => status === "scheduled").length} scheduled · {inProgress.filter(({ status }) => status === "processing").length} processing</p>
       </div>
       <div className="payment-summary-approvals">
-        <span>Outstanding approvals</span>
         <strong className="payment-summary-value financial-value">{outstandingApprovals.length}</strong>
+        <span>Outstanding approvals</span>
         <p>Across {paymentsAwaitingApproval} payments</p>
       </div>
       <div className="payment-summary-secondary">
         <div>
-          <span>Failed</span>
           <strong className="payment-summary-value financial-value">{payments.filter(({ status }) => status === "failed").length}</strong>
+          <span>Failed</span>
         </div>
         <div>
-          <span>Completed today</span>
           <strong className="payment-summary-value financial-value">{completedToday}</strong>
+          <span>Completed today</span>
         </div>
       </div>
     </section>
