@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AccountPreview } from "./_components/AccountPreview";
+import { GitHubLink } from "./_components/GitHubLink";
 import { HomeHero } from "./_components/HomeHero";
 import { prepareGenerativeFinanceData } from "./experiments/generative-hero/_components/finance";
 import { ledgerBankDemoUrl } from "../lib/deployments";
@@ -35,7 +36,7 @@ export default function Home() {
 
       <section className="workflow-section page-shell" aria-labelledby="workflow-heading"><div className="section-heading"><div><p className="eyebrow">From intent to interface</p><h2 id="workflow-heading">A clearer path through the system.</h2></div><p>The Playground uses curated prompts and predefined previews today. Live, grounded generation remains planned.</p></div><div className="workflow-grid">{workflow.map((step) => <article key={step.number}><span>{step.number}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}</div></section>
 
-      <section className="design-system-showcase page-shell"><div className="showcase-copy"><p className="eyebrow">A coded system for financial product creation</p><h2>The Ledger Design System</h2><p>Authoritative foundations and reusable components are implemented today. Financial patterns and machine-readable AI guidance will grow through real product examples.</p><div className="actions"><Link className="button-link" href="/design-system">Explore the design system</Link><Link className="text-link" href="/design-system/installation">Installation status</Link></div></div><DesignSystemPreview /></section>
+      <section className="design-system-showcase page-shell"><div className="showcase-copy"><p className="eyebrow">A coded system for financial product creation</p><h2>The Ledger Design System</h2><p>Authoritative foundations and reusable components are implemented today. Financial patterns and machine-readable AI guidance will grow through real product examples.</p><div className="actions"><Link className="button-link" href="/design-system">Explore the design system</Link><GitHubLink className="button-link button-link--secondary" /></div></div><DesignSystemPreview /></section>
 
       <section className="showcase page-shell"><div><p className="eyebrow">Reference implementation</p><h2>Meet Ledger Bank.</h2><p>A separate, full-screen commercial banking prototype demonstrates a sterling account overview, balance summaries, account details and responsive transaction history using real Ledger components.</p><div className="actions"><a className="button-link" href={ledgerBankDemoUrl} target="_blank" rel="noreferrer">Open Ledger Bank <span className="sr-only">(opens in a new tab)</span></a><Link className="text-link" href="/ledger-bank">About the reference app</Link></div></div><AccountPreview source="bank" /></section>
 

@@ -25,6 +25,8 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .button-link--secondary { background: var(--ledger-color-surface); color: var(--ledger-color-text); }
 .button-link--secondary:hover { background: var(--ledger-color-surface-hover); }
 .button-link--small { min-height: 40px; padding-inline: var(--ledger-space-4); font-size: var(--ledger-font-size-body-small); }
+.github-link { gap: var(--ledger-space-2); }
+.github-mark { width: 18px; height: 18px; fill: currentColor; flex: 0 0 auto; }
 .text-link { font-weight: var(--ledger-font-weight-medium); text-underline-offset: 4px; }
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ledger-space-5); }
 .eyebrow, .example-label { margin-bottom: var(--ledger-space-3); color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-small); font-weight: var(--ledger-font-weight-semibold); line-height: var(--ledger-line-height-small); letter-spacing: .09em; text-transform: uppercase; }
