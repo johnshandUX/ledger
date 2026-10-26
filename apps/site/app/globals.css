@@ -122,6 +122,9 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .docs-sidebar a:hover { color: var(--ledger-color-text); }
 .docs-content { min-width: 0; max-width: 920px; }
 .docs-content > .page-intro { margin-bottom: var(--ledger-space-9); }
+.docs-content--with-actions > .page-intro { margin-bottom: var(--ledger-space-5); }
+.docs-intro-actions { margin-bottom: var(--ledger-space-9); }
+.docs-page-actions { margin-top: var(--ledger-space-6); }
 .docs-section { padding-block: var(--ledger-space-8); border-top: 1px solid var(--ledger-color-border); }
 .docs-section > p { max-width: 720px; color: var(--ledger-color-text-secondary); }
 .doc-section-heading { display: grid; grid-template-columns: 1fr .8fr; align-items: end; gap: var(--ledger-space-7); margin-bottom: var(--ledger-space-7); }
