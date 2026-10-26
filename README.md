@@ -1,6 +1,6 @@
 # LedgerOS
 
-LedgerOS is a fictional commercial banking project built as a public learning and portfolio exercise. It combines a code-first design system, a working banking prototype, documentation and a small playground for exploring how the system can support product work. It is not production banking software.
+LedgerOS is a fictional commercial banking project. It combines a code-first design system, a working banking prototype, documentation and a small playground for exploring how the system can support product work. It is not production banking software.
 
 ## How the project fits together
 
@@ -125,6 +125,6 @@ The Ledger Design System works as a local npm workspace package and is consumed 
 
 ## Project status and contributions
 
-LedgerOS is a personal, public portfolio and learning project under active development, rather than a maintained production banking product. Issues and thoughtful feedback are welcome; please open an issue before investing in a substantial contribution so the proposed work can be aligned with the project's direction.
+LedgerOS is an independent public project under active development, rather than a maintained production banking product. Issues and thoughtful feedback are welcome; please open an issue before investing in a substantial contribution so the proposed work can be aligned with the project's direction.
 
 This repository currently has no root licence file. Some package manifests contain licence metadata, but a repository-wide licence has not been selected or added. Please do not assume permission to reuse or redistribute the code until that decision is made.
