@@ -99,6 +99,14 @@ describe("accounts overview", () => {
     expect(css).not.toMatch(/\.account-identifier\s*\{[^}]*brand-mono/);
   });
 
+  it("keeps clear space below the summary values", () => {
+    const css = readFileSync(new URL("./accounts.css", import.meta.url), "utf8");
+
+    expect(css).toMatch(
+      /\.financial-summary-card__body\.ledger-card__body\{[^}]*padding:var\(--ledger-space-2\) var\(--ledger-space-4\) var\(--ledger-space-6\)/,
+    );
+  });
+
   it("uses the requested mobile card hierarchy and status treatment", () => {
     const html = renderPage();
     const mobile = html.slice(html.indexOf('class="accounts-mobile"'));
