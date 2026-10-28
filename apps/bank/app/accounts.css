@@ -10,7 +10,7 @@
 
 .financial-summary{margin:var(--ledger-space-5) 0}
 .financial-summary-card{min-width:0}
-.financial-summary-card__body.ledger-card__body{display:grid;gap:var(--ledger-space-1);min-width:0;padding:var(--ledger-space-2) var(--ledger-space-4)}
+.financial-summary-card__body.ledger-card__body{display:grid;gap:var(--ledger-space-1);min-width:0;padding:var(--ledger-space-2) var(--ledger-space-4) var(--ledger-space-4)}
 .financial-summary-card__header{display:flex;min-width:0;min-height:var(--ledger-space-6);align-items:center;justify-content:space-between;gap:var(--ledger-space-3)}
 .financial-summary-card__view-label{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);line-height:var(--ledger-line-height-small)}
 .financial-summary-card__menu-trigger.ledger-button--secondary{display:inline-flex;width:var(--ledger-space-6);height:var(--ledger-space-6);min-height:var(--ledger-space-6);align-items:center;justify-content:center;padding:0;flex:none;border:0;background:transparent;font-size:var(--ledger-font-size-heading-small);line-height:1;letter-spacing:1px;white-space:nowrap}
@@ -30,7 +30,6 @@
 .accounts-table .ledger-table__cell:first-child{width:30%;max-width:280px}
 .accounts-table .acc-name{overflow-wrap:anywhere}
 .acc-name{font-weight:var(--ledger-font-weight-semibold)}
-.acc-sub{color:var(--ledger-color-text-secondary);font-size:13px}
 
 .accounts-mobile{display:none}
 

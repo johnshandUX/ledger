@@ -19,7 +19,6 @@ export const accountColumns: readonly DataTableColumn<BankAccount>[] = [
     cell: ({ row }) => (
       <div>
         <div className="acc-name"><Link className="ledger-link" href={`/accounts/${row.id}`}>{row.name}</Link></div>
-        <div className="acc-sub">{row.status}</div>
       </div>
     ),
     sort: { value: row => row.name },

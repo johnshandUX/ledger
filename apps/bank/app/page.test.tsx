@@ -62,6 +62,17 @@ describe("accounts overview", () => {
     ]);
   });
 
+  it("keeps account status in the data without displaying it in the desktop table", () => {
+    const accounts = getBankAccounts();
+    const accountColumn = accountColumns.find(({ id }) => id === "account")!;
+    const activeAccount = accounts.find(({ status, name }) => status === "active" && !name.toLowerCase().includes(status))!;
+    const accountCell = renderToStaticMarkup(<>{accountColumn.cell({ row: activeAccount, rowId: activeAccount.id })}</>);
+
+    expect(activeAccount.status).toBe("active");
+    expect(accountCell).toContain(activeAccount.name);
+    expect(accountCell).not.toContain(">active<");
+  });
+
   it("renders separate UK identifiers without losing formatting or leading zeroes", () => {
     const account = {
       ...getBankAccounts()[0]!,
