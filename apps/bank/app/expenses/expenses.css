@@ -6,10 +6,10 @@
 .expenses-section-heading h2{margin:0;font-size:var(--ledger-font-size-heading-medium);line-height:var(--ledger-line-height-heading-medium)}
 .expenses-summary-card .ledger-card__body{padding:var(--ledger-space-4)}
 .expenses-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
-.expenses-summary-grid>div{min-width:0;padding-inline:var(--ledger-space-4);border-left:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+.expenses-summary-grid>div{display:grid;gap:var(--ledger-space-1);min-width:0;padding-inline:var(--ledger-space-4);border-left:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
 .expenses-summary-grid>div:first-child{padding-left:0;border-left:0}
 .expenses-summary-grid dt{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);line-height:var(--ledger-line-height-small)}
-.expenses-summary-grid dd{margin:var(--ledger-space-2) 0 0;font-size:var(--ledger-font-size-heading-medium);font-weight:var(--ledger-font-weight-semibold);line-height:var(--ledger-line-height-heading-medium);overflow-wrap:anywhere}
+.expenses-summary-grid dd{order:-1;margin:0;font-size:var(--ledger-font-size-heading-medium);font-weight:var(--ledger-font-weight-semibold);line-height:var(--ledger-line-height-heading-medium);overflow-wrap:anywhere}
 .expenses-team-table .ledger-table__cell:first-child{width:18%}
 .expense-team-link{font-weight:var(--ledger-font-weight-semibold)}
 .expense-team-action{display:inline-grid;width:44px;height:44px;place-items:center;border-radius:var(--ledger-radius-small);color:var(--ledger-color-text-secondary)}
