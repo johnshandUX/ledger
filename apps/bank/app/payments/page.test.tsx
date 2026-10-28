@@ -20,7 +20,7 @@ describe("payments overview", () => {
     expect(html).toMatch(/>3<\/strong><span>Completed today<\/span>/);
     expect(html).not.toContain("Review payment activity and approvals for Caldermere Ltd.");
     expect(html).not.toContain("Payment activity");
-    expect(html).toContain('class="payments-heading"><span>200 payments</span>');
+    expect(html).toContain('class="accounts-heading"><span>200 payments</span>');
     expect(html).toContain('href="/payments/new"');
     expect(html).toContain("payments");
   });
@@ -37,5 +37,14 @@ describe("payments overview", () => {
     expect(css).toMatch(/\.payment-summary-primary p,\.payment-summary-approvals p\{grid-column:1\/-1;margin:0/);
     expect(css).toMatch(/\.payment-summary-secondary>div\{display:grid;grid-template-columns:auto minmax\(0,1fr\);align-items:baseline;gap:var\(--ledger-space-2\)/);
     expect(css).toMatch(/\.payment-summary-secondary>div\+div\{[^}]*border-top:var\(--ledger-border-width-thin\) solid var\(--ledger-color-border\)/);
+  });
+
+  it("matches the Expenses needs-attention card typography and spacing", () => {
+    const css = readFileSync(new URL("./payments.css", import.meta.url), "utf8");
+
+    expect(css).toMatch(/\.payment-summary-primary,\.payment-summary-approvals,\.payment-summary-secondary\{[^}]*padding:var\(--ledger-space-4\)/);
+    expect(css).toMatch(/\.payment-summary-primary,\.payment-summary-approvals,\.payment-summary-secondary>div\{display:grid;align-content:center;gap:var\(--ledger-space-1\)/);
+    expect(css).toMatch(/\.payment-summary-primary>strong,\.payment-summary-approvals>strong,\.payment-summary-secondary strong\{font-size:var\(--ledger-font-size-heading-medium\);line-height:var\(--ledger-line-height-heading-medium\)/);
+    expect(css).toMatch(/\.payment-summary-primary>span,\.payment-summary-approvals>span,\.payment-summary-secondary span,[^{]+\{[^}]*font-size:var\(--ledger-font-size-body-small\)/);
   });
 });

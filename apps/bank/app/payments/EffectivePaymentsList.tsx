@@ -53,6 +53,6 @@ export function EffectivePaymentsOverview() {
         </div>
       </div>
     </section>
-    <section className="payment-list" aria-labelledby="payment-list-heading"><h2 id="payment-list-heading" className="visually-hidden">Payments</h2><div className="payments-heading"><span>{rows.length} payments</span></div><PaymentsDataTable payments={rows} /></section>
+    <section className="payment-list" aria-labelledby="payment-list-heading"><h2 id="payment-list-heading" className="visually-hidden">Payments</h2><div className="accounts-heading"><span>{rows.length} payments</span></div><PaymentsDataTable payments={rows} /></section>
   </>;
 }
