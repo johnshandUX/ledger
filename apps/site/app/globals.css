@@ -53,8 +53,6 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .section-heading { display: grid; grid-template-columns: 1.25fr .75fr; align-items: end; gap: var(--ledger-space-8); margin-bottom: var(--ledger-space-8); }
 .section-heading h2 { margin-bottom: 0; }
 .section-heading > p { margin-bottom: 0; color: var(--ledger-color-text-secondary); }
-.section-heading__copy { color: var(--ledger-color-text-secondary); }
-.section-heading__copy p:last-child { margin-bottom: 0; }
 .playground-feature, .system-section, .split-section, .workflow-section, .design-system-showcase, .showcase, .journal-callout { padding-block: clamp(80px, 10vw, 128px); border-top: 1px solid var(--ledger-color-border); }
 .prompt-preview { display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); overflow: hidden; border: 1px solid var(--ledger-color-border); border-radius: var(--ledger-radius-large); background: var(--ledger-color-surface-elevated); box-shadow: var(--ledger-shadow-small); }
 .prompt-panel { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(32px, 5vw, 64px); border-right: 1px solid var(--ledger-color-border); }
@@ -70,6 +68,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .workflow-grid article:last-child { border-right: 0; }
 .workflow-grid article > span { display: block; margin-bottom: var(--ledger-space-8); color: var(--ledger-color-text-secondary); font-size: var(--ledger-font-size-small); }
 .workflow-grid p, .showcase-copy > p { color: var(--ledger-color-text-secondary); }
+.workflow-actions { margin-top: var(--ledger-space-6); }
 .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ledger-space-9); }
 .split-section > div:last-child { padding-top: var(--ledger-space-2); }
 .showcase, .feature-intro { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: clamp(48px, 8vw, 112px); }

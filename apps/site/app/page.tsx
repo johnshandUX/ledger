@@ -7,7 +7,7 @@ import { ledgerBankDemoUrl } from "../lib/deployments";
 import "./experiments/generative-hero/generative-hero.css";
 
 const workflow = [
-  { number: "01", title: "Describe it", copy: "Start with a commercial banking product idea and the customer outcome it needs to support." },
+  { number: "01", title: "Describe it", copy: "Start with a financial product idea and the customer outcome it needs to support." },
   { number: "02", title: "Shape it", copy: "Use curated examples to turn that intent into a structured interface starting point." },
   { number: "03", title: "Understand it", copy: "Trace the foundations, components and financial guidance behind the result." },
   { number: "04", title: "Build with it", copy: "Reuse the coded system in Ledger projects today, with wider distribution planned." },
@@ -34,7 +34,7 @@ export default function Home() {
     <main id="main-content">
       <HomeHero data={prepareGenerativeFinanceData()} />
 
-      <section className="workflow-section page-shell" aria-labelledby="workflow-heading"><div className="section-heading"><h2 id="workflow-heading">From intent to interface</h2><div className="section-heading__copy"><p>Explore how the LedgerOS Playground turns your business needs into financial interfaces.</p><p>Today, you can explore a selection of prepared examples that demonstrate what the LedgerOS design system can generate. In future, you’ll be able to describe your own requirements in a chat that generates interfaces tailored to your needs.</p></div></div><div className="workflow-grid">{workflow.map((step) => <article key={step.number}><span>{step.number}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}</div></section>
+      <section className="workflow-section page-shell" aria-labelledby="workflow-heading"><div className="section-heading"><h2 id="workflow-heading">From intent to interface</h2></div><div className="workflow-grid">{workflow.map((step) => <article key={step.number}><span>{step.number}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}</div><div className="actions workflow-actions"><Link className="button-link" href="/playground">Explore Playground</Link></div></section>
 
       <section className="design-system-showcase page-shell"><div className="showcase-copy"><p className="eyebrow">A coded system for financial product creation</p><h2>The Ledger Design System</h2><p>Authoritative foundations and reusable components are implemented today. Financial patterns and machine-readable AI guidance will grow through real product examples.</p><div className="actions"><Link className="button-link" href="/design-system">Explore the design system</Link><GitHubLink className="button-link button-link--secondary" /></div></div><DesignSystemPreview /></section>
 
