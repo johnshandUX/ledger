@@ -18,7 +18,9 @@ describe("payments overview", () => {
     expect(html).toContain("Across 4 payments");
     expect(html).toMatch(/>2<\/strong><span>Failed<\/span>/);
     expect(html).toMatch(/>3<\/strong><span>Completed today<\/span>/);
-    expect(html).toContain("Payment activity");
+    expect(html).not.toContain("Review payment activity and approvals for Caldermere Ltd.");
+    expect(html).not.toContain("Payment activity");
+    expect(html).toContain('class="payments-heading"><span>200 payments</span>');
     expect(html).toContain('href="/payments/new"');
     expect(html).toContain("payments");
   });

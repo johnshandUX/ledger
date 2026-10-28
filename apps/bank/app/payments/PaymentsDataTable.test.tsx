@@ -15,6 +15,8 @@ describe("PaymentsDataTable", () => {
     expect(html).toContain("Awaiting approval");
     expect(html).toContain('href="/payments/payment-awaiting-01"');
     expect(html).toContain('aria-label="View details for payment APX-10482"');
+    expect(html).toContain('class="payment-row-action"');
+    expect(html).toContain('<span aria-hidden="true">›</span>');
     expect(html).toContain("View details");
     expect(html.match(/>APX-10482</g)).toHaveLength(2);
   });
