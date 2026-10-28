@@ -100,5 +100,13 @@ function cloneFinanceDataset(dataset: FinanceDataset): FinanceDataset {
     payments: dataset.payments.map((payment) => ({ ...payment })),
     paymentApprovals: dataset.paymentApprovals.map((approval) => ({ ...approval })),
     invoices: dataset.invoices.map((invoice) => ({ ...invoice })),
+    expenseTeams: dataset.expenseTeams.map((team) => ({ ...team })),
+    teamSpendingBudgets: dataset.teamSpendingBudgets.map((budget) => ({ ...budget })),
+    expenseCardholders: dataset.expenseCardholders.map((cardholder) => ({ ...cardholder })),
+    expenseCards: dataset.expenseCards.map((card) => ({ ...card })),
+    cardSpendingLimits: dataset.cardSpendingLimits.map((limit) => ({ ...limit })),
+    merchants: dataset.merchants.map((merchant) => ({ ...merchant })),
+    cardTransactions: dataset.cardTransactions.map((transaction) => ({ ...transaction })),
+    expenseRecords: dataset.expenseRecords.map((record) => ({ ...record })),
   };
 }

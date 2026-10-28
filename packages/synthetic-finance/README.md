@@ -113,6 +113,33 @@ Key rules:
 - transaction `from` and `to` filters are inclusive and apply to `valueDate`
 - entity selectors preserve dataset order; transactions, payments, and approval actions return newest first
 
+## Expenses baseline
+
+The Caldermere baseline also contains an independent company-card expense domain:
+expense teams and monthly soft budgets, employee and external-contractor
+cardholders, physical and virtual cards, one primary hard limit per card,
+merchants, card transactions, and their administrative expense records.
+Cardholders may optionally reference an existing banking user, but the
+relationship grants no role, permission, authentication, or access.
+
+Expense selectors accept the dataset and explicit reporting dates. Financial
+totals use transaction-level spending-team attribution: settled purchases add
+to expenditure, settled refunds reduce it, pending purchases are reported as
+committed spending, and declined or reversed transactions contribute nothing.
+Pending refunds do not reduce committed spending. Expense records never add a
+second financial amount. Monthly limits use the supplied calendar period,
+lifetime limits include eligible settled activity through the explicitly
+supplied reporting `to` date, and per-transaction
+limits deliberately return no cumulative remaining balance.
+
+The expense domain is not linked to account transactions or balance snapshots.
+Organisation, team and card selectors require or enforce a business scope;
+stable identifiers do not implicitly authorise cross-business reads.
+Monthly limit utilisation uses the calendar month containing the supplied
+reporting period's `from` date, even if the wider reporting period spans more
+than one month. Card settlement, funding, authorisation, mutations, receipts and accounting
+actions remain outside the baseline.
+
 ## Consumers
 
 Consumers should keep their presentation boundary separate from finance semantics:
@@ -141,6 +168,8 @@ The context exposes typed queries and calculations, not its underlying `FinanceD
 The package provides:
 
 - typed contracts for businesses, legal entities, users, roles, permissions, accounts, balances, transactions, counterparties, beneficiaries, payments, payment approvals, and invoices
+- typed contracts and deterministic fixtures for expense teams, budgets, cardholders, cards, limits, merchants, card transactions, and expense records
+- company-level cardholder lifecycle states (`active`, `frozen`, `pending_activation`, `removed`) remain independent from the lifecycle status of any card they hold
 - a typed `FinanceDataset` container
 - lightweight referential-integrity validation
 - public package-root exports

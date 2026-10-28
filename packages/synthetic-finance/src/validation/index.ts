@@ -4,13 +4,21 @@ import type {
   Beneficiary,
   Business,
   Counterparty,
+  CardSpendingLimit,
+  CardTransaction,
+  ExpenseCard,
+  ExpenseCardholder,
+  ExpenseRecord,
+  ExpenseTeam,
   Invoice,
   LegalEntity,
+  Merchant,
   Payment,
   PaymentApproval,
   Permission,
   Role,
   Transaction,
+  TeamSpendingBudget,
   User,
 } from "../domain/index.js";
 import { additionalAccessCatalogue } from "../domain/index.js";
@@ -29,6 +37,14 @@ export interface FinanceDataset {
   payments: Payment[];
   paymentApprovals: PaymentApproval[];
   invoices: Invoice[];
+  expenseTeams: ExpenseTeam[];
+  teamSpendingBudgets: TeamSpendingBudget[];
+  expenseCardholders: ExpenseCardholder[];
+  expenseCards: ExpenseCard[];
+  cardSpendingLimits: CardSpendingLimit[];
+  merchants: Merchant[];
+  cardTransactions: CardTransaction[];
+  expenseRecords: ExpenseRecord[];
 }
 
 export interface FinanceDatasetValidationError {
@@ -77,6 +93,11 @@ export function validateFinanceDataset(
   const counterparties = new Map(dataset.counterparties.map((item) => [item.id, item]));
   const beneficiaries = new Map(dataset.beneficiaries.map((item) => [item.id, item]));
   const payments = new Map(dataset.payments.map((item) => [item.id, item]));
+  const expenseTeams = new Map(dataset.expenseTeams.map((item) => [item.id, item]));
+  const expenseCardholders = new Map(dataset.expenseCardholders.map((item) => [item.id, item]));
+  const expenseCards = new Map(dataset.expenseCards.map((item) => [item.id, item]));
+  const merchants = new Map(dataset.merchants.map((item) => [item.id, item]));
+  const cardTransactions = new Map(dataset.cardTransactions.map((item) => [item.id, item]));
 
   const requireReference = (
     path: string,
@@ -422,6 +443,183 @@ export function validateFinanceDataset(
         message: `Counterparty "${counterparty.id}" belongs to Business "${counterparty.businessId}", not "${invoice.businessId}".`,
       });
     }
+  });
+
+  dataset.expenseTeams.forEach((team, index) => {
+    requireReference(
+      `expenseTeams[${index}].businessId`,
+      "Business",
+      team.businessId,
+      businesses.has(team.businessId),
+    );
+  });
+
+  dataset.teamSpendingBudgets.forEach((budget, index) => {
+    requireReference(
+      `teamSpendingBudgets[${index}].teamId`,
+      "ExpenseTeam",
+      budget.teamId,
+      expenseTeams.has(budget.teamId),
+    );
+    requireMinorUnitInteger(`teamSpendingBudgets[${index}].amountMinor`, budget.amountMinor);
+    if (budget.amountMinor <= 0) {
+      errors.push({ path: `teamSpendingBudgets[${index}].amountMinor`, message: "Budget amount must be positive." });
+    }
+  });
+
+  dataset.expenseCardholders.forEach((cardholder, index) => {
+    requireReference(
+      `expenseCardholders[${index}].businessId`,
+      "Business",
+      cardholder.businessId,
+      businesses.has(cardholder.businessId),
+    );
+    const team = expenseTeams.get(cardholder.primaryTeamId);
+    requireReference(
+      `expenseCardholders[${index}].primaryTeamId`,
+      "ExpenseTeam",
+      cardholder.primaryTeamId,
+      Boolean(team),
+    );
+    if (team && team.businessId !== cardholder.businessId) {
+      errors.push({ path: `expenseCardholders[${index}].primaryTeamId`, message: `ExpenseTeam "${team.id}" belongs to Business "${team.businessId}", not "${cardholder.businessId}".` });
+    }
+    if (cardholder.userId !== undefined) {
+      const user = users.get(cardholder.userId);
+      requireReference(`expenseCardholders[${index}].userId`, "User", cardholder.userId, Boolean(user));
+      if (user && user.businessId !== cardholder.businessId) {
+        errors.push({ path: `expenseCardholders[${index}].userId`, message: `User "${user.id}" belongs to Business "${user.businessId}", not "${cardholder.businessId}".` });
+      }
+    }
+  });
+
+  dataset.expenseCards.forEach((card, index) => {
+    const cardholder = expenseCardholders.get(card.cardholderId);
+    const team = expenseTeams.get(card.spendingTeamId);
+    requireReference(`expenseCards[${index}].businessId`, "Business", card.businessId, businesses.has(card.businessId));
+    requireReference(`expenseCards[${index}].cardholderId`, "ExpenseCardholder", card.cardholderId, Boolean(cardholder));
+    requireReference(`expenseCards[${index}].spendingTeamId`, "ExpenseTeam", card.spendingTeamId, Boolean(team));
+    if (cardholder && cardholder.businessId !== card.businessId) {
+      errors.push({ path: `expenseCards[${index}].cardholderId`, message: `ExpenseCardholder "${cardholder.id}" belongs to Business "${cardholder.businessId}", not "${card.businessId}".` });
+    }
+    if (team && team.businessId !== card.businessId) {
+      errors.push({ path: `expenseCards[${index}].spendingTeamId`, message: `ExpenseTeam "${team.id}" belongs to Business "${team.businessId}", not "${card.businessId}".` });
+    }
+    if (!/^\d{4}$/.test(card.lastFour)) {
+      errors.push({ path: `expenseCards[${index}].lastFour`, message: "Card lastFour must contain exactly four digits." });
+    }
+  });
+
+  const limitCountByCard = new Map<string, number>();
+  dataset.cardSpendingLimits.forEach((limit, index) => {
+    requireReference(`cardSpendingLimits[${index}].cardId`, "ExpenseCard", limit.cardId, expenseCards.has(limit.cardId));
+    requireMinorUnitInteger(`cardSpendingLimits[${index}].amountMinor`, limit.amountMinor);
+    if (limit.amountMinor <= 0) {
+      errors.push({ path: `cardSpendingLimits[${index}].amountMinor`, message: "Card limit amount must be positive." });
+    }
+    limitCountByCard.set(limit.cardId, (limitCountByCard.get(limit.cardId) ?? 0) + 1);
+  });
+  dataset.expenseCards.forEach((card, index) => {
+    if (limitCountByCard.get(card.id) !== 1) {
+      errors.push({ path: `expenseCards[${index}].id`, message: `ExpenseCard "${card.id}" must have exactly one primary spending limit.` });
+    }
+  });
+
+  dataset.cardTransactions.forEach((transaction, index) => {
+    const card = expenseCards.get(transaction.cardId);
+    const cardholder = expenseCardholders.get(transaction.cardholderId);
+    const team = expenseTeams.get(transaction.spendingTeamId);
+    requireReference(`cardTransactions[${index}].cardId`, "ExpenseCard", transaction.cardId, Boolean(card));
+    requireReference(`cardTransactions[${index}].cardholderId`, "ExpenseCardholder", transaction.cardholderId, Boolean(cardholder));
+    requireReference(`cardTransactions[${index}].spendingTeamId`, "ExpenseTeam", transaction.spendingTeamId, Boolean(team));
+    requireReference(`cardTransactions[${index}].merchantId`, "Merchant", transaction.merchantId, merchants.has(transaction.merchantId));
+    requireMinorUnitInteger(`cardTransactions[${index}].amountMinor`, transaction.amountMinor);
+    if (transaction.amountMinor <= 0) {
+      errors.push({ path: `cardTransactions[${index}].amountMinor`, message: "Card transaction amount must be positive; transaction type represents refunds." });
+    }
+    if (card && card.cardholderId !== transaction.cardholderId) {
+      errors.push({ path: `cardTransactions[${index}].cardholderId`, message: `Card transaction cardholder does not match ExpenseCard "${card.id}".` });
+    }
+    const transactionDate = transaction.transactedAt.slice(0, 10);
+    if (card && (transaction.status === "settled" || transaction.status === "pending")) {
+      if (card.status === "pending_activation" || card.activatedAt === undefined) {
+        errors.push({ path: `cardTransactions[${index}].cardId`, message: `Successful CardTransaction cannot use unactivated ExpenseCard "${card.id}".` });
+      }
+      if (transactionDate < card.issuedAt) {
+        errors.push({ path: `cardTransactions[${index}].transactedAt`, message: `Successful CardTransaction predates ExpenseCard "${card.id}" issuance.` });
+      }
+      if (card.activatedAt !== undefined && transactionDate < card.activatedAt) {
+        errors.push({ path: `cardTransactions[${index}].transactedAt`, message: `Successful CardTransaction predates ExpenseCard "${card.id}" activation.` });
+      }
+      if (card.validFrom !== undefined && transactionDate < card.validFrom) {
+        errors.push({ path: `cardTransactions[${index}].transactedAt`, message: `Successful CardTransaction predates ExpenseCard "${card.id}" validity period.` });
+      }
+      if (card.validTo !== undefined && transactionDate > card.validTo) {
+        errors.push({ path: `cardTransactions[${index}].transactedAt`, message: `Successful CardTransaction is after ExpenseCard "${card.id}" validity period.` });
+      }
+      if (card.expiresAt !== undefined && transactionDate > card.expiresAt) {
+        errors.push({ path: `cardTransactions[${index}].transactedAt`, message: `Successful CardTransaction is after ExpenseCard "${card.id}" expiry.` });
+      }
+    }
+    if (transaction.status === "settled" && transaction.settledAt === undefined) {
+      errors.push({ path: `cardTransactions[${index}].settledAt`, message: "Settled CardTransaction requires settledAt." });
+    }
+    if (transaction.settledAt !== undefined && transaction.settledAt < transaction.transactedAt) {
+      errors.push({ path: `cardTransactions[${index}].settledAt`, message: "CardTransaction cannot settle before it was transacted." });
+    }
+    if (cardholder && team && cardholder.businessId !== team.businessId) {
+      errors.push({ path: `cardTransactions[${index}].spendingTeamId`, message: "Card transaction cardholder and spending team belong to different businesses." });
+    }
+    const limit = dataset.cardSpendingLimits.find(({ cardId }) => cardId === transaction.cardId);
+    if (limit && transaction.currency !== limit.currency) {
+      errors.push({ path: `cardTransactions[${index}].currency`, message: `Card transaction currency "${transaction.currency}" does not match CardSpendingLimit currency "${limit.currency}".` });
+    }
+    if (limit?.type === "per_transaction" && transaction.status === "settled" && transaction.type === "purchase" && transaction.amountMinor > limit.amountMinor) {
+      errors.push({ path: `cardTransactions[${index}].amountMinor`, message: `Settled purchase exceeds per-transaction limit for ExpenseCard "${transaction.cardId}".` });
+    }
+  });
+
+  const transactionIndexById = new Map(
+    dataset.cardTransactions.map((transaction, index) => [transaction.id, index]),
+  );
+  dataset.cardSpendingLimits.forEach((limit) => {
+    if (limit.type === "per_transaction") return;
+    const runningByPeriod = new Map<string, number>();
+    const transactions = dataset.cardTransactions
+      .filter(
+        (transaction) =>
+          transaction.cardId === limit.cardId &&
+          transaction.currency === limit.currency &&
+          transaction.status === "settled",
+      )
+      .sort((left, right) => left.transactedAt.localeCompare(right.transactedAt));
+    for (const transaction of transactions) {
+      const periodKey = limit.type === "monthly"
+        ? transaction.transactedAt.slice(0, 7)
+        : "lifetime";
+      const running = runningByPeriod.get(periodKey) ?? 0;
+      if (transaction.type === "purchase") {
+        if (running + transaction.amountMinor > limit.amountMinor) {
+          const index = transactionIndexById.get(transaction.id)!;
+          errors.push({
+            path: `cardTransactions[${index}].amountMinor`,
+            message: `Settled purchase breaches ${limit.type} limit for ExpenseCard "${limit.cardId}" at the transaction time.`,
+          });
+        }
+        runningByPeriod.set(periodKey, running + transaction.amountMinor);
+      } else {
+        runningByPeriod.set(periodKey, Math.max(0, running - transaction.amountMinor));
+      }
+    }
+  });
+
+  const recordTransactions = new Set<string>();
+  dataset.expenseRecords.forEach((record, index) => {
+    requireReference(`expenseRecords[${index}].cardTransactionId`, "CardTransaction", record.cardTransactionId, cardTransactions.has(record.cardTransactionId));
+    if (recordTransactions.has(record.cardTransactionId)) {
+      errors.push({ path: `expenseRecords[${index}].cardTransactionId`, message: `CardTransaction "${record.cardTransactionId}" has more than one ExpenseRecord.` });
+    }
+    recordTransactions.add(record.cardTransactionId);
   });
 
   return errors.length === 0

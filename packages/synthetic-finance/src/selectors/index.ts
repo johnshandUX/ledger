@@ -1,6 +1,7 @@
 export * from "./accounts.js";
 export * from "./beneficiaries.js";
 export * from "./counterparties.js";
+export * from "./expenses.js";
 export * from "./invoices.js";
 export * from "./payment-approvals.js";
 export * from "./payments.js";

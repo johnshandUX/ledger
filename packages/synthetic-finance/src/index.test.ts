@@ -8,6 +8,7 @@ import {
   createFinanceQueryContext,
   createCaldermereScenario,
   getAccounts,
+  getExpenseOrganisationSummary,
   getAdditionalAccessById,
   getFinancialSnapshot,
   getRoles,
@@ -16,6 +17,7 @@ import {
   validateFinanceDataset,
   type Account,
   type FinanceDataset,
+  type ExpenseCard,
   type Invoice,
   type Payment,
 } from "./index.js";
@@ -34,6 +36,7 @@ describe("package root", () => {
 
   it("exports selectors and calculations", () => {
     expect(getAccounts).toBeTypeOf("function");
+    expect(getExpenseOrganisationSummary).toBeTypeOf("function");
     expect(getFinancialSnapshot).toBeTypeOf("function");
     expect(getRoles).toBeTypeOf("function");
     expect(getAdditionalAccessById("developer")).toEqual(
@@ -60,5 +63,6 @@ describe("package root", () => {
     expectTypeOf<Payment>().toBeObject();
     expectTypeOf<Invoice>().toBeObject();
     expectTypeOf<FinanceDataset>().toBeObject();
+    expectTypeOf<ExpenseCard>().toBeObject();
   });
 });

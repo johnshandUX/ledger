@@ -10,6 +10,16 @@ import { caldermereBeneficiaries } from "./beneficiaries.js";
 import { caldermereBusinesses } from "./business.js";
 import { caldermereCounterparties } from "./counterparties.js";
 import { caldermereInvoices } from "./invoices.js";
+import {
+  caldermereCardSpendingLimits,
+  caldermereCardTransactions,
+  caldermereExpenseCardholders,
+  caldermereExpenseCards,
+  caldermereExpenseRecords,
+  caldermereExpenseTeams,
+  caldermereMerchants,
+  caldermereTeamSpendingBudgets,
+} from "./expenses.js";
 import { caldermereLegalEntities } from "./legal-entity.js";
 import { caldermerePaymentApprovals } from "./payment-approvals.js";
 import { caldermerePayments } from "./payments.js";
@@ -34,7 +44,26 @@ export const caldermereDataset: FinanceDataset = {
   payments: caldermerePayments,
   paymentApprovals: caldermerePaymentApprovals,
   invoices: caldermereInvoices,
+  expenseTeams: caldermereExpenseTeams,
+  teamSpendingBudgets: caldermereTeamSpendingBudgets,
+  expenseCardholders: caldermereExpenseCardholders,
+  expenseCards: caldermereExpenseCards,
+  cardSpendingLimits: caldermereCardSpendingLimits,
+  merchants: caldermereMerchants,
+  cardTransactions: caldermereCardTransactions,
+  expenseRecords: caldermereExpenseRecords,
 };
+
+export {
+  caldermereCardSpendingLimits,
+  caldermereCardTransactions,
+  caldermereExpenseCardholders,
+  caldermereExpenseCards,
+  caldermereExpenseRecords,
+  caldermereExpenseTeams,
+  caldermereMerchants,
+  caldermereTeamSpendingBudgets,
+} from "./expenses.js";
 
 export { CALDERMERE_DEFAULT_SEED, type CreateCaldermereDatasetOptions };
 

@@ -126,6 +126,14 @@ function createValidDataset(): FinanceDataset {
         status: "issued",
       },
     ],
+    expenseTeams: [],
+    teamSpendingBudgets: [],
+    expenseCardholders: [],
+    expenseCards: [],
+    cardSpendingLimits: [],
+    merchants: [],
+    cardTransactions: [],
+    expenseRecords: [],
   };
 }
 

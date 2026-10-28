@@ -1,0 +1,74 @@
+.expenses-page{display:grid;gap:var(--ledger-space-5)}
+.expenses-page-header h1{margin:0;font-size:var(--ledger-font-size-heading-large);line-height:var(--ledger-line-height-heading-large)}
+.expenses-content{display:grid;gap:var(--ledger-space-7)}
+.expenses-section-heading{display:flex;align-items:end;justify-content:space-between;gap:var(--ledger-space-4);margin-bottom:var(--ledger-space-4)}
+.expenses-section-heading--compact{margin-bottom:var(--ledger-space-3)}
+.expenses-section-heading h2{margin:0;font-size:var(--ledger-font-size-heading-medium);line-height:var(--ledger-line-height-heading-medium)}
+.expenses-summary-card .ledger-card__body{padding:var(--ledger-space-4)}
+.expenses-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
+.expenses-summary-grid>div{min-width:0;padding-inline:var(--ledger-space-4);border-left:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+.expenses-summary-grid>div:first-child{padding-left:0;border-left:0}
+.expenses-summary-grid dt{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);line-height:var(--ledger-line-height-small)}
+.expenses-summary-grid dd{margin:var(--ledger-space-2) 0 0;font-size:var(--ledger-font-size-heading-medium);font-weight:var(--ledger-font-weight-semibold);line-height:var(--ledger-line-height-heading-medium);overflow-wrap:anywhere}
+.expenses-team-table .ledger-table__cell:first-child{width:18%}
+.expense-team-link{font-weight:var(--ledger-font-weight-semibold)}
+.expense-team-action{display:inline-grid;width:44px;height:44px;place-items:center;border-radius:var(--ledger-radius-small);color:var(--ledger-color-text-secondary)}
+.expense-team-action:hover{color:var(--ledger-color-text);background:var(--ledger-color-surface-subtle)}
+.expense-team-action:focus-visible,.expense-team-card:focus-visible{outline:var(--ledger-border-width-thick) solid var(--ledger-color-focus);outline-offset:var(--ledger-space-1)}
+.expense-utilisation{display:grid;grid-template-columns:minmax(90px,1fr) auto;align-items:center;gap:var(--ledger-space-2);min-width:150px;font-size:var(--ledger-font-size-small)}
+.expense-utilisation__track{display:block;height:var(--ledger-space-1);overflow:hidden;border-radius:var(--ledger-radius-full);background:var(--ledger-color-surface-subtle)}
+.expense-utilisation__fill{display:block;height:100%;border-radius:inherit;background:var(--ledger-color-action)}
+.expense-utilisation__fill--over{background:var(--ledger-color-status-error-border)}
+.expense-over-budget{color:var(--ledger-color-status-error-text);font-weight:var(--ledger-font-weight-semibold)}
+.expenses-team-mobile,.expense-activity-mobile,.expense-detail-mobile{display:none}
+.expense-attention-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--ledger-space-4)}
+.expense-attention-grid .ledger-card__body{display:grid;gap:var(--ledger-space-1);padding:var(--ledger-space-4)}
+.expense-attention-grid span{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small)}
+.expense-attention-grid strong{font-size:var(--ledger-font-size-heading-medium);line-height:var(--ledger-line-height-heading-medium)}
+.expense-cell-secondary{display:block;margin-top:var(--ledger-space-1);color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);font-weight:var(--ledger-font-weight-regular)}
+.expenses-team-page>.breadcrumb{margin-bottom:var(--ledger-space-1)}
+.team-financial-card .ledger-card__body{display:grid;gap:var(--ledger-space-5);padding:var(--ledger-space-5)}
+.team-financial-card dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
+.team-financial-card dl>div{min-width:0;padding-inline:var(--ledger-space-4);border-left:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+.team-financial-card dl>div:first-child{padding-left:0;border-left:0}
+.team-financial-card dt{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small)}
+.team-financial-card dd{margin:var(--ledger-space-2) 0 0;font-size:var(--ledger-font-size-heading-small);font-weight:var(--ledger-font-weight-semibold);font-variant-numeric:tabular-nums}
+.team-financial-card .expense-utilisation{grid-template-columns:minmax(0,1fr) auto}
+@media(max-width:900px){
+  .expenses-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:var(--ledger-space-4)}
+  .expenses-summary-grid>div:nth-child(3){padding-left:0;border-left:0}
+  .expenses-team-table,.expense-activity-table{display:none}
+  .expenses-team-mobile,.expense-activity-mobile{display:grid;gap:var(--ledger-space-3);margin:0;padding:0;list-style:none}
+  .expense-team-card{display:grid;gap:var(--ledger-space-3);padding:var(--ledger-space-4);border:var(--ledger-border-width-thin) solid var(--ledger-color-border);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface);color:var(--ledger-color-text);text-decoration:none}
+  .expense-team-card:hover{border-color:var(--ledger-color-control-border-hover)}
+  .expense-team-card__header,.expense-activity-mobile li>div{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ledger-space-3)}
+  .expense-team-card p{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small)}
+  .expense-team-card__remaining{font-size:var(--ledger-font-size-small)}
+  .expense-activity-mobile li{display:grid;gap:var(--ledger-space-2);padding:var(--ledger-space-4);border:var(--ledger-border-width-thin) solid var(--ledger-color-border);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface)}
+  .expense-activity-mobile p{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small)}
+  .expense-activity-mobile li>div:last-child{align-items:center;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small)}
+  .expense-responsive-table{display:none}
+  .expense-detail-mobile{display:grid;gap:var(--ledger-space-3);margin:0;padding:0;list-style:none}
+  .expense-detail-mobile>li{display:grid;gap:var(--ledger-space-3);padding:var(--ledger-space-4);border:var(--ledger-border-width-thin) solid var(--ledger-color-border);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface)}
+  .expense-detail-mobile__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ledger-space-3)}
+  .expense-detail-mobile__header>div{display:grid;gap:var(--ledger-space-1);min-width:0}
+  .expense-detail-mobile__header span,.expense-detail-mobile>li>p{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small)}
+  .expense-detail-mobile__footer{display:flex;align-items:center;justify-content:space-between;gap:var(--ledger-space-3);padding-top:var(--ledger-space-3);border-top:var(--ledger-border-width-thin) solid var(--ledger-color-border);font-size:var(--ledger-font-size-small)}
+  .expense-detail-mobile dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ledger-space-3);margin:0;padding-top:var(--ledger-space-3);border-top:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+  .expense-detail-mobile dt{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small)}
+  .expense-detail-mobile dd{margin:var(--ledger-space-1) 0 0;font-variant-numeric:tabular-nums}
+  .team-financial-card dl{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:var(--ledger-space-4)}
+  .team-financial-card dl>div:nth-child(3){padding-left:0;border-left:0}
+}
+@media(max-width:560px){
+  .expenses-page{margin-block:var(--ledger-space-5);padding-inline:var(--ledger-space-4)}
+  .expenses-content{gap:var(--ledger-space-6)}
+  .expenses-section-heading{align-items:start}
+  .expenses-summary-card .ledger-card__body{padding:var(--ledger-space-3)}
+  .expenses-summary-grid>div{padding-inline:var(--ledger-space-3)}
+  .expenses-summary-grid dd{font-size:var(--ledger-font-size-heading-small);line-height:var(--ledger-line-height-heading-small)}
+  .expense-attention-grid{grid-template-columns:1fr;gap:var(--ledger-space-2)}
+  .expense-utilisation{min-width:0}
+  .team-financial-card .ledger-card__body{padding:var(--ledger-space-4)}
+  .team-financial-card dl>div{padding-inline:var(--ledger-space-3)}
+}

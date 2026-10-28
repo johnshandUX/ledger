@@ -33,6 +33,14 @@ function emptyDataset(): FinanceDataset {
     payments: [],
     paymentApprovals: [],
     invoices: [],
+    expenseTeams: [],
+    teamSpendingBudgets: [],
+    expenseCardholders: [],
+    expenseCards: [],
+    cardSpendingLimits: [],
+    merchants: [],
+    cardTransactions: [],
+    expenseRecords: [],
   };
 }
 
