@@ -1,5 +1,6 @@
 .expenses-page{display:grid;gap:var(--ledger-space-5)}
 .expenses-page-header h1{margin:0;font-size:var(--ledger-font-size-heading-large);line-height:var(--ledger-line-height-heading-large)}
+.expenses-page-header p{max-width:680px;margin:var(--ledger-space-2) 0 0;color:var(--ledger-color-text-secondary);line-height:var(--ledger-line-height-body)}
 .expenses-content{display:grid;gap:var(--ledger-space-7)}
 .expenses-section-heading{display:flex;align-items:end;justify-content:space-between;gap:var(--ledger-space-4);margin-bottom:var(--ledger-space-4)}
 .expenses-section-heading--compact{margin-bottom:var(--ledger-space-3)}
@@ -26,6 +27,11 @@
 .expense-attention-grid span{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small)}
 .expense-attention-grid strong{font-size:var(--ledger-font-size-heading-medium);line-height:var(--ledger-line-height-heading-medium)}
 .expense-cell-secondary{display:block;margin-top:var(--ledger-space-1);color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);font-weight:var(--ledger-font-weight-regular)}
+.expenses-activity-page>.breadcrumb{margin-bottom:var(--ledger-space-1)}
+.expenses-activity-placeholder{display:grid;gap:var(--ledger-space-2);padding:var(--ledger-space-2)}
+.expenses-activity-placeholder h2,.expenses-activity-placeholder p{margin:0}
+.expenses-activity-placeholder h2{font-size:var(--ledger-font-size-heading-small);line-height:var(--ledger-line-height-heading-small)}
+.expenses-activity-placeholder p{color:var(--ledger-color-text-secondary);line-height:var(--ledger-line-height-body)}
 .expenses-team-page>.breadcrumb{margin-bottom:var(--ledger-space-1)}
 .team-financial-card .ledger-card__body{display:grid;gap:var(--ledger-space-5);padding:var(--ledger-space-5)}
 .team-financial-card dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}

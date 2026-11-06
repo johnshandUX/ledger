@@ -12,7 +12,7 @@ export default function ExpensesPage() {
       <ExpensesSummary summary={model.summary} />
       <ExpenseAttention summary={model.summary} />
       <TeamSpendingList teams={model.teams} />
-      <ExpenseActivity items={model.recentTransactions} />
+      <ExpenseActivity items={model.recentTransactions} viewAllHref="/expenses/activity" />
     </div>
   </div></ProductShell>;
 }

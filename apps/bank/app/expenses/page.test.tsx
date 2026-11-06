@@ -1,8 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { BankStateProvider } from "../BankStateProvider";
 import ExpensesPage from "./page";
 import { getExpensesOverviewModel } from "./expense-data";
+
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("Expenses overview", () => {
   it("uses the accepted selectors for organisation and team reporting", () => {
@@ -21,10 +23,12 @@ describe("Expenses overview", () => {
   it("renders the information hierarchy, independent attention categories and valid team links", () => {
     const html = renderToStaticMarkup(<BankStateProvider><ExpensesPage /></BankStateProvider>);
     expect(html).toContain("<h1>Expenses</h1>");
-    expect(html).toContain('<h2 id="expenses-summary-heading">Summary</h2>');
+    expect(html).not.toContain(">Summary</h2>");
+    expect(html).toContain('aria-label="Expenses summary"');
     expect(html.indexOf("Needs attention")).toBeLessThan(html.indexOf("Team spending"));
     expect(html).toContain("Spent this month");
     expect(html).toContain("Pending spend");
+    expect(html).toMatch(/<dt>Cardholders<\/dt><dd class="financial-value">28<\/dd>/);
     expect(html).toContain("Missing receipts");
     expect(html).toContain("Pending review");
     expect(html).toContain("Unreconciled");
@@ -32,6 +36,7 @@ describe("Expenses overview", () => {
     expect(html).toContain("106.75%");
     expect(html).toContain("£810.00 over budget");
     expect(html).toContain('href="/expenses/teams/expense-team-marketing"');
+    expect(html).toContain('href="/expenses/activity">View all</a>');
     expect(html).toContain('aria-label="Team spending for October 2026"');
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/expenses"|<a[^>]*href="\/expenses"[^>]*aria-current="page"/);
   });

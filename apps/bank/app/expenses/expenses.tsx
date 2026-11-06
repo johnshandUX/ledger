@@ -37,9 +37,9 @@ export function ExpensesSummary({ summary }: { summary: ExpenseOrganisationSumma
     ["Spent this month", formatMinorCurrencyAmount(summary.settledSpendingMinor, summary.currency)],
     ["Pending spend", formatMinorCurrencyAmount(summary.pendingSpendingMinor, summary.currency)],
     ["Active cards", summary.activeCardCount.toString()],
-    ["Missing receipts", summary.attention.missingReceipts.toString()],
+    ["Cardholders", summary.cardholderCount.toString()],
   ];
-  return <section aria-labelledby="expenses-summary-heading"><div className="expenses-section-heading expenses-section-heading--compact"><h2 id="expenses-summary-heading">Summary</h2></div><Card className="expenses-summary-card"><CardBody><dl className="expenses-summary-grid">{metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="financial-value">{value}</dd></div>)}</dl></CardBody></Card></section>;
+  return <section aria-label="Expenses summary"><Card className="expenses-summary-card"><CardBody><dl className="expenses-summary-grid">{metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="financial-value">{value}</dd></div>)}</dl></CardBody></Card></section>;
 }
 
 function RemainingBudget({ summary }: { summary: ExpenseTeamSummary }) {
@@ -69,9 +69,9 @@ export function ExpenseAttention({ summary }: { summary: ExpenseOrganisationSumm
 }
 
 type ActivityItem = Pick<ExpenseTransactionDetails, "transaction" | "cardholder" | "merchant"> & { team?: ExpenseTransactionDetails["team"] };
-export function ExpenseActivity({ items, heading = "Recent activity", includeTeam = true }: { items: ActivityItem[]; heading?: string; includeTeam?: boolean }) {
+export function ExpenseActivity({ items, heading = "Recent activity", includeTeam = true, viewAllHref }: { items: ActivityItem[]; heading?: string; includeTeam?: boolean; viewAllHref?: string }) {
   if (!items.length) return <section aria-labelledby="expense-activity-heading"><div className="expenses-section-heading"><h2 id="expense-activity-heading">{heading}</h2></div><div className="empty-state"><h3>No recent transactions</h3><p>Card activity will appear here when it becomes available.</p></div></section>;
-  return <section aria-labelledby="expense-activity-heading"><div className="expenses-section-heading"><h2 id="expense-activity-heading">{heading}</h2></div>
+  return <section aria-labelledby="expense-activity-heading"><div className="expenses-section-heading"><h2 id="expense-activity-heading">{heading}</h2>{viewAllHref ? <Link className="ledger-link" href={viewAllHref}>View all</Link> : null}</div>
     <div className="expense-activity-table"><Table ariaLabel={heading}><TableHead><TableRow><TableHeaderCell>Merchant</TableHeaderCell><TableHeaderCell>Cardholder{includeTeam ? " / team" : ""}</TableHeaderCell><TableHeaderCell>Date</TableHeaderCell><TableHeaderCell>Status</TableHeaderCell><TableHeaderCell align="right">Amount</TableHeaderCell></TableRow></TableHead><TableBody>{items.map(({ transaction, cardholder, merchant, team }) => <TableRow key={transaction.id}><TableCell><strong>{merchant.name}</strong>{transaction.type === "refund" ? <small className="expense-cell-secondary">Refund</small> : null}</TableCell><TableCell>{cardholder.displayName}{includeTeam && team ? <small className="expense-cell-secondary">{team.name}</small> : null}</TableCell><TableCell>{formatDate(transaction.transactedAt)}</TableCell><TableCell><TransactionStatus status={transaction.status} /></TableCell><TableCell align="right"><strong className="financial-value">{transactionAmount(transaction.amountMinor, transaction.currency, transaction.type)}</strong></TableCell></TableRow>)}</TableBody></Table></div>
     <ol className="expense-activity-mobile" aria-label={heading}>{items.map(({ transaction, cardholder, merchant, team }) => <li key={transaction.id}><div><strong>{merchant.name}</strong><strong className="financial-value">{transactionAmount(transaction.amountMinor, transaction.currency, transaction.type)}</strong></div><p>{cardholder.displayName}{includeTeam && team ? ` · ${team.name}` : ""}</p><div><span>{formatDate(transaction.transactedAt)}</span><TransactionStatus status={transaction.status} /></div></li>)}</ol>
   </section>;
