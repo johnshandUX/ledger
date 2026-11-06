@@ -15,7 +15,7 @@
 .admin-summary-card{height:100%}
 .admin-summary-card .ledger-card__body{display:flex;height:100%;box-sizing:border-box;flex-direction:column;align-items:flex-start}
 .admin-summary-card h2{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);font-weight:var(--ledger-font-weight-semibold);letter-spacing:.04em;line-height:var(--ledger-line-height-small);text-transform:uppercase}
-.admin-summary-value{margin:var(--ledger-space-3) 0 0;font-size:var(--ledger-font-size-display);font-weight:var(--ledger-font-weight-semibold);font-variant-numeric:tabular-nums;line-height:var(--ledger-line-height-display)}
+.admin-summary-value{margin:var(--ledger-space-3) 0 0;font-size:var(--ledger-font-size-heading-medium);font-weight:var(--ledger-font-weight-semibold);font-variant-numeric:tabular-nums;line-height:var(--ledger-line-height-heading-medium)}
 .admin-summary-detail{margin:var(--ledger-space-1) 0 0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small);line-height:var(--ledger-line-height-body-small)}
 .admin-summary-card .admin-arrow-link{margin-top:auto;padding-top:var(--ledger-space-4)}
 .admin-unavailable{margin-top:var(--ledger-space-4)}

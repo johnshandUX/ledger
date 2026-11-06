@@ -12,8 +12,8 @@ describe("Administration home", () => {
   it("renders the dashboard in the agreed hierarchy with every destination", () => {
     const html = renderPage();
     expect(html).toContain('<div class="admin-page">');
-    expect(html).toContain('<h1 id="admin-page-title">Administration</h1>');
-    expect(html).toContain("Caldermere Ltd");
+    expect(html).toContain('<h1 id="admin-page-title">Admin</h1>');
+    expect(html).not.toContain("Manage your organisation and banking services for Caldermere Ltd.");
     expect(html).toContain('<nav class="admin-navigation" aria-label="Administration">');
     for (const destination of Object.values(administrationDestinations)) {
       expect(html).toContain(`href="${destination.href}"`);
