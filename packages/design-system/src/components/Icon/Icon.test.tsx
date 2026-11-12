@@ -34,7 +34,7 @@ describe("Icon", () => {
   });
 
   it("keeps every catalogue entry addressable by IconName", () => {
-    expect(iconCatalog).toHaveLength(37);
+    expect(iconCatalog).toHaveLength(38);
     expectTypeOf<IconName>().toEqualTypeOf<(typeof iconCatalog)[number]["name"]>();
   });
 
@@ -44,6 +44,7 @@ describe("Icon", () => {
     expect(iconCatalog.find(({ name }) => name === "warning")?.lucideName).toBe("Ledger filled warning");
     expect(iconCatalog.find(({ name }) => name === "success")?.lucideName).toBe("Ledger filled success");
     expect(catalogueNames).not.toContain("account");
+    expect(catalogueNames).toContain("sparkles");
     expect(catalogueNames).toContain("sun");
     expect(catalogueNames).toContain("moon");
   });

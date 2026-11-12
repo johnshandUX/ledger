@@ -1,5 +1,12 @@
-import { PlannedFeaturePage, plannedFeatures } from "../PlannedFeaturePage";
+import "../accounts.css";
+import { ProductShell } from "../ProductShell";
+import { ReportingHome } from "./ReportingHome";
+import "./reporting.css";
 
 export default function ReportsPage() {
-  return <PlannedFeaturePage feature={plannedFeatures.reports} />;
+  return (
+    <ProductShell activeRoute="reports">
+      <ReportingHome />
+    </ProductShell>
+  );
 }

@@ -3,7 +3,7 @@ import {
   ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar, Check,
   ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleUserRound,
   CreditCard, Download, Eye, FileText, Filter, House, Menu, Moon, Pencil,
-  Plus, Search, Send, Settings, Sun, Trash2, Upload, UserRound, X,
+  Plus, Search, Send, Settings, Sparkles, Sun, Trash2, Upload, UserRound, X,
 } from "lucide-react";
 import { ErrorStatusIcon, InformationStatusIcon, SuccessStatusIcon, WarningStatusIcon } from "./StatusIconShapes";
 
@@ -47,6 +47,7 @@ export const iconRegistry = {
   profile: defineIcon(CircleUserRound, "CircleUserRound", "Objects / content"),
   business: defineIcon(Building2, "Building2", "Objects / content"),
   document: defineIcon(FileText, "FileText", "Objects / content"),
+  sparkles: defineIcon(Sparkles, "Sparkles", "Objects / content"),
   calendar: defineIcon(Calendar, "Calendar", "Objects / content"),
   settings: defineIcon(Settings, "Settings", "Objects / content"),
   notifications: defineIcon(Bell, "Bell", "Objects / content"),

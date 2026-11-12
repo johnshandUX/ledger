@@ -1,0 +1,47 @@
+.reporting-page{display:grid;gap:var(--ledger-space-5)}
+.reporting-page-header{display:flex;align-items:center;justify-content:space-between;gap:var(--ledger-space-4)}
+.reporting-page-header h1{margin:0;font-size:var(--ledger-font-size-heading-large);line-height:var(--ledger-line-height-heading-large)}
+.reporting-page-header p{margin:var(--ledger-space-2) 0 0;color:var(--ledger-color-text-secondary);line-height:var(--ledger-line-height-body)}
+.reporting-create-action{display:inline-flex;align-items:center;gap:var(--ledger-space-2);flex:none}
+.reporting-content{display:grid;gap:var(--ledger-space-5)}
+.report-request{display:grid;gap:var(--ledger-space-3);padding:var(--ledger-space-4);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface-subtle)}
+.report-request__heading{display:flex;align-items:center;gap:var(--ledger-space-2)}
+.report-request__heading h2{margin:0;font-size:var(--ledger-font-size-heading-small);line-height:var(--ledger-line-height-heading-small)}
+.report-request__icon,.connected-reporting__icon{display:grid;place-items:center;width:var(--ledger-space-6);height:var(--ledger-space-6);flex:none;border-radius:var(--ledger-radius-full);background:var(--ledger-color-action-subtle);color:var(--ledger-color-text)}
+.report-request__field{position:relative;min-width:0}
+.report-request__field .ledger-textarea-label{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.report-request__field .ledger-textarea{min-height:76px;padding-right:calc(var(--ledger-space-8) + var(--ledger-space-2));resize:vertical;background:var(--ledger-color-surface)}
+.report-request__submit{position:absolute;right:var(--ledger-space-2);bottom:var(--ledger-space-2);display:grid;width:var(--ledger-space-7);min-height:var(--ledger-space-7);place-items:center;padding:0}
+.report-request__submit:disabled{background:var(--ledger-color-surface-disabled);color:var(--ledger-color-text-disabled);cursor:not-allowed}
+.report-request__suggestions{display:flex;flex-wrap:wrap;align-items:center;gap:0 var(--ledger-space-3);color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);line-height:var(--ledger-line-height-small)}
+.report-request__suggestions>span{font-weight:var(--ledger-font-weight-semibold)}
+.report-request__suggestion{position:relative;min-height:44px;padding:0;border:0;background:transparent;color:var(--ledger-color-text-secondary);font:inherit;text-align:left;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:var(--ledger-space-1);cursor:pointer}
+.report-request__suggestion+.report-request__suggestion::before{margin-right:var(--ledger-space-3);color:var(--ledger-color-border-strong);content:"·"}
+.report-request__suggestion:hover{color:var(--ledger-color-text);text-decoration-color:currentColor}
+.report-request__suggestion:focus-visible{border-radius:var(--ledger-radius-small);outline:var(--ledger-border-width-thick) solid var(--ledger-color-focus);outline-offset:var(--ledger-space-1)}
+.reporting-tabs{display:flex;gap:var(--ledger-space-5);border-bottom:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+.reporting-tabs button{position:relative;min-height:44px;padding:0;border:0;background:transparent;color:var(--ledger-color-text-secondary);font:inherit;font-weight:var(--ledger-font-weight-semibold);cursor:pointer}
+.reporting-tabs button:hover{color:var(--ledger-color-text)}
+.reporting-tabs button:focus-visible{border-radius:var(--ledger-radius-small);outline:var(--ledger-border-width-thick) solid var(--ledger-color-focus);outline-offset:var(--ledger-space-1)}
+.reporting-tabs button[aria-selected="true"]{color:var(--ledger-color-text)}
+.reporting-tabs button[aria-selected="true"]::after{position:absolute;right:0;bottom:-1px;left:0;height:var(--ledger-border-width-thick);background:var(--ledger-color-action);content:""}
+.reporting-tabpanel{padding-top:var(--ledger-space-4)}
+.reporting-tabpanel:focus-visible{border-radius:var(--ledger-radius-small);outline:var(--ledger-border-width-thick) solid var(--ledger-color-focus);outline-offset:var(--ledger-space-2)}
+.my-reports-table .ledger-table__cell:first-child{width:34%}
+.my-reports-table strong{font-weight:var(--ledger-font-weight-semibold)}
+.my-reports-mobile{display:none}
+.connected-reporting{display:grid;gap:var(--ledger-space-5)}
+.connected-reporting__summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--ledger-space-3)}
+.connected-reporting__identity h2{margin:0;font-size:var(--ledger-font-size-heading-small);line-height:var(--ledger-line-height-heading-small)}
+.connected-reporting__identity p{margin:var(--ledger-space-1) 0 0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small);line-height:var(--ledger-line-height-body-small);font-variant-numeric:tabular-nums}
+.connected-processes{border-top:var(--ledger-border-width-thin) solid var(--ledger-color-border)}
+.connected-processes__header,.connected-processes__row{display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(160px,1.2fr) minmax(220px,1.6fr) auto;align-items:center;gap:var(--ledger-space-4);padding:var(--ledger-space-3) var(--ledger-space-4);border-bottom:var(--ledger-border-width-thin) solid var(--ledger-color-border-subtle)}
+.connected-processes__header{color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-small);font-weight:var(--ledger-font-weight-semibold)}
+.connected-processes__row{min-height:44px}
+.connected-processes__row>span{min-width:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small);line-height:var(--ledger-line-height-body-small);overflow-wrap:anywhere}
+.connected-processes__row small{display:block;margin-top:var(--ledger-space-1);color:var(--ledger-color-text-tertiary);font-size:var(--ledger-font-size-small)}
+.connected-processes__mobile-label{display:none}
+@media(max-width:1100px){.connected-processes{border-top:0}.connected-processes__header{display:none}.connected-processes__row{grid-template-columns:minmax(0,1fr) auto;gap:var(--ledger-space-2) var(--ledger-space-3);padding:var(--ledger-space-4) 0}.connected-processes__row>strong{align-self:center}.connected-processes__row>span:nth-of-type(1),.connected-processes__row>span:nth-of-type(2){grid-column:1/-1}.connected-processes__row>span:last-child{grid-column:2;grid-row:1}.connected-processes__mobile-label{display:inline;margin-right:var(--ledger-space-2);color:var(--ledger-color-text);font-weight:var(--ledger-font-weight-semibold)}}
+@media(max-width:760px){.reporting-page{margin-block:var(--ledger-space-5);padding-inline:var(--ledger-space-4)}.reporting-content{gap:var(--ledger-space-4)}.my-reports-table{display:none}.my-reports-mobile{display:grid;gap:var(--ledger-space-3);margin:0;padding:0;list-style:none}.my-reports-mobile li{display:grid;gap:var(--ledger-space-2);padding:var(--ledger-space-4);border:var(--ledger-border-width-thin) solid var(--ledger-color-border);border-radius:var(--ledger-radius-medium);background:var(--ledger-color-surface)}.my-report-card__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--ledger-space-3)}.my-report-card__header strong{min-width:0;overflow-wrap:anywhere}.my-reports-mobile p,.my-reports-mobile li>span{margin:0;color:var(--ledger-color-text-secondary);font-size:var(--ledger-font-size-body-small);line-height:var(--ledger-line-height-body-small)}}
+@media(max-width:520px){.reporting-page-header{align-items:flex-start}.reporting-create-action{padding-inline:var(--ledger-space-3)}.report-request{padding:var(--ledger-space-3)}.report-request__suggestions{align-items:flex-start}.report-request__suggestions>span{width:100%}.report-request__suggestion{width:100%}.report-request__suggestion+.report-request__suggestion::before{margin-right:var(--ledger-space-2)}.reporting-tabs{gap:var(--ledger-space-4)}.connected-reporting__summary{grid-template-columns:auto minmax(0,1fr)}.connected-reporting__summary>.ledger-badge{grid-column:2;justify-self:start}}
+@media(max-width:360px){.reporting-page-header{display:grid}.reporting-create-action{justify-self:start}}
