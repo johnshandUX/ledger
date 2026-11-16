@@ -159,6 +159,17 @@ describe("DataTable", () => {
     expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} pageSizeOptions={[20, 10]} />)).toThrow(/ascending/);
   });
 
+  it("adds opt-in accessible selection without changing the default table", () => {
+    const rows = [{ id: "1", name: "Ada" }, { id: "2", name: "Grace" }];
+    const defaultHtml = renderToStaticMarkup(<DataTable caption="People" rows={rows} columns={columns} getRowId={row => row.id} />);
+    const selectedHtml = renderToStaticMarkup(<DataTable caption="People" rows={rows} columns={columns} getRowId={row => row.id} selection={{ selectedRowIds: new Set(["1"]), onSelectedRowIdsChange: () => undefined, isRowSelectable: row => row.id !== "2", getRowSelectionLabel: row => `Select ${row.name}` }} />);
+    expect(defaultHtml).not.toContain("Select all eligible rows");
+    expect(selectedHtml).toContain("Select all eligible rows on this page");
+    expect(selectedHtml).toContain("Select Ada");
+    expect(selectedHtml).toContain("Select Grace");
+    expect(selectedHtml).toContain("disabled");
+  });
+
   it("rejects duplicate filter identities and option values", () => {
     expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} filters={[...filters, ...filters]} />)).toThrow(/filter IDs/);
     expect(() => renderToStaticMarkup(<DataTable caption="People" rows={[]} columns={columns} getRowId={row => row.id} filters={[{ ...filters[0]!, options: [...filters[0]!.options, filters[0]!.options[0]!] }]} />)).toThrow(/option values/);

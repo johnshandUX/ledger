@@ -130,6 +130,25 @@ export const Foundation: Story = {
   render: args => <DataTable {...args} pageSizeOptions={[10, 20, 50]} />,
 };
 
+export const RowSelection: Story = {
+  args: { caption: "Selectable accounts", rows: accounts, columns, getRowId: row => row.id },
+  render: function RowSelectionStory() {
+    const [selected, setSelected] = useState<ReadonlySet<string>>(new Set(["account-1", "account-12"]));
+    return <><output aria-live="polite">{selected.size} accounts selected</output><DataTable caption="Selectable accounts" rows={accounts} columns={columns} getRowId={row => row.id} pageSizeOptions={[10, 20, 50]} selection={{ selectedRowIds: selected, onSelectedRowIdsChange: setSelected, isRowSelectable: row => row.id !== "account-3", getRowSelectionLabel: row => `Select ${row.name}` }} /></>;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const selectAll = canvas.getByRole("checkbox", { name: "Select all eligible rows on this page" });
+    expect(selectAll).toBePartiallyChecked();
+    await userEvent.click(selectAll);
+    expect(canvas.getByText("10 accounts selected")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Next page" }));
+    expect(canvas.getByRole("checkbox", { name: "Select Account 12" })).toBeChecked();
+    await userEvent.click(canvas.getByRole("checkbox", { name: "Select Account 13" }));
+    expect(canvas.getByText("11 accounts selected")).toBeVisible();
+  },
+};
+
 export const MobileTableSorting: Story = {
   name: "Mobile table sorting",
   args: { caption: "Accounts", rows: accounts, columns, getRowId: row => row.id },

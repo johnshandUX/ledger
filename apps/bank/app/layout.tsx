@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@johnshandux/ledger-design-system/styles.css";
 import "./globals.css";
 import { BankStateProvider } from "./BankStateProvider";
+import { ReportingStateProvider } from "./ReportingStateProvider";
 
 const inter = Inter({
   variable: "--ledger-font-family-product",
@@ -27,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <BankStateProvider>{children}</BankStateProvider>
+        <BankStateProvider><ReportingStateProvider>{children}</ReportingStateProvider></BankStateProvider>
       </body>
     </html>
   );

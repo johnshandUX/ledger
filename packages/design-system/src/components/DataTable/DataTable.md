@@ -1,6 +1,6 @@
 # DataTable
 
-> Status: the foundation and client-side search/filter slices are implemented. Selection/bulk
+> Status: the foundation, client-side search/filter, and controlled row-selection slices are implemented. Bulk
 > actions and column management remain future work. Archived sections describe direction, not
 > current props, exports or supported behaviour.
 
@@ -46,6 +46,7 @@ semantic elements or base visual rules where practical.
 - page navigation, page size and result summaries
 - comfortable and compact density
 - optional zebra row treatment, independently of density
+- opt-in controlled row selection using stable row IDs, including page-scoped select all
 - a deliberate horizontal-overflow viewport
 - consistent loading, empty, no-results and error presentation
 - accessible names, relationships, focus treatment and status feedback for its own controls
@@ -100,10 +101,24 @@ in `DataTable.types.ts`. The implemented component accepts:
 - optional singular and plural `itemLabel` copy for domain-contextual result counts
 - `ready`, `loading`, `no-results` and `error` presentation
 - consumer-supplied loading, empty, no-results and error content
+- optional controlled `selection` with eligibility and accessible row-label callbacks
 
 Current columns support rendering, alignment, numeric/nowrap presentation and optional sorting.
 Search and filters use separate row accessors and never inspect rendered cell content. Columns do
-not support copy, selection, visibility, ordering, pinning or resizing.
+not support copy, visibility, ordering, pinning or resizing.
+
+### Implemented row-selection contract
+
+Selection is opt-in and controlled. The consumer supplies a `ReadonlySet` of stable row IDs and
+owns draft/confirmation behaviour, full-selection clearing, and any product-level count display.
+The header checkbox selects or deselects eligible rows on the current visible page only. It does
+not select other pages or all filtered results. It exposes checked, unchecked and native mixed
+states as appropriate.
+
+Sorting, searching, filtering, pagination and page-size changes do not rewrite the selection set.
+Use `isRowSelectable` for ineligible rows and `getRowSelectionLabel` for a domain-specific
+accessible name. The Storybook row-selection example covers partial selection and persistence
+between pages.
 
 ## Implemented search contract
 
@@ -925,9 +940,8 @@ The first contract avoids speculative public props but preserves these extension
 
 ### Row selection
 
-Stable `getRowId` identity and explicit column order allow a future leading selection column.
-Selection state must be separate from navigation and must define selection across pages and server
-datasets before being added.
+Basic controlled client-side row selection is implemented. Bulk-action toolbars and server-side
+selection semantics remain future extensions.
 
 ### Bulk actions
 

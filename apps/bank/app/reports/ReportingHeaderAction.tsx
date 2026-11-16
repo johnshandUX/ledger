@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@johnshandux/ledger-design-system";
 import { Icon } from "@johnshandux/ledger-design-system/icons";
+import Link from "next/link";
 
 export function ReportingHeaderAction() {
-  return <Button className="reporting-create-action" type="button" disabled><Icon name="add" size="small" aria-hidden="true" />Create report</Button>;
+  return <Link className="ledger-button ledger-button--primary reporting-create-action" href="/reports/new"><Icon name="add" size="small" aria-hidden="true" />Create report</Link>;
 }

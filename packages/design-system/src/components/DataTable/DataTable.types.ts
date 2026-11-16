@@ -124,6 +124,14 @@ export interface DataTableCommonProps<TData, TFilterId extends string = string> 
   emptyState?: DataTableStateContent;
   noResultsState?: DataTableStateContent;
   errorState?: DataTableStateContent;
+  selection?: DataTableSelection<TData>;
+}
+
+export interface DataTableSelection<TData> {
+  selectedRowIds: ReadonlySet<string>;
+  onSelectedRowIdsChange: (selectedRowIds: ReadonlySet<string>) => void;
+  isRowSelectable?: (row: TData) => boolean;
+  getRowSelectionLabel?: (row: TData) => string;
 }
 
 export type DataTableProps<TData, TFilterId extends string = string> =

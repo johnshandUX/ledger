@@ -212,6 +212,7 @@ export function DataTable<TData, TFilterId extends string = string>({
   emptyState = { title: "No data to display" },
   noResultsState = { title: "No matching results" },
   errorState = { title: "Data could not be loaded" },
+  selection,
   state: controlledState,
   defaultState,
   onStateChange,
@@ -229,6 +230,7 @@ export function DataTable<TData, TFilterId extends string = string>({
     resolveInitialState(defaultState, pageSizeOptions),
   );
   const state = controlledState ?? uncontrolledState;
+  const hasSelection = selection !== undefined;
 
   const rowModel = useMemo(
     () => createDataTableRowModel({ rows, columns, state, search, filters, pageSizeOptions }),
@@ -320,12 +322,33 @@ export function DataTable<TData, TFilterId extends string = string>({
   const visibleResultText = addResultNoun(resultText, rowModel.resultRowCount, itemLabel);
   const paginationItems = getPaginationItems(effectiveState.pageIndex, rowModel.pageCount);
   const hasEffectivePageSizeChoice = pageSizeOptions.some((pageSize) => pageSize < rowModel.resultRowCount);
+  const visibleSelectableRows = selection
+    ? rowModel.visibleRows.filter((row) => selection.isRowSelectable?.(row) ?? true)
+    : [];
+  const visibleSelectedCount = selection
+    ? visibleSelectableRows.filter((row) => selection.selectedRowIds.has(getRowId(row))).length
+    : 0;
+  const allVisibleSelected = visibleSelectableRows.length > 0 && visibleSelectedCount === visibleSelectableRows.length;
+  const someVisibleSelected = visibleSelectedCount > 0 && !allVisibleSelected;
+
+  const updateVisibleSelection = (checked: boolean) => {
+    if (!selection) return;
+    const next = new Set(selection.selectedRowIds);
+    visibleSelectableRows.forEach((row) => {
+      const rowId = getRowId(row);
+      if (checked) next.add(rowId);
+      else next.delete(rowId);
+    });
+    selection.onSelectedRowIdsChange(next);
+  };
 
   useLayoutEffect(() => {
     const headerCells = viewportRef.current?.querySelectorAll<HTMLTableCellElement>("thead th");
-    if (!headerCells || headerCells.length !== columns.length) return;
-    setColumnWidths(Array.from(headerCells, (cell) => cell.getBoundingClientRect().width));
-  }, [columns]);
+    const expectedCount = columns.length + (hasSelection ? 1 : 0);
+    if (!headerCells || headerCells.length !== expectedCount) return;
+    const dataCells = Array.from(headerCells).slice(hasSelection ? 1 : 0);
+    setColumnWidths(dataCells.map((cell) => cell.getBoundingClientRect().width));
+  }, [columns, hasSelection]);
 
   return (
     <div
@@ -384,11 +407,23 @@ export function DataTable<TData, TFilterId extends string = string>({
           </caption>
           {columnWidths.length === columns.length && (
             <colgroup>
+              {selection && <col className="ledger-data-table__selection-column" />}
               {columns.map((column, index) => <col key={column.id} style={{ width: columnWidths[index] }} />)}
             </colgroup>
           )}
           <TableHead>
             <TableRow>
+              {selection && (
+                <TableHeaderCell className="ledger-data-table__selection-cell">
+                  <SelectionCheckbox
+                    label="Select all eligible rows on this page"
+                    checked={allVisibleSelected}
+                    indeterminate={someVisibleSelected}
+                    disabled={visibleSelectableRows.length === 0}
+                    onChange={updateVisibleSelection}
+                  />
+                </TableHeaderCell>
+              )}
               {columns.map((column) => {
                 const sortDirection = effectiveState.sort?.columnId === column.id ? effectiveState.sort.direction : undefined;
                 return (
@@ -429,6 +464,22 @@ export function DataTable<TData, TFilterId extends string = string>({
               const rowId = getRowId(row);
               return (
                 <TableRow key={rowId}>
+                  {selection && (
+                    <TableCell className="ledger-data-table__selection-cell">
+                      <Checkbox
+                        id={`${instanceId}-select-${rowId}`}
+                        label={selection.getRowSelectionLabel?.(row) ?? `Select row ${rowId}`}
+                        checked={selection.selectedRowIds.has(rowId)}
+                        disabled={!(selection.isRowSelectable?.(row) ?? true)}
+                        onChange={(event) => {
+                          const next = new Set(selection.selectedRowIds);
+                          if (event.currentTarget.checked) next.add(rowId);
+                          else next.delete(rowId);
+                          selection.onSelectedRowIdsChange(next);
+                        }}
+                      />
+                    </TableCell>
+                  )}
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
@@ -524,5 +575,31 @@ export function DataTable<TData, TFilterId extends string = string>({
         </div>
       )}
     </div>
+  );
+}
+
+function SelectionCheckbox({ checked, disabled, indeterminate, label, onChange }: {
+  checked: boolean;
+  disabled: boolean;
+  indeterminate: boolean;
+  label: string;
+  onChange: (checked: boolean) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (ref.current) ref.current.indeterminate = indeterminate;
+  }, [indeterminate]);
+  return (
+    <label className="ledger-data-table__selection-label">
+      <input
+        ref={ref}
+        className="ledger-data-table__selection-checkbox"
+        type="checkbox"
+        aria-label={label}
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.currentTarget.checked)}
+      />
+    </label>
   );
 }
