@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
-import { act, useState } from "react";
+import { useState } from "react";
+import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { DataTable } from "./DataTable";
@@ -19,12 +20,12 @@ function Harness() {
 describe("DataTable selection interactions", () => {
   let container: HTMLDivElement;
   let root: Root;
-  beforeEach(async () => { (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true; container = document.createElement("div"); document.body.append(container); root = createRoot(container); await act(async () => root.render(<Harness />)); });
-  afterEach(async () => { await act(async () => root.unmount()); container.remove(); });
+  beforeEach(() => { container = document.createElement("div"); document.body.append(container); root = createRoot(container); flushSync(() => root.render(<Harness />)); });
+  afterEach(() => { flushSync(() => root.unmount()); container.remove(); });
 
   it("preserves stable selected IDs when page size changes", async () => {
     expect(container.querySelector("output")?.textContent).toBe("row-1,row-15");
-    await act(async () => [...container.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show 20 rows")!.click());
+    flushSync(() => [...container.querySelectorAll<HTMLButtonElement>("button")].find(button => button.textContent === "Show 20 rows")!.click());
     expect(container.querySelector("output")?.textContent).toBe("row-1,row-15");
     const rowFifteen = [...container.querySelectorAll<HTMLLabelElement>(".ledger-checkbox-label")].find(label => label.textContent === "Select Row 15")!;
     expect(rowFifteen.querySelector<HTMLInputElement>('input[type="checkbox"]')?.checked).toBe(true);
