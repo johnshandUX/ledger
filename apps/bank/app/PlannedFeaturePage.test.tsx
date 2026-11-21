@@ -4,7 +4,7 @@ import { BankStateProvider } from "./BankStateProvider";
 import { PlannedFeaturePage, plannedFeatures } from "./PlannedFeaturePage";
 
 describe("PlannedFeaturePage", () => {
-  const sidebarRoutes = new Set(["expenses", "reports", "cash-flow", "integrations", "admin"]);
+  const sidebarRoutes = new Set(["expenses", "reports", "integrations", "admin"]);
 
   it.each(Object.values(plannedFeatures))(
     "renders $name as an intentional planned destination",

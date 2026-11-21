@@ -1,0 +1,40 @@
+.workspace-placeholder-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1100px;
+  margin: var(--ledger-space-6) auto;
+  padding: 0 var(--ledger-space-5);
+}
+
+.workspace-placeholder-card {
+  max-width: 640px;
+}
+
+.workspace-placeholder-card h1 {
+  margin: 0;
+  font-size: var(--ledger-font-size-heading-large);
+  line-height: var(--ledger-line-height-heading-large);
+}
+
+.workspace-placeholder-description,
+.workspace-placeholder-status {
+  margin: var(--ledger-space-3) 0 0;
+  line-height: var(--ledger-line-height-body);
+}
+
+.workspace-placeholder-description {
+  color: var(--ledger-color-text);
+  font-size: var(--ledger-font-size-heading-small);
+  line-height: var(--ledger-line-height-heading-small);
+}
+
+.workspace-placeholder-status {
+  color: var(--ledger-color-text-secondary);
+}
+
+@media (max-width: 740px) {
+  .workspace-placeholder-page {
+    margin-block: var(--ledger-space-5);
+    padding-inline: var(--ledger-space-4);
+  }
+}

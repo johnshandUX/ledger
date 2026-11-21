@@ -1,8 +1,11 @@
 export type BankNavigationRoute =
   | "accounts"
   | "payments"
+  | "cashflow"
   | "expenses"
+  | "tax"
   | "reports"
+  | "treasury"
   | "cash-flow"
   | "fx"
   | "liquidity"
@@ -29,14 +32,16 @@ export const bankNavigation = [
     destinations: [
       { id: "accounts", label: "Accounts", href: "/" },
       { id: "payments", label: "Payments", href: "/payments" },
-      { id: "expenses", label: "Expenses", href: "/expenses" },
-      { id: "reports", label: "Reports", href: "/reports" },
     ],
   },
   {
-    label: "Treasury",
+    label: "Operations",
     destinations: [
-      { id: "cash-flow", label: "Cash flow", href: "/treasury/cash-flow" },
+      { id: "cashflow", label: "Cashflow", href: "/cashflow" },
+      { id: "expenses", label: "Expenses", href: "/expenses" },
+      { id: "tax", label: "Tax", href: "/tax" },
+      { id: "reports", label: "Reports", href: "/reports" },
+      { id: "treasury", label: "Treasury", href: "/treasury" },
     ],
   },
   {
@@ -51,8 +56,11 @@ export const bankNavigation = [
 export const bankWorkspaceTitles: Record<BankNavigationRoute, string> = {
   accounts: "Accounts",
   payments: "Payments",
+  cashflow: "Cashflow",
   expenses: "Expenses",
+  tax: "Tax",
   reports: "Reports",
+  treasury: "Treasury",
   "cash-flow": "Cash flow",
   fx: "FX",
   liquidity: "Liquidity",

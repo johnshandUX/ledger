@@ -29,8 +29,9 @@ describe("ProductShell", () => {
     expect(html).toContain("Administrator");
     expect(html).toContain('href="/payments"');
     expect(html).toContain('href="/reports"');
-    expect(html).toContain('href="/treasury/cash-flow"');
-    expect(html).toContain('href="/integrations"');
+    expect(html).toContain('href="/cashflow"');
+    expect(html).toContain('href="/treasury"');
+    expect(html).toMatch(/<section aria-labelledby="[^"]+" class="ledger-side-nav-group ledger-side-nav-group--labelled"><h2[^>]*>Operations<\/h2>/);
     expect(html).toContain('aria-label="Close navigation"');
     expect(html).not.toContain("J. Finance");
   });
@@ -42,14 +43,16 @@ describe("ProductShell", () => {
         destinations: [
           { id: "accounts", label: "Accounts", href: "/" },
           { id: "payments", label: "Payments", href: "/payments" },
-          { id: "expenses", label: "Expenses", href: "/expenses" },
-          { id: "reports", label: "Reports", href: "/reports" },
         ],
       },
       {
-        label: "Treasury",
+        label: "Operations",
         destinations: [
-          { id: "cash-flow", label: "Cash flow", href: "/treasury/cash-flow" },
+          { id: "cashflow", label: "Cashflow", href: "/cashflow" },
+          { id: "expenses", label: "Expenses", href: "/expenses" },
+          { id: "tax", label: "Tax", href: "/tax" },
+          { id: "reports", label: "Reports", href: "/reports" },
+          { id: "treasury", label: "Treasury", href: "/treasury" },
         ],
       },
       {
@@ -62,12 +65,14 @@ describe("ProductShell", () => {
     ]);
   });
 
-  it("keeps Reports primary and excludes rejected destinations", () => {
+  it("keeps Operations visible and excludes rejected destinations", () => {
     const html = renderProductShell("reports");
 
-    expect(html.indexOf(">Expenses<")).toBeLessThan(html.indexOf(">Reports<"));
+    expect(html.indexOf(">Cashflow<")).toBeLessThan(html.indexOf(">Expenses<"));
+    expect(html.indexOf(">Expenses<")).toBeLessThan(html.indexOf(">Tax<"));
+    expect(html.indexOf(">Tax<")).toBeLessThan(html.indexOf(">Reports<"));
     expect(html.indexOf(">Reports<")).toBeLessThan(html.indexOf(">Treasury<"));
-    expect(html.indexOf(">Cash flow<")).toBeLessThan(html.indexOf(">Integrations<"));
+    expect(html.indexOf(">Treasury<")).toBeLessThan(html.indexOf(">Integrations<"));
     expect(html).not.toContain(">Analysis<");
     expect(html).not.toContain(">Insights<");
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*href="\/reports"|<a[^>]*href="\/reports"[^>]*aria-current="page"/);
