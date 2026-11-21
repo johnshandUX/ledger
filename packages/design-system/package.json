@@ -6,7 +6,7 @@
   ],
   "description": "The shared tokens, components, patterns and guidance for LedgerOS and Ledger Bank",
   "scripts": {
-    "test": "vitest run --config vitest.unit.config.ts",
+    "test": "NODE_ENV=test vitest run --config vitest.unit.config.ts",
     "test:data-table": "vitest run --config vitest.unit.config.ts src/components/DataTable",
     "typecheck": "../../node_modules/.bin/tsc --noEmit",
     "test:storybook": "vitest run --project storybook",
