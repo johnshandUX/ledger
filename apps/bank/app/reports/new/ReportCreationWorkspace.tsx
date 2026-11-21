@@ -15,7 +15,7 @@ import { calendarDateInTimeZone } from "../../../src/reporting/schedule";
 import type { GeneratedReportOutput } from "../../../src/reporting/types";
 import { useBankState } from "../../BankStateProvider";
 import { useBankOrganisation } from "../../BankOrganisationProvider";
-import { useReportingDispatch, useReportingIdSource } from "../../ReportingStateProvider";
+import { useReportingDispatch, useReportingIdSource, useReportingState } from "../../ReportingStateProvider";
 import { useEffectiveAccounts } from "../../useBankEffectiveState";
 import { amountInputToMinor, initialReportConfiguration, resolveReportPeriod, scheduleSummary, type ReportConfiguration, validateReportConfiguration } from "./report-configuration";
 
@@ -88,10 +88,11 @@ export function ReportCreationWorkspace({ accounts, today }: { accounts: readonl
   const { activeOrganisationId, activeMembership } = useBankOrganisation();
   const dataOrganisationId = getBankOrganisationAccess(activeOrganisationId, activeMembership.userId)!.financialDataSourceBusinessId;
   const reportingDispatch = useReportingDispatch();
+  const reportingState = useReportingState();
   const nextId = useReportingIdSource();
-  const [configuration, setConfiguration] = useState<ReportConfiguration>(initialReportConfiguration);
+  const [configuration, setConfiguration] = useState<ReportConfiguration>(() => reportingState.assistedConfiguration ?? initialReportConfiguration);
   const [runtimeToday, setRuntimeToday] = useState(today ?? "");
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(() => Boolean(reportingState.assistedConfiguration?.filters.minimumAmount || reportingState.assistedConfiguration?.filters.maximumAmount || reportingState.assistedConfiguration?.filters.currency));
   const [submittingSchedule, setSubmittingSchedule] = useState(false);
   const submittingScheduleRef = useRef(false);
   const [success, setSuccess] = useState<{ kind: "report"; name: string; output: GeneratedReportOutput }>();
@@ -101,6 +102,7 @@ export function ReportCreationWorkspace({ accounts, today }: { accounts: readonl
     const timer = window.setTimeout(() => setRuntimeToday(calendarDateInTimeZone(new Date())), 0);
     return () => window.clearTimeout(timer);
   }, [today]);
+  useEffect(() => { if (reportingState.assistedConfiguration) reportingDispatch({ type: "assisted-configuration-consumed" }); }, [reportingDispatch, reportingState.assistedConfiguration]);
   const effectiveToday = today ?? runtimeToday;
   const errors = useMemo(() => effectiveToday ? validateReportConfiguration(configuration, effectiveToday) : { today: "Preparing the reporting date." }, [configuration, effectiveToday]);
   const update = (changes: Partial<ReportConfiguration>) => { setSuccess(undefined); setConfiguration(current => ({ ...current, ...changes })); };

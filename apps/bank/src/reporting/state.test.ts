@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createReportingState, reportingReducer } from "./state";
 import type { GeneratedReportOutput, RecurringReportSchedule, ReportDefinition, ReportRun } from "./types";
+import { initialReportConfiguration } from "./configuration";
 
 const definition: ReportDefinition = { id: "definition-1", name: "Report", reportType: "transaction-activity", selectedAccountIds: ["account-1"], reportingPeriod: { from: "2026-10-01", to: "2026-10-31" }, direction: "all", outputFormat: "csv", createdAt: "2026-11-01T00:00:00Z", organisationId: "business-1" };
 const run: ReportRun = { id: "run-1", definitionId: definition.id, executedAt: definition.createdAt, reportingPeriod: { from: "2026-10-01", to: "2026-10-31" }, status: "completed", matchingRecordCount: 0, completedAt: definition.createdAt, outputId: "output-1" };
@@ -21,5 +22,14 @@ describe("reporting state", () => {
     const created = reportingReducer(createReportingState(), { type: "schedule-created", definition, schedule });
     expect(created).toEqual({ definitions: [definition], schedules: [schedule], runs: [], outputs: [], latestCreatedScheduleId: schedule.id });
     expect(reportingReducer(created, { type: "schedule-confirmation-consumed", scheduleId: schedule.id })).toEqual({ ...created, latestCreatedScheduleId: undefined });
+  });
+
+  it("holds one cloned assisted configuration until the creation workspace consumes it", () => {
+    const configuration = { ...initialReportConfiguration, selectedAccountIds: ["account-1"], direction: "outgoing" as const, filters: { ...initialReportConfiguration.filters, minimumAmount: "5000.01" } };
+    const prepared = reportingReducer(createReportingState(), { type: "assisted-configuration-prepared", configuration });
+    expect(prepared.assistedConfiguration).toEqual(configuration);
+    expect(prepared.assistedConfiguration).not.toBe(configuration);
+    expect(reportingReducer(prepared, { type: "assisted-configuration-consumed" }).assistedConfiguration).toBeUndefined();
+    expect(createReportingState().assistedConfiguration).toBeUndefined();
   });
 });

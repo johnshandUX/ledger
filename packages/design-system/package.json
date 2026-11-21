@@ -161,6 +161,12 @@
       "require": "./dist/application-navigation.cjs",
       "default": "./dist/application-navigation.js"
     },
+    "./conversation": {
+      "types": "./dist/conversation.d.ts",
+      "import": "./dist/conversation.js",
+      "require": "./dist/conversation.cjs",
+      "default": "./dist/conversation.js"
+    },
     "./styles.css": "./dist/ledger-design-system.css"
   },
   "exportsIgnore": [],

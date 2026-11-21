@@ -1,11 +1,12 @@
 // @vitest-environment happy-dom
 
-import { act } from "react";
+import { act, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getBankAccounts } from "../../../src/finance/accounts";
 import { BankStateProvider } from "../../BankStateProvider";
-import { ReportingStateProvider } from "../../ReportingStateProvider";
+import { ReportingStateProvider, useReportingDispatch } from "../../ReportingStateProvider";
+import { initialReportConfiguration } from "../../../src/reporting/configuration";
 import { ReportCreationWorkspace } from "./ReportCreationWorkspace";
 
 const push = vi.fn();
@@ -32,6 +33,25 @@ describe("ReportCreationWorkspace", () => {
     expect(container.querySelector("h1")?.textContent).toBe("Create report");
     expect(container.textContent).toContain("Select at least one account to continue.");
     expect(button("Generate report").disabled).toBe(true);
+    expect(container.textContent).not.toContain("Report created");
+  });
+
+  it("prepopulates an assisted configuration once and keeps every field manually editable", async () => {
+    function Journey() {
+      const [open, setOpen] = useState(false);
+      const dispatch = useReportingDispatch();
+      if (open) return <ReportCreationWorkspace accounts={getBankAccounts()} today="2026-11-12" />;
+      return <button onClick={() => { dispatch({ type: "assisted-configuration-prepared", configuration: { ...initialReportConfiguration, selectedAccountIds: ["account-main-operating"], period: { kind: "custom", from: "2026-09-01", to: "2026-09-30" }, direction: "outgoing", filters: { minimumAmount: "5000.01", maximumAmount: "", currency: "GBP" } } }); setOpen(true); }}>Open assisted report</button>;
+    }
+    await act(async () => root.render(<BankStateProvider><ReportingStateProvider><Journey /></ReportingStateProvider></BankStateProvider>));
+    await act(async () => button("Open assisted report").click());
+    expect(container.textContent).toContain("1 account selected");
+    expect(container.querySelector<HTMLInputElement>("#direction-outgoing")?.checked).toBe(true);
+    expect(container.querySelector<HTMLInputElement>("#report-from")?.value).toBe("2026-09-01");
+    expect(container.querySelector<HTMLInputElement>("#minimum-amount")?.value).toBe("5000.01");
+    expect(container.querySelector<HTMLSelectElement>("#report-currency")?.value).toBe("GBP");
+    await act(async () => change(container.querySelector<HTMLInputElement>("#minimum-amount")!, "6000"));
+    expect(container.querySelector<HTMLInputElement>("#minimum-amount")?.value).toBe("6000");
     expect(container.textContent).not.toContain("Report created");
   });
 

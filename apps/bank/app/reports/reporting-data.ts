@@ -18,9 +18,9 @@ export type ConnectedReportProcess = {
 };
 
 export const reportSuggestions = [
-  "Outgoing payments last month",
-  "Monthly account balances",
-  "Expenses by team",
+  "Outgoing transactions across all GBP accounts last month",
+  "Transactions over £5,000 for the last 12 months",
+  "Transaction report for our operating accounts",
 ] as const;
 
 export const reports: ReportSummary[] = [

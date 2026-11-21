@@ -21,6 +21,7 @@ describe("Reporting homepage", () => {
     expect(html).not.toContain("Simulated connection for demonstration");
     expect(html).not.toContain("Describe the information you need");
     expect(html).not.toContain("Report preparation is not available");
-    expect(html).toContain("Prepare report (available in a future phase)");
+    expect(html).toContain("aria-label=\"Prepare report\"");
+    expect(html).toContain("Outgoing transactions across all GBP accounts last month");
   });
 });

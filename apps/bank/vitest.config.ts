@@ -5,6 +5,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: "@johnshandux/ledger-design-system/conversation",
+        replacement: resolve(__dirname, "../../packages/design-system/src/conversation.ts"),
+      },
+      {
         find: "@johnshandux/ledger-design-system/application-navigation",
         replacement: resolve(__dirname, "../../packages/design-system/src/application-navigation.ts"),
       },

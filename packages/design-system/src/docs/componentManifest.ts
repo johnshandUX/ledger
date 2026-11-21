@@ -44,6 +44,7 @@ const implementedComponents = [
   ["Progress", "progress", "Published", "Core", "./progress", "Communicates measurable or indeterminate operation progress.", "Radix-backed, explicitly named progress with bounded determinate values or a null indeterminate state.", "not-created"],
   ["Avatar", "avatar", "Published", "Core", "./avatar", "Represents a person or organisation with resilient fallback text.", "Radix-backed image loading and fallback with three explicit sizes.", "not-created"],
   ["ApplicationNavigation", "application-navigation", "Published", "Core Pattern", "./application-navigation", "Composes a responsive application shell and product-agnostic navigation.", "Open or closed inline navigation, modal small-screen navigation, semantic links and groups, organisation switching and personal context.", "not-created"],
+  ["Conversation", "conversation", "Published", "Core Pattern", "./conversation", "Supports intent-led conversational interactions without owning domain meaning.", "Typed messages, outcomes, interpretation, ephemeral state, input, clarification, message and action presentation.", "not-created"],
 ] as const;
 
 const plannedComponents = [

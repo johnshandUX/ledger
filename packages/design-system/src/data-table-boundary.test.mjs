@@ -33,3 +33,14 @@ test("keeps Application Navigation behind its dedicated client entry", async () 
   assert.match(clientEntry, /^"use client";/);
   assert.match(builtEntry, /^"use client";/);
 });
+
+test("keeps Conversation behind its dedicated client entry", async () => {
+  const rootSource = await readFile(new URL("./index.ts", import.meta.url), "utf8");
+  const conversationSource = await readFile(new URL("./conversation.ts", import.meta.url), "utf8");
+  const conversationBuild = await readFile(new URL("../dist/conversation.js", import.meta.url), "utf8");
+  const packageJson = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(rootSource.includes("Conversation"), false);
+  assert.match(conversationSource, /^"use client";/);
+  assert.match(conversationBuild, /^"use client";/);
+  assert.equal(typeof packageJson.exports["./conversation"], "object");
+});

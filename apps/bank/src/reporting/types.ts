@@ -1,4 +1,5 @@
 import type { TransactionDirection } from "@johnshandux/ledger-synthetic-finance";
+import type { ReportConfiguration } from "./configuration";
 
 export type ReportingDateRange = Readonly<{ from: string; to: string }>;
 export type ReportingDirection = "all" | "incoming" | "outgoing";
@@ -37,6 +38,7 @@ export type RecurringReportSchedule = Readonly<{
 export type ReportingState = Readonly<{
   definitions: readonly ReportDefinition[]; runs: readonly ReportRun[]; outputs: readonly GeneratedReportOutput[];
   schedules: readonly RecurringReportSchedule[]; latestCreatedScheduleId?: string;
+  assistedConfiguration?: ReportConfiguration;
 }>;
 
 export const initialReportingState: ReportingState = { definitions: [], runs: [], outputs: [], schedules: [] };

@@ -22,7 +22,8 @@
       "@/*": ["./*"],
       "@johnshandux/ledger-design-system": ["../../packages/design-system/src/index.ts"],
       "@johnshandux/ledger-design-system/application-navigation": ["../../packages/design-system/src/application-navigation.ts"],
-      "@johnshandux/ledger-design-system/data-table": ["../../packages/design-system/src/data-table.ts"]
+      "@johnshandux/ledger-design-system/data-table": ["../../packages/design-system/src/data-table.ts"],
+      "@johnshandux/ledger-design-system/conversation": ["../../packages/design-system/src/conversation.ts"]
     }
   },
   "include": [
