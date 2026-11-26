@@ -24,6 +24,7 @@ import {
 } from "../DropdownMenu/DropdownMenu";
 import { Icon } from "../Icon/Icon";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover/Popover";
+import { Tooltip } from "../Tooltip/Tooltip";
 import "./ApplicationNavigation.css";
 
 const NAVIGATION_MEDIA_QUERY = "(max-width: 740px)";
@@ -150,12 +151,12 @@ export function WorkspaceHeader({ children, className, showNavigationLabel = "Sh
       onPointerDown={() => setNavigationOpenedFromKeyboard(false)}
       onClick={isNarrow ? undefined : () => setNavigationOpen(true)}
     >
-      <Icon name="menu" size="medium" />
+      <Icon name={isNarrow ? "menu" : "panel-left-open"} size="medium" />
     </button>
   );
   return (
     <header {...props} className={cn("ledger-workspace-header", className)}>
-      {!navigationOpen ? (isNarrow ? <DialogPrimitive.Trigger asChild>{showNavigationButton}</DialogPrimitive.Trigger> : showNavigationButton) : null}
+      {!navigationOpen ? (isNarrow ? <DialogPrimitive.Trigger asChild>{showNavigationButton}</DialogPrimitive.Trigger> : <Tooltip content={showNavigationLabel}>{showNavigationButton}</Tooltip>) : null}
       <div className="ledger-workspace-header__content">{children}</div>
     </header>
   );
@@ -177,9 +178,11 @@ export function SideNavHeader({ children, className, closeNavigationLabel = "Clo
     <div {...props} className={cn("ledger-side-nav__header", className)}>
       <div className="ledger-side-nav__header-content">{children}</div>
       {!isNarrow ? (
-        <button className="ledger-navigation-control ledger-navigation-control--hide" type="button" aria-label={closeNavigationLabel} onClick={() => setNavigationOpen(false)}>
-          <Icon name="chevron-left" size="medium" />
-        </button>
+        <Tooltip content={closeNavigationLabel}>
+          <button className="ledger-navigation-control ledger-navigation-control--hide" type="button" aria-label={closeNavigationLabel} onClick={() => setNavigationOpen(false)}>
+            <Icon name="panel-left-close" size="medium" />
+          </button>
+        </Tooltip>
       ) : null}
     </div>
   );

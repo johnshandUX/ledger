@@ -34,7 +34,7 @@ describe("Icon", () => {
   });
 
   it("keeps every catalogue entry addressable by IconName", () => {
-    expect(iconCatalog).toHaveLength(38);
+    expect(iconCatalog).toHaveLength(40);
     expectTypeOf<IconName>().toEqualTypeOf<(typeof iconCatalog)[number]["name"]>();
   });
 

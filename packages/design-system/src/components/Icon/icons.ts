@@ -2,7 +2,7 @@ import type { ComponentType, SVGProps } from "react";
 import {
   ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, ArrowUpDown, Bell, Building2, Calendar, Check,
   ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleUserRound,
-  CreditCard, Download, Eye, FileText, Filter, House, Menu, Moon, Pencil,
+  CreditCard, Download, Eye, FileText, Filter, House, Menu, Moon, PanelLeftClose, PanelLeftOpen, Pencil,
   Plus, Search, Send, Settings, Sparkles, Sun, Trash2, Upload, UserRound, X,
 } from "lucide-react";
 import { ErrorStatusIcon, InformationStatusIcon, SuccessStatusIcon, WarningStatusIcon } from "./StatusIconShapes";
@@ -26,6 +26,8 @@ export const iconRegistry = {
   sort: defineIcon(ArrowUpDown, "ArrowUpDown", "Actions"),
   visibility: defineIcon(Eye, "Eye", "Actions"),
   menu: defineIcon(Menu, "Menu", "Navigation"),
+  "panel-left-close": defineIcon(PanelLeftClose, "PanelLeftClose", "Navigation"),
+  "panel-left-open": defineIcon(PanelLeftOpen, "PanelLeftOpen", "Navigation"),
   home: defineIcon(House, "House", "Navigation"),
   "chevron-left": defineIcon(ChevronLeft, "ChevronLeft", "Navigation"),
   "chevron-right": defineIcon(ChevronRight, "ChevronRight", "Navigation"),

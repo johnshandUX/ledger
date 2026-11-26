@@ -63,10 +63,18 @@ describe("ApplicationNavigation", () => {
     const html = renderToStaticMarkup(<AppShell navigation={<SideNav><SideNavHeader>Organisation</SideNavHeader><SideNavNavigation /></SideNav>}><WorkspaceHeader>Workspace</WorkspaceHeader></AppShell>);
     const css = readFileSync(new URL("./ApplicationNavigation.css", import.meta.url), "utf8");
     expect(html).toContain('aria-label="Close navigation"');
+    expect(html).toMatch(/class="[^"]*lucide-panel-left-close[^"]*ledger-icon"/);
+    expect(html).not.toContain("lucide-chevron-left");
     expect(css).toMatch(/ledger-app-shell__dialog \{ width: min\(320px, 82vw\); \}/);
     expect(css).toMatch(/ledger-app-shell__dialog \.ledger-side-nav \{ height: 100dvh; \}/);
     expect(css).toMatch(/ledger-app-shell__overlay\[data-state="closed"\] \{ animation: ledger-navigation-overlay-out/);
     expect(css).toMatch(/ledger-app-shell__dialog\[data-state="closed"\] \{ animation: ledger-navigation-out/);
+  });
+
+  it("uses a labelled panel icon for the collapsed desktop navigation control", () => {
+    const html = renderToStaticMarkup(<AppShell defaultNavigationOpen={false} navigation={<SideNav><SideNavNavigation /></SideNav>}><WorkspaceHeader>Workspace</WorkspaceHeader></AppShell>);
+    expect(html).toContain('aria-label="Show navigation"');
+    expect(html).toMatch(/class="[^"]*lucide-panel-left-open[^"]*ledger-icon"/);
   });
 
   it("can pass navigation semantics to a routing-library link", () => {
